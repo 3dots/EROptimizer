@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EROptimizer.Controllers
+namespace EROptimizerOld.Controllers
 {
     [ApiController]
     [Route("[controller]")]
