@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
+using ScrapeWiki.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,12 +12,19 @@ namespace ScrapeWiki
 {
     public class Scraper
     {
-        private readonly string _baseUrl = "https://eldenring.wiki.fextralife.com";
+        private const string BaseUrl = "https://eldenring.wiki.fextralife.com";
+        private const int MaxSimultaniousRequests = 4;
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
         private readonly bool _createHtmlFilesInSource;
         private readonly bool _useStaticHtmlFiles;
+
+        object armorPieceIdLock = new object();
+        int ArmorPieceIdCounter { get; set; }
+
+        public List<ArmorSet> ArmorSets { get; private set; } = new List<ArmorSet>();
+        public List<ArmorPiece> ArmorPieces { get; private set; } = new List<ArmorPiece>();
 
         public Scraper(IProgressConsole pc)
         {
@@ -31,17 +39,17 @@ namespace ScrapeWiki
             _filesPath = filesPath;
         }
 
-        internal Scraper(IProgressConsole pc, string filesPath, string createHtmlFilesInSource, string useStaticFiles) 
+        internal Scraper(IProgressConsole pc, string filesPath, string createHtmlFilesInSource, string useStaticFiles)
             : this(pc, filesPath, bool.Parse(createHtmlFilesInSource), bool.Parse(useStaticFiles))
         {
-            
+
         }
 
         public async Task Scrape()
-        {            
+        {
             //try
             //{
-                await BeginScrape();
+            await BeginScrape();
             //}
             //catch (Exception e)
             //{
@@ -50,51 +58,188 @@ namespace ScrapeWiki
             //}
         }
 
-        private async Task BeginScrape()
+        private async Task<string> GetHtml(string resourceName) //Expects slash "/Armor"
         {
-            string url = $"{_baseUrl}/Armor";
+            string resourceFile = $"{resourceName.Replace("/", "")}.html";
+            string url = $"{BaseUrl}{resourceName}";
+
             _console.WriteLine($"Scraping {url}");
-            if (_createHtmlFilesInSource) _console.WriteLine("Creating HTML files in source.");
-            if (_useStaticHtmlFiles) _console.WriteLine($"Using static HTML files at {_filesPath}");
 
-            string section = "Armor.html";
-
-            string armorHtml;
+            string htmlString;
             if (_useStaticHtmlFiles)
             {
-                armorHtml = await File.ReadAllTextAsync(Path.Combine(_filesPath, section));
+                htmlString = await File.ReadAllTextAsync(Path.Combine(_filesPath, resourceFile));
             }
             else
             {
                 var c = new HttpClient();
-                armorHtml = await c.GetStringAsync(url);
+                htmlString = await c.GetStringAsync(url);
 
-                if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, section), armorHtml);
+                if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
             }
 
             _console.WriteLine($"Retrieved {url}");
+            return htmlString;
+        }
+
+        private async Task BeginScrape()
+        {
+            _console.WriteLine($"Begin Scrape.");
+            if (_createHtmlFilesInSource) _console.WriteLine("Creating HTML files in source.");
+            if (_useStaticHtmlFiles) _console.WriteLine($"Using static HTML files at {_filesPath}");
+
+            //Getting armor set names
+            await GetSets();
+
+            // Adding armor pieces
+            //await ProcessSet(ArmorSets.First());
+            foreach (IEnumerable<ArmorSet> batch in ArmorSets.Batch(MaxSimultaniousRequests))
+            {
+                Task.WaitAll(batch.Select(set => ProcessSet(set)).ToArray());
+            }
+            ArmorPieces = ArmorSets.SelectMany(x => x.ArmorPieces).ToList();
+
+            //Ensure unquiness of all armor pieces
+            if (ArmorPieces.Select(x => x.Name).Distinct().Count() != ArmorPieces.Count)
+            {
+                _console.WriteLine("There are duplicate armor pieces:");
+                foreach (IGrouping<string, ArmorPiece> group in ArmorPieces.GroupBy(x => x.Name).Where(g => g.Count() > 1))
+                {
+                    foreach (ArmorPiece a in group)
+                    {
+                        ArmorSet set = ArmorSets.FirstOrDefault(x => x.ArmorSetId == a.ArmorSetId);
+                        _console.WriteLine($"{set?.Name}: {a.Name}");
+                    }
+                }
+                throw new ScrapeParsingException("Exiting.");
+            }
+
+            await GetHelmsData();
+        }
+
+        private async Task GetSets()
+        {
+            string resourceName = "/Armor";
 
             var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(armorHtml);
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
 
+            string headerText = "Elden Ring Armor Set Gallery";
             IList<HtmlNode> h2s = htmlDoc.QuerySelectorAll("#wiki-content-block > h2");
-            HtmlNode h2ArmorSetGallery = h2s.FirstOrDefault(x => x.InnerText == "Elden Ring Armor Set Gallery");
-            if (h2ArmorSetGallery == null) throw new ScrapeParsingException(section, "h2 with \"Elden Ring Armor Set Gallery\" not found.");
+            HtmlNode h2ArmorSetGallery = h2s.FirstOrDefault(x => x.InnerText == headerText);
+            if (h2ArmorSetGallery == null) throw new ScrapeParsingException(resourceName, $"h2 with \"{headerText}\" not found.");
 
-            IList<HtmlNode> armorSetLinks = h2ArmorSetGallery.NextSiblingElement().GetChildElements().First().QuerySelectorAll("a");
-            foreach(HtmlNode a in armorSetLinks)
+            IList<HtmlNode> armorSetAnchors = h2ArmorSetGallery.NextSiblingElement().GetChildElements().First().QuerySelectorAll("a");
+
+            int id = 1;
+            foreach (HtmlNode a in armorSetAnchors)
             {
-                _console.WriteLine(a.Attributes["href"]?.Value);
-                _console.WriteLine(a.InnerText.Replace("&nbsp;", ""));
+                string setName = a.InnerText.Replace("&nbsp;", "");
+                string setResourceName = a.Attributes["href"]?.Value;
+                if (string.IsNullOrEmpty(setName)) throw new ScrapeParsingException(resourceName, "Empty Set name.");
+                if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
+
+                _console.WriteLine($"{setResourceName} {setName}");
+                ArmorSets.Add(new ArmorSet() { ArmorSetId = id++, Name = setName, ResourceName = setResourceName });
             }
+        }
+
+        private async Task ProcessSet(ArmorSet set)
+        {
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(set.ResourceName));
+
+            string headerText = $"{set.Name} Armor Pieces in Elden Ring";
+            IList<HtmlNode> h3s = htmlDoc.QuerySelectorAll("#wiki-content-block > h3");
+            HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => x.InnerText == headerText);
+            if (h3ArmorPieces == null) throw new ScrapeParsingException(set.ResourceName, $"h3 with \"{headerText}\" not found.");
+
+            HtmlNode ul = h3ArmorPieces.NextSiblingElement();
+            IList<HtmlNode> armorPieceAnchors = ul.QuerySelectorAll("a");
+
+            foreach (HtmlNode a in armorPieceAnchors)
+            {
+                string name = a.InnerText;
+                if (string.IsNullOrEmpty(name)) throw new ScrapeParsingException(set.ResourceName, "Empty Piece name.");
+
+                int id = 0;
+                lock (armorPieceIdLock)
+                {
+                    ArmorPieceIdCounter++;
+                    id = ArmorPieceIdCounter;
+                }
+
+                set.ArmorPieces.Add(new ArmorPiece() { ArmorPieceId = id, ArmorSetId = set.ArmorSetId, Name = name });
+            }
+        }
+
+        private async Task GetHelmsData()
+        {
+            string resourceName = "/Helms";
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
+
+            IList<HtmlNode> trs = htmlDoc.QuerySelectorAll("#wiki-content-block > div > table > tbody > tr");
+            if (!(trs?.Count > 0)) throw new ScrapeParsingException(resourceName, $"Couldn't find table rows.");
+
+            foreach (HtmlNode tr in trs)
+            {
+                int i = 0;
+                double value;
+                ArmorPiece piece = null;
+
+                foreach (HtmlNode td in tr.GetChildElements())
+                {
+                    if (i == 0)
+                    {
+                        string armorPieceName = td.QuerySelector("a")?.InnerText;
+                        if (string.IsNullOrEmpty(armorPieceName)) throw new ScrapeParsingException(resourceName, $"Armor piece name was blank in the table?");
+                        piece = ArmorPieces.FirstOrDefault(x => x.Name == armorPieceName);
+                        if (piece == null) throw new ScrapeParsingException(resourceName, $"Couldn't find Armor Piece: {armorPieceName}");
+                    }
+                    else if (i <= 13)
+                    {
+                        bool p = double.TryParse(td.InnerText.Replace("&nbsp;", ""), out value);
+                        if (i == 1) ParseTableCell(p, () => { piece.Physical = value; }, nameof(piece.Physical), piece.Name, resourceName);
+                        else if (i == 2) ParseTableCell(p, () => { piece.PhysicalStrike = value; }, nameof(piece.PhysicalStrike), piece.Name, resourceName);
+                        else if (i == 3) ParseTableCell(p, () => { piece.PhysicalSlash = value; }, nameof(piece.PhysicalSlash), piece.Name, resourceName);
+                        else if (i == 4) ParseTableCell(p, () => { piece.PhysicalPierce = value; }, nameof(piece.PhysicalPierce), piece.Name, resourceName);
+                        else if (i == 5) ParseTableCell(p, () => { piece.Magic = value; }, nameof(piece.Magic), piece.Name, resourceName);
+                        else if (i == 6) ParseTableCell(p, () => { piece.Fire = value; }, nameof(piece.Fire), piece.Name, resourceName);
+                        else if (i == 7) ParseTableCell(p, () => { piece.Lightning = value; }, nameof(piece.Lightning), piece.Name, resourceName);
+                        else if (i == 8) ParseTableCell(p, () => { piece.Holy = value; }, nameof(piece.Holy), piece.Name, resourceName);
+                        else if (i == 9) ParseTableCell(p, () => { piece.Immunity = value; }, nameof(piece.Immunity), piece.Name, resourceName);
+                        else if (i == 10) ParseTableCell(p, () => { piece.Robustness = value; }, nameof(piece.Robustness), piece.Name, resourceName);
+                        else if (i == 11) ParseTableCell(p, () => { piece.Focus = value; }, nameof(piece.Focus), piece.Name, resourceName);
+                        else if (i == 12) ParseTableCell(p, () => { piece.Death = value; }, nameof(piece.Death), piece.Name, resourceName);
+                        else if (i == 13) ParseTableCell(p, () => { piece.Weigtht = value; }, nameof(piece.Weigtht), piece.Name, resourceName);
+                    }
+
+                    i++;
+                }
+            }
+        }
+
+        private void ParseTableCell(bool parseSucceded, Action assignValue, string propertyName, string armorPieceName, string resourceName)
+        {
+            if (parseSucceded)
+                assignValue.Invoke();
+            else
+                throw new ScrapeParsingException(resourceName, $"Couldn't parse {propertyName} for Armor Piece: {armorPieceName}");
         }
     }
 
-    class ScrapeParsingException : Exception 
+    class ScrapeParsingException : Exception
     {
-        public ScrapeParsingException(string section, string message) : base($"{section}: {message}")
+        public ScrapeParsingException(string message) : base(message)
         {
-            
+
+        }
+
+        public ScrapeParsingException(string resourceName, string message) : base($"{resourceName}: {message}")
+        {
+
         }
     }
 
