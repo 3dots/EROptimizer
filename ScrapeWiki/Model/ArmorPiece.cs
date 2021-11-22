@@ -6,11 +6,22 @@ using System.Threading.Tasks;
 
 namespace ScrapeWiki.Model
 {
+    public enum ArmorPieceTypeEnum
+    {
+        Head = 0,
+        Chest = 1,
+        Gauntlets = 2,
+        Legs = 3,
+    }
+
     public class ArmorPiece
     {
         public int ArmorPieceId { get; set; }
         public int ArmorSetId { get; set; }
         public string Name { get; set; }
+        public ArmorPieceTypeEnum? Type { get; set; }
+
+        public bool IsProcessed { get; set; }
 
         public double Physical { get; set; }
         public double PhysicalStrike { get; set; }

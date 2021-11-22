@@ -21,7 +21,10 @@ namespace ScrapeWiki
         private readonly bool _useStaticHtmlFiles;
 
         object armorPieceIdLock = new object();
-        int ArmorPieceIdCounter { get; set; }
+        int ArmorPieceIdCounter { get; set; } = 1;
+
+        object armorSetIdLock = new object();
+        int ArmorSetIdCounter { get; set; } = 1;
 
         public List<ArmorSet> ArmorSets { get; private set; } = new List<ArmorSet>();
         public List<ArmorPiece> ArmorPieces { get; private set; } = new List<ArmorPiece>();
@@ -114,7 +117,15 @@ namespace ScrapeWiki
                 throw new ScrapeParsingException("Exiting.");
             }
 
-            await GetHelmsData();
+            //Get data
+            var types = new List<ArmorPieceTypeEnum>() 
+                { ArmorPieceTypeEnum.Head, ArmorPieceTypeEnum.Chest, ArmorPieceTypeEnum.Gauntlets, ArmorPieceTypeEnum.Legs };
+            foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(MaxSimultaniousRequests))
+            {
+                Task.WaitAll(batch.Select(type => GetData(type)).ToArray());
+            }
+
+            _console.WriteLine("Succesfully scraped data.");
         }
 
         private async Task GetSets()
@@ -131,16 +142,16 @@ namespace ScrapeWiki
 
             IList<HtmlNode> armorSetAnchors = h2ArmorSetGallery.NextSiblingElement().GetChildElements().First().QuerySelectorAll("a");
 
-            int id = 1;
+            ArmorSetIdCounter = 1;
             foreach (HtmlNode a in armorSetAnchors)
             {
-                string setName = a.InnerText.Replace("&nbsp;", "");
+                string setName = a.InnerText?.Replace("&nbsp;", "")?.Trim();
                 string setResourceName = a.Attributes["href"]?.Value;
                 if (string.IsNullOrEmpty(setName)) throw new ScrapeParsingException(resourceName, "Empty Set name.");
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
                 _console.WriteLine($"{setResourceName} {setName}");
-                ArmorSets.Add(new ArmorSet() { ArmorSetId = id++, Name = setName, ResourceName = setResourceName });
+                ArmorSets.Add(new ArmorSet() { ArmorSetId = ArmorSetIdCounter++, Name = setName, ResourceName = setResourceName });
             }
         }
 
@@ -159,23 +170,37 @@ namespace ScrapeWiki
 
             foreach (HtmlNode a in armorPieceAnchors)
             {
-                string name = a.InnerText;
+                string name = a.InnerText?.Replace("&nbsp;", "")?.Trim();
                 if (string.IsNullOrEmpty(name)) throw new ScrapeParsingException(set.ResourceName, "Empty Piece name.");
 
-                int id = 0;
+                int id;
                 lock (armorPieceIdLock)
                 {
-                    ArmorPieceIdCounter++;
-                    id = ArmorPieceIdCounter;
+                    id = ArmorPieceIdCounter++;
                 }
 
                 set.ArmorPieces.Add(new ArmorPiece() { ArmorPieceId = id, ArmorSetId = set.ArmorSetId, Name = name });
             }
         }
 
-        private async Task GetHelmsData()
+        private async Task GetData(ArmorPieceTypeEnum armorPieceType)
         {
-            string resourceName = "/Helms";
+            string resourceName = null;
+            switch(armorPieceType)
+            {
+                case ArmorPieceTypeEnum.Head:
+                    resourceName = "/Helms";
+                    break;
+                case ArmorPieceTypeEnum.Chest:
+                    resourceName = "/Chest+Armor";
+                    break;
+                case ArmorPieceTypeEnum.Gauntlets:
+                    resourceName = "/Gauntlets";
+                    break;
+                case ArmorPieceTypeEnum.Legs:
+                    resourceName = "/Leg+Armor";
+                    break;
+            }
 
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(await GetHtml(resourceName));
@@ -193,10 +218,33 @@ namespace ScrapeWiki
                 {
                     if (i == 0)
                     {
-                        string armorPieceName = td.QuerySelector("a")?.InnerText;
-                        if (string.IsNullOrEmpty(armorPieceName)) throw new ScrapeParsingException(resourceName, $"Armor piece name was blank in the table?");
+                        string armorPieceName = td.QuerySelector("a")?.InnerText.Replace("&nbsp;", "")?.Trim();
+                        if (string.IsNullOrEmpty(armorPieceName)) throw new ScrapeParsingException(resourceName, "Armor piece name was blank in the table?");
                         piece = ArmorPieces.FirstOrDefault(x => x.Name == armorPieceName);
-                        if (piece == null) throw new ScrapeParsingException(resourceName, $"Couldn't find Armor Piece: {armorPieceName}");
+                        if (piece == null)
+                        {
+                            _console.WriteLine($"Standalone armor piece found: {armorPieceName}");
+
+                            int newSetId;
+                            lock (armorSetIdLock)
+                            {
+                                newSetId = ArmorSetIdCounter++;
+                            }
+
+                            int newPieceId;
+                            lock (armorPieceIdLock)
+                            {
+                                newPieceId = ArmorPieceIdCounter++;
+                            }
+
+                            piece = new ArmorPiece() { ArmorPieceId = newPieceId, ArmorSetId = newSetId, Name = armorPieceName };
+                            ArmorPieces.Add(piece);
+                            ArmorSets.Add(new ArmorSet() { ArmorSetId = newSetId, Name = armorPieceName, ArmorPieces = new List<ArmorPiece>() { piece } });
+                        }
+
+                        if (piece.IsProcessed) throw new ScrapeParsingException(resourceName, $"Attempted to process Armor Piece {armorPieceName} multiple times.");
+                        piece.IsProcessed = true;
+                        piece.Type = armorPieceType;                        
                     }
                     else if (i <= 13)
                     {
