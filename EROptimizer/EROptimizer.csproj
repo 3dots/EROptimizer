@@ -13,4 +13,8 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ScrapeWiki\ScrapeWiki.csproj" />
+  </ItemGroup>
+
 </Project>

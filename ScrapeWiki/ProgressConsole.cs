@@ -8,30 +8,16 @@ namespace ScrapeWiki
 {
     public interface IProgressConsole 
     {
-        void WriteLine();
-        void WriteLine(string s);
-        void WriteSeparator();
+        Task WriteLine(string s);
     }
-
 
     class ProgressConsole : IProgressConsole
     {
         private readonly int DASH_COUNT = 10;
 
-        void IProgressConsole.WriteLine()
+        Task IProgressConsole.WriteLine(string s)
         {
-            Console.WriteLine();
-        }
-
-        void IProgressConsole.WriteLine(string s)
-        {
-            Console.WriteLine(s);
-        }
-
-        void IProgressConsole.WriteSeparator()
-        {
-            for (int i = 0; i < DASH_COUNT; i++) Console.Write("-");
-            Console.WriteLine();
+            return Task.Run(() => { Console.WriteLine(s); });
         }
     }
 }

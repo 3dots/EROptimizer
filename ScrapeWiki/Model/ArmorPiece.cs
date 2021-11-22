@@ -38,6 +38,6 @@ namespace ScrapeWiki.Model
         public double Focus { get; set; }
         public double Death { get; set; }
 
-        public double Weigtht { get; set; }
+        public double Weight { get; set; }
     }
 }

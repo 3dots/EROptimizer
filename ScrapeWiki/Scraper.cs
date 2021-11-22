@@ -42,7 +42,7 @@ namespace ScrapeWiki
             _filesPath = filesPath;
         }
 
-        internal Scraper(IProgressConsole pc, string filesPath, string createHtmlFilesInSource, string useStaticFiles)
+        public Scraper(IProgressConsole pc, string filesPath, string createHtmlFilesInSource, string useStaticFiles)
             : this(pc, filesPath, bool.Parse(createHtmlFilesInSource), bool.Parse(useStaticFiles))
         {
 
@@ -50,15 +50,15 @@ namespace ScrapeWiki
 
         public async Task Scrape()
         {
-            //try
-            //{
-            await BeginScrape();
-            //}
-            //catch (Exception e)
-            //{
-            //    PConsole.WriteLine("Scape failed. Exception:");
-            //    PConsole.WriteLine(e.ToString());
-            //}
+            try
+            {
+                await BeginScrape();
+            }
+            catch (Exception e)
+            {
+                await _console.WriteLine("Scape failed. Exception:");
+                await _console.WriteLine(e.ToString());
+            }
         }
 
         private async Task<string> GetHtml(string resourceName) //Expects slash "/Armor"
@@ -66,7 +66,7 @@ namespace ScrapeWiki
             string resourceFile = $"{resourceName.Replace("/", "")}.html";
             string url = $"{BaseUrl}{resourceName}";
 
-            _console.WriteLine($"Scraping {url}");
+            await _console.WriteLine($"Scraping {url}");
 
             string htmlString;
             if (_useStaticHtmlFiles)
@@ -81,15 +81,15 @@ namespace ScrapeWiki
                 if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
             }
 
-            _console.WriteLine($"Retrieved {url}");
+            await _console.WriteLine($"Retrieved {url}");
             return htmlString;
         }
 
         private async Task BeginScrape()
         {
-            _console.WriteLine($"Begin Scrape.");
-            if (_createHtmlFilesInSource) _console.WriteLine("Creating HTML files in source.");
-            if (_useStaticHtmlFiles) _console.WriteLine($"Using static HTML files at {_filesPath}");
+            await _console.WriteLine($"Begin Scrape.");
+            if (_createHtmlFilesInSource) await _console.WriteLine("Creating HTML files in source.");
+            if (_useStaticHtmlFiles) await _console.WriteLine($"Using static HTML files at {_filesPath}");
 
             //Getting armor set names
             await GetSets();
@@ -100,32 +100,34 @@ namespace ScrapeWiki
             {
                 Task.WaitAll(batch.Select(set => ProcessSet(set)).ToArray());
             }
-            ArmorPieces = ArmorSets.SelectMany(x => x.ArmorPieces).ToList();
+            ArmorPieces.AddRange(ArmorSets.SelectMany(x => x.ArmorPieces));
 
             //Ensure unquiness of all armor pieces
             if (ArmorPieces.Select(x => x.Name).Distinct().Count() != ArmorPieces.Count)
             {
-                _console.WriteLine("There are duplicate armor pieces:");
+                await _console.WriteLine("There are duplicate armor pieces:");
                 foreach (IGrouping<string, ArmorPiece> group in ArmorPieces.GroupBy(x => x.Name).Where(g => g.Count() > 1))
                 {
                     foreach (ArmorPiece a in group)
                     {
                         ArmorSet set = ArmorSets.FirstOrDefault(x => x.ArmorSetId == a.ArmorSetId);
-                        _console.WriteLine($"{set?.Name}: {a.Name}");
+                        await _console.WriteLine($"{set?.Name}: {a.Name}");
                     }
                 }
                 throw new ScrapeParsingException("Exiting.");
             }
 
             //Get data
-            var types = new List<ArmorPieceTypeEnum>() 
+            var types = new List<ArmorPieceTypeEnum>()
                 { ArmorPieceTypeEnum.Head, ArmorPieceTypeEnum.Chest, ArmorPieceTypeEnum.Gauntlets, ArmorPieceTypeEnum.Legs };
             foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(MaxSimultaniousRequests))
             {
                 Task.WaitAll(batch.Select(type => GetData(type)).ToArray());
             }
 
-            _console.WriteLine("Succesfully scraped data.");
+            ArmorPieces = ArmorPieces.OrderBy(x => x.ArmorSetId).ToList();
+
+            await _console.WriteLine("Successfully scraped data.");
         }
 
         private async Task GetSets()
@@ -150,7 +152,7 @@ namespace ScrapeWiki
                 if (string.IsNullOrEmpty(setName)) throw new ScrapeParsingException(resourceName, "Empty Set name.");
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
-                _console.WriteLine($"{setResourceName} {setName}");
+                await _console.WriteLine($"{setResourceName} {setName}");
                 ArmorSets.Add(new ArmorSet() { ArmorSetId = ArmorSetIdCounter++, Name = setName, ResourceName = setResourceName });
             }
         }
@@ -186,7 +188,7 @@ namespace ScrapeWiki
         private async Task GetData(ArmorPieceTypeEnum armorPieceType)
         {
             string resourceName = null;
-            switch(armorPieceType)
+            switch (armorPieceType)
             {
                 case ArmorPieceTypeEnum.Head:
                     resourceName = "/Helms";
@@ -223,7 +225,7 @@ namespace ScrapeWiki
                         piece = ArmorPieces.FirstOrDefault(x => x.Name == armorPieceName);
                         if (piece == null)
                         {
-                            _console.WriteLine($"Standalone armor piece found: {armorPieceName}");
+                            await _console.WriteLine($"Standalone armor piece found: {armorPieceName}");
 
                             int newSetId;
                             lock (armorSetIdLock)
@@ -244,7 +246,7 @@ namespace ScrapeWiki
 
                         if (piece.IsProcessed) throw new ScrapeParsingException(resourceName, $"Attempted to process Armor Piece {armorPieceName} multiple times.");
                         piece.IsProcessed = true;
-                        piece.Type = armorPieceType;                        
+                        piece.Type = armorPieceType;
                     }
                     else if (i <= 13)
                     {
@@ -261,7 +263,7 @@ namespace ScrapeWiki
                         else if (i == 10) ParseTableCell(p, () => { piece.Robustness = value; }, nameof(piece.Robustness), piece.Name, resourceName);
                         else if (i == 11) ParseTableCell(p, () => { piece.Focus = value; }, nameof(piece.Focus), piece.Name, resourceName);
                         else if (i == 12) ParseTableCell(p, () => { piece.Death = value; }, nameof(piece.Death), piece.Name, resourceName);
-                        else if (i == 13) ParseTableCell(p, () => { piece.Weigtht = value; }, nameof(piece.Weigtht), piece.Name, resourceName);
+                        else if (i == 13) ParseTableCell(p, () => { piece.Weight = value; }, nameof(piece.Weight), piece.Name, resourceName);
                     }
 
                     i++;
