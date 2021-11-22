@@ -34,7 +34,7 @@ namespace ScrapeWiki
 
         }
 
-        internal Scraper(IProgressConsole pc, string filesPath, bool createHtmlFilesInSource, bool useStaticFiles)
+        public Scraper(IProgressConsole pc, string filesPath, bool createHtmlFilesInSource, bool useStaticFiles)
         {
             _console = pc;
             _createHtmlFilesInSource = createHtmlFilesInSource;

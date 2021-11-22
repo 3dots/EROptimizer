@@ -6,8 +6,46 @@
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    .loading-screen {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .loading-screen > div {
+      position: relative;
+    }
+      .loading-screen > div > img {
+        height: 8vh;
+      }
+
+      .loading-screen > div > .spinner-border {
+        position: absolute;
+        height: 10vh;
+        width: 10vh;
+        left: calc(50% - 10vh / 2);
+        top: calc(50% - 10vh / 2);
+        animation-duration: 1.5s;
+      }
+
+    .text-blue {
+      color: #007BFF;
+    }
+  </style>
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <div class="loading-screen">
+      <div class="text-blue">
+        <img src="/assets/calculator.svg" alt="Loading...">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>        
+      </div>      
+    </div>    
+  </app-root>
 </body>
 </html>
