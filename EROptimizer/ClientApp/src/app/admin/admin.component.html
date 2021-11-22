@@ -2,7 +2,10 @@
 <div>
   <h2 class="h4">Armor data updates</h2>
   <div>
-    <button type="button" class="btn btn-primary" (click)="scrape()"> Scrape armor data</button>
+    <button type="button" class="btn btn-primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
     from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
+    <div style="white-space: pre-wrap;">
+      {{ scrapeConsoleText }}
+    </div>
   </div>
 </div>

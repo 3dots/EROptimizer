@@ -1,3 +1,4 @@
+using EROptimizer.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -18,6 +19,8 @@ namespace EROptimizer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            //services.AddHttpContextAccessor(); todo: remove?
+            services.AddSignalR();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -55,6 +58,7 @@ namespace EROptimizer
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<ScrapeWikiHub>("/scrapeWikiHub");
             });
 
             app.UseSpa(spa =>
