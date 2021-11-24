@@ -5,16 +5,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\optimizer\optimizer.component.ts" />
+    <None Remove="ClientApp\src\model\data.service.ts" />
+    <None Remove="ClientApp\src\model\dto\ArmorDataDto.ts" />
+    <None Remove="ClientApp\src\model\dto\ArmorPieceDto.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\" />
+    <Folder Include="ClientApp\src\app\loading\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ScrapeWiki\ScrapeWiki.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\optimizer\optimizer.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\data.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\dto\ArmorDataDto.ts" />
+    <TypeScriptCompile Include="ClientApp\src\model\dto\ArmorPieceDto.ts" />
   </ItemGroup>
 
 </Project>

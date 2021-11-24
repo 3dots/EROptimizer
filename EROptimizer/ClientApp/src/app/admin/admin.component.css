@@ -1,0 +1,7 @@
+#scrape-console {
+  white-space: pre-wrap;
+  max-height: 300px;
+  min-width: 600px;
+  overflow: auto;
+  display: inline-block;
+}
