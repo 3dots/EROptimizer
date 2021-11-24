@@ -12,6 +12,8 @@ export class OptimizerComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  armorData!: ArmorDataDto;
+
   constructor(private dataService: DataService) {
 
   }
@@ -19,7 +21,7 @@ export class OptimizerComponent implements OnInit {
   ngOnInit(): void {
 
     this.dataService.getArmorData().subscribe((data: ArmorDataDto) => {
-
+      this.armorData = data;
       this.isLoading = false;
     });
 
