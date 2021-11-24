@@ -26,6 +26,7 @@ export class AdminComponent implements AfterViewChecked {
   scrape() {
 
     this.isScrapeButtonDisabled = true;
+    this.scrapeConsoleText = "";
 
     this.socket = new signalR.HubConnectionBuilder().withUrl("/scrapeWikiHub").build();
     this.socket.on("WriteLine", this.onRecieveMessage.bind(this));

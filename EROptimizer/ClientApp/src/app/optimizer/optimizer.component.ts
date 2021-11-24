@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { DataService } from '../../model/data.service'
+import { ArmorDataDto } from '../../model/dto/ArmorDataDto';
 
 @Component({
   selector: 'app-optimizer',
@@ -11,15 +12,17 @@ export class OptimizerComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  constructor(private dataService: DataService) {
+
+  }
+
   ngOnInit(): void {
 
-    setTimeout(() => {
-      //this.isLoading = false;
-    }, 3000);
+    this.dataService.getArmorData().subscribe((data: ArmorDataDto) => {
+
+      this.isLoading = false;
+    });
 
   }
 
-  constructor(dataService: DataService) {
-
-  }
 }
