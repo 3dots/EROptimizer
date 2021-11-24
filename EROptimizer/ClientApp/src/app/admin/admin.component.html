@@ -4,8 +4,9 @@
   <div>
     <button type="button" class="btn btn-primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
     from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
-    <div>
-      <span #scrapeConsole style="white-space: pre-wrap; max-height: 300px; overflow: auto; display: inline-block; width: 600px;">
+    <div style="margin-top: 10px;">
+      <label style="display: block;" for="scrape-console">Console output:</label>
+      <span #scrapeConsole id="scrape-console" role="log" class="table-border" style="white-space: pre-wrap; max-height: 300px; overflow: auto; display: inline-block; min-width: 600px;">
         {{ scrapeConsoleText }}
       </span>
     </div>

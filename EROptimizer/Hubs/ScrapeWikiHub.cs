@@ -28,19 +28,19 @@ namespace EROptimizer.Hubs
             else
                 scraper = new Scraper(this);
 
-            await scraper.Scrape();
-            await WriteStaticDataFile(scraper);            
+            bool success = await scraper.Scrape();
+            if (success) await WriteStaticDataFile(scraper);
             await ScrapeEnd();
         }
 
         public async Task WriteLine(string s)
         {
-            await Clients.All.SendAsync("WriteLine", s);
+            await Clients.Caller.SendAsync("WriteLine", s);            
         }
 
         async Task ScrapeEnd()
         {
-            await Clients.All.SendAsync("ScrapeEnd");
+            await Clients.Caller.SendAsync("ScrapeEnd");
         }
 
         async Task WriteStaticDataFile(Scraper s)

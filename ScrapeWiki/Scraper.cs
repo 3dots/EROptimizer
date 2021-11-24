@@ -48,16 +48,18 @@ namespace ScrapeWiki
 
         }
 
-        public async Task Scrape()
+        public async Task<bool> Scrape()
         {
             try
             {
                 await BeginScrape();
+                return true;
             }
             catch (Exception e)
             {
                 await _console.WriteLine("Scape failed. Exception:");
                 await _console.WriteLine(e.ToString());
+                return false;
             }
         }
 

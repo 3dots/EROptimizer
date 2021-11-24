@@ -8,7 +8,6 @@ import * as signalR from "@microsoft/signalr";
 })
 export class AdminComponent implements AfterViewChecked {
   
-
   @ViewChild('scrapeConsole') scrapeConsole!: ElementRef;
 
   isScrapeButtonDisabled: boolean = false;
@@ -33,8 +32,8 @@ export class AdminComponent implements AfterViewChecked {
     this.socket.on("ScrapeEnd", this.onScrapeEnd.bind(this));
 
     this.socket.start().then(() => {
-      this.socket.invoke("StartScrape").catch(this.onSocketError);
-    }).catch(this.onSocketError);
+      this.socket.invoke("StartScrape").catch(this.onSocketError.bind(this));
+    }).catch(this.onSocketError.bind(this));
   }
 
   onRecieveMessage(message: string) {
