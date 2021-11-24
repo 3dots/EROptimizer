@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
@@ -6,5 +6,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./loading.component.css'],
 })
 export class LoadingComponent {
-    
+  @Input() hasProgressBar: boolean = false;
+  @Input() progressValue: number = 0;
+  @Input() progressLabel: string = "Loading";
 }
