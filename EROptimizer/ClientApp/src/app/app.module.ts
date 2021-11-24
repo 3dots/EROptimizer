@@ -8,6 +8,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { LoadingComponent } from './loading/loading.component';
 import { OptimizerComponent } from './optimizer/optimizer.component';
 import { AdminComponent } from './admin/admin.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AdminComponent } from './admin/admin.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule
+    BrowserAnimationsModule,
+    AppRoutingModule   
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,1 +1,5 @@
-/* all the css is in index.html */
+/* most of the css is in index.html */
+
+#content:empty {
+    display: none;
+}
