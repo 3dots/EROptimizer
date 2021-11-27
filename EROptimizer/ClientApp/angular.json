@@ -32,8 +32,7 @@
               }
             ],
             "styles": [
-              "src/bootstrap-theme.scss",
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/sass.scss",
               "src/styles.css"
             ],
             "scripts": []

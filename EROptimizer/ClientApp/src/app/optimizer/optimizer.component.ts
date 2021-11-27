@@ -14,6 +14,17 @@ export class OptimizerComponent implements OnInit {
 
   armorData!: ArmorDataDto;
 
+  strength: number = 10;
+  weightFractionGoal: number = 0.5;
+
+  public get maxWeight() {
+    return this.strength * 2; //todo get correct formula
+  }
+
+  public get totalAvailableWeight() {
+    return this.maxWeight * this.weightFractionGoal;
+  }
+
   constructor(private dataService: DataService) {
 
   }

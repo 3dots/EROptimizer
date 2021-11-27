@@ -1,0 +1,50 @@
+@use '@angular/material' as mat;
+
+$grid-gutter-width: 1rem;
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+@include mat.core();
+
+$my-palette: (
+    50: #e2f2ff,
+    100: #b9ddff,
+    200: #88c9ff,
+    300: #4db3ff,
+    400: #00a1ff,
+    500: #0090ff,
+    600: #0081ff,
+    700: #0d6dfd,
+    800: #1e5aea,
+    900: #2b35ca,
+    contrast: (
+        50: rgb(33, 37, 41),
+        100: rgb(33, 37, 41),
+        200: rgb(33, 37, 41),
+        300: rgb(33, 37, 41),
+        400: rgb(33, 37, 41),
+        500: rgb(33, 37, 41),
+        600: #1C1C1C,
+        700: #FFFFFF,
+        800: #FFFFFF,
+        900: #FFFFFF,
+    )
+);
+
+$my-primary: mat.define-palette($my-palette, 700);
+$my-accent: mat.define-palette($my-palette, 700);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+ )
+));
+
+// Emit theme-dependent styles for common features used across multiple components.
+@include mat.core-theme($my-theme);
+
+@include mat.form-field-theme($my-theme);
+@include mat.button-theme($my-theme);
+@include mat.input-theme($my-theme);
+@include mat.progress-bar-theme($my-theme);
+

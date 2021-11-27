@@ -1,4 +1,36 @@
 <app-loading *ngIf="isLoading"></app-loading>
 
-<h1 class="h3">Elden Ring Armor Optimizer</h1>
+<h1>Elden Ring Armor Optimizer</h1>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7 col-lg-9">
+      <div class="row">
+        <div class="col col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label>Strength:</mat-label>
+            <input matInput [(ngModel)]="strength" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label>Max weight:</mat-label>
+            <input matInput [value]="maxWeight" disabled type="number" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Weight Fraction Goal</mat-label>
+            <input matInput [(ngModel)]="weightFractionGoal" type="number" min="0">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Available weight for equipment:</mat-label>
+            <input matInput [value]="totalAvailableWeight | number:'1.0-2'" disabled type="number" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>    
+  </div>
+</div>
