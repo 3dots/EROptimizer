@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DataService } from '../../model/data.service'
-import { ArmorDataDto } from '../../model/dto/ArmorDataDto';
+import { DataService } from '../../service/data.service'
+import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
+
+import { OptimizerConfigDto } from './model/OptimizerConfigDto';
 
 @Component({
   selector: 'app-optimizer',
@@ -12,18 +14,9 @@ export class OptimizerComponent implements OnInit {
 
   isLoading: boolean = true;
 
-  armorData!: ArmorDataDto;
+  armorData!: IArmorDataDto;
 
-  strength: number = 10;
-  weightFractionGoal: number = 0.5;
-
-  public get maxWeight() {
-    return this.strength * 2; //todo get correct formula
-  }
-
-  public get totalAvailableWeight() {
-    return this.maxWeight * this.weightFractionGoal;
-  }
+  viewModel: OptimizerConfigDto = new OptimizerConfigDto();
 
   constructor(private dataService: DataService) {
 
@@ -31,7 +24,7 @@ export class OptimizerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.dataService.getArmorData().subscribe((data: ArmorDataDto) => {
+    this.dataService.getArmorData().subscribe((data: IArmorDataDto) => {
       this.armorData = data;
       this.isLoading = false;
     });

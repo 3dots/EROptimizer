@@ -16,3 +16,19 @@ body {
 mat-form-field {
   width: 100%;
 }
+
+.container-mat-form-field-less-bottom-space .mat-form-field-wrapper {
+  margin-bottom: calc(-1.3em + var(--bs-gutter-x) * 0.5);
+}
+
+.container-mat-form-field-no-bottom-space .mat-form-field-wrapper {
+  margin-bottom: -1.3em;
+}
+
+.table {
+    table-layout: fixed;
+}
+
+.table .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding-top: 0;
+}

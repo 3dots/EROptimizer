@@ -1,5 +1,5 @@
 
-export interface ArmorPieceDto {
+export interface IArmorPieceDto {
   armorSetId: number;
   name: string;
 

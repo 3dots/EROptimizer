@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-import { ArmorDataDto } from './dto/ArmorDataDto';
+import { IArmorDataDto } from './dto/IArmorDataDto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getArmorData(): Observable<ArmorDataDto> {
-    return this.http.get<ArmorDataDto>(this.url);
+  getArmorData(): Observable<IArmorDataDto> {
+    return this.http.get<IArmorDataDto>(this.url);
   }
 }

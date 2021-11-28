@@ -2,35 +2,241 @@
 
 <h1>Elden Ring Armor Optimizer</h1>
 
-<div class="container-fluid">
+<h2 class="h3">Equipment:</h2>
+<div class="container-fluid container-mat-form-field-less-bottom-space">
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
       <div class="row">
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label>Strength:</mat-label>
-            <input matInput [(ngModel)]="strength" type="number" min="0" />
+            <input matInput [(ngModel)]="viewModel.strength" type="number" min="0" />
           </mat-form-field>
         </div>
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label>Max weight:</mat-label>
-            <input matInput [value]="maxWeight" disabled type="number" />
+            <input matInput [value]="viewModel.maxWeight" disabled type="number" />
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Weight Fraction Goal</mat-label>
-            <input matInput [(ngModel)]="weightFractionGoal" type="number" min="0">
+            <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Available weight for equipment:</mat-label>
-            <input matInput [value]="totalAvailableWeight | number:'1.0-2'" disabled type="number" />
+            <input matInput [value]="viewModel.totalAvailableWeight | number:'1.0-2'" disabled type="number" />
           </mat-form-field>
         </div>
       </div>
-    </div>    
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7 col-lg-9">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Right hand 1:</mat-label>
+            <input matInput [(ngModel)]="viewModel.rightHand1" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Right hand 2:</mat-label>
+            <input matInput [(ngModel)]="viewModel.rightHand2" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Right hand 3:</mat-label>
+            <input matInput [(ngModel)]="viewModel.rightHand3" type="number" min="0" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7 col-lg-9">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Left hand 1:</mat-label>
+            <input matInput [(ngModel)]="viewModel.leftHand1" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Left hand 2:</mat-label>
+            <input matInput [(ngModel)]="viewModel.leftHand2" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Left hand 3:</mat-label>
+            <input matInput [(ngModel)]="viewModel.leftHand3" type="number" min="0" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+<h2 class="h3">Optimization criteria:</h2>
+<div class="container-fluid container-mat-form-field-no-bottom-space">
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th scope="col" style="width: 9%;">Average Physical</th>
+        <th scope="col">Physical</th>
+        <th scope="col">Strike</th>
+        <th scope="col">Slash</th>
+        <th scope="col">Pierce</th>
+        <th scope="col">Magic</th>
+        <th scope="col">Fire</th>
+        <th scope="col">Lightning</th>
+        <th scope="col">Holy</th>
+        <th scope="col">Immunity</th>
+        <th scope="col">Robustness</th>
+        <th scope="col">Focus</th>
+        <th scope="col">Death</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" style="vertical-align: middle;">Minimums</th>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minAvgPhysical" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minPhysical" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minPhysicalStrike" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minPhysicalSlash" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minPhysicalPierce" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minMagic" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minFire" type="number" min="0" />
+          </mat-form-field>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minLightning" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minHoly" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minImmunity" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minRobustness" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minFocus" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minDeath" type="number" min="0" />
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row" style="vertical-align: middle;">Prioritization</th>
+        <td></td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priPhysical" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priPhysicalStrike" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priPhysicalSlash" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priPhysicalPierce" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priMagic" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priFire" type="number" min="0" />
+          </mat-form-field>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priLightning" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priHoly" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priImmunity" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priRobustness" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priFocus" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priDeath" type="number" min="0" />
+          </mat-form-field>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>Results</h2>

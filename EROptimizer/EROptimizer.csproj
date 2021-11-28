@@ -5,10 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\optimizer\model\OptimizerConfigDto.ts" />
     <None Remove="ClientApp\src\app\optimizer\optimizer.component.ts" />
-    <None Remove="ClientApp\src\model\data.service.ts" />
-    <None Remove="ClientApp\src\model\dto\ArmorDataDto.ts" />
-    <None Remove="ClientApp\src\model\dto\ArmorPieceDto.ts" />
+    <None Remove="ClientApp\src\service\data.service.ts" />
+    <None Remove="ClientApp\src\service\dto\IArmorDataDto.ts" />
+    <None Remove="ClientApp\src\service\dto\IArmorPieceDto.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,10 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\optimizer\model\OptimizerConfigDto.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\optimizer\optimizer.component.ts" />
-    <TypeScriptCompile Include="ClientApp\src\model\data.service.ts" />
-    <TypeScriptCompile Include="ClientApp\src\model\dto\ArmorDataDto.ts" />
-    <TypeScriptCompile Include="ClientApp\src\model\dto\ArmorPieceDto.ts" />
+    <TypeScriptCompile Include="ClientApp\src\service\data.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\service\dto\IArmorDataDto.ts" />
+    <TypeScriptCompile Include="ClientApp\src\service\dto\IArmorPieceDto.ts" />
   </ItemGroup>
 
 </Project>
