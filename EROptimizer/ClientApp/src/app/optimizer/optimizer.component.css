@@ -1,3 +1,102 @@
 h1, h2, .h3 {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1560px) {
+  :host {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 1200px) and (max-width: 1299px) {
+  :host {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+
+  table.optimization-criteria-table,
+  .optimization-criteria-table thead,
+  .optimization-criteria-table tbody,
+  .optimization-criteria-table th,
+  .optimization-criteria-table td,
+  .optimization-criteria-table tr {
+    display: block;
+  }
+
+    table.optimization-criteria-table thead th {
+      clip: rect(1px, 1px, 1px, 1px);
+      clip-path: inset(50%);
+      height: 1px;
+      width: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+    }
+
+  .optimization-criteria-table td {
+    position: relative;
+    padding-left: calc(50% + 0.5rem);
+  }
+
+    .optimization-criteria-table td:before {
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      transform: translate(0, -50%);
+      width: calc(50% - 0.5rem);
+    }
+
+  table.optimization-criteria-table td:nth-of-type(1):not(:empty):before {
+    content: "Avg Physical";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(2):before {
+    content: "Physical";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(3):before {
+    content: "Strike";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(4):before {
+    content: "Slash";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(5):before {
+    content: "Pierce";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(6):before {
+    content: "Magic";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(7):before {
+    content: "Fire";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(8):before {
+    content: "Lightning";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(9):before {
+    content: "Holy";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(10):before {
+    content: "Immunity";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(11):before {
+    content: "Robustness";
+  }
+
+  table.optimization-criteria-table td:nth-of-type(12):before {
+    content: "Focus";
+  }
+  table.optimization-criteria-table td:nth-of-type(13):before {
+    content: "Death";
+  }
 }

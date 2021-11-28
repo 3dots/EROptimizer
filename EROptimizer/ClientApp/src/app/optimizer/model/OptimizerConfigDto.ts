@@ -27,10 +27,10 @@ export class OptimizerConfigDto {
   minFocus: number = 0;
   minDeath: number = 0;
 
-  priPhysical: number = 0;
-  priPhysicalStrike: number = 0;
-  priPhysicalSlash: number = 0;
-  priPhysicalPierce: number = 0;
+  priPhysical: number = 1;
+  priPhysicalStrike: number = 1;
+  priPhysicalSlash: number = 1;
+  priPhysicalPierce: number = 1;
 
   priMagic: number = 0;
   priFire: number = 0;
