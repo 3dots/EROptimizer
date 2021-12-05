@@ -30,6 +30,7 @@ export class AdminComponent implements AfterViewChecked {
 
     this.socket = new signalR.HubConnectionBuilder().withUrl("/scrapeWikiHub").build();
     this.socket.on("WriteLine", this.onRecieveMessage.bind(this));
+    this.socket.on("DataRetrieved", this.onDataRetrieved.bind(this));
     this.socket.on("ScrapeEnd", this.onScrapeEnd.bind(this));
 
     this.socket.start().then(() => {
@@ -51,5 +52,9 @@ export class AdminComponent implements AfterViewChecked {
     this.socket.stop().then(() => {
       this.isScrapeButtonDisabled = false;
     });    
+  }
+
+  onDataRetrieved(diffJson: string) {
+    console.log(diffJson);
   }
 }

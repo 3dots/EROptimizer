@@ -1,7 +1,15 @@
 
+export enum ArmorPieceTypeEnum {
+  Head = 0,
+  Chest = 1,
+  Gauntlets = 2,
+  Legs = 3,
+}
+
 export interface IArmorPieceDto {
   armorSetId: number;
   name: string;
+  type: ArmorPieceTypeEnum;
 
   physical: number;
   physicalStrike: number;

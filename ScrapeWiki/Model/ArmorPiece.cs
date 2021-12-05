@@ -16,7 +16,6 @@ namespace ScrapeWiki.Model
 
     public class ArmorPiece
     {
-        public int ArmorPieceId { get; set; }
         public int ArmorSetId { get; set; }
         public string Name { get; set; }
         public ArmorPieceTypeEnum? Type { get; set; }

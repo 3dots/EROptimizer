@@ -48,3 +48,11 @@ $my-theme: mat.define-light-theme((
 @include mat.input-theme($my-theme);
 @include mat.progress-bar-theme($my-theme);
 
+// Styles
+
+.mat-typography {
+  h1, h2, .h3 {
+    margin-bottom: 8px;
+  }
+}
+

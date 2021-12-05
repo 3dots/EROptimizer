@@ -20,9 +20,6 @@ namespace ScrapeWiki
         private readonly bool _createHtmlFilesInSource;
         private readonly bool _useStaticHtmlFiles;
 
-        object armorPieceIdLock = new object();
-        int ArmorPieceIdCounter { get; set; } = 1;
-
         object armorSetIdLock = new object();
         int ArmorSetIdCounter { get; set; } = 1;
 
@@ -104,28 +101,24 @@ namespace ScrapeWiki
             }
             ArmorPieces.AddRange(ArmorSets.SelectMany(x => x.ArmorPieces));
 
-            //Ensure unquiness of all armor pieces
-            if (ArmorPieces.Select(x => x.Name).Distinct().Count() != ArmorPieces.Count)
-            {
-                await _console.WriteLine("There are duplicate armor pieces:");
-                foreach (IGrouping<string, ArmorPiece> group in ArmorPieces.GroupBy(x => x.Name).Where(g => g.Count() > 1))
-                {
-                    foreach (ArmorPiece a in group)
-                    {
-                        ArmorSet set = ArmorSets.FirstOrDefault(x => x.ArmorSetId == a.ArmorSetId);
-                        await _console.WriteLine($"{set?.Name}: {a.Name}");
-                    }
-                }
-                throw new ScrapeParsingException("Exiting.");
-            }
+            await EnsureUniqueness();
 
             //Get data
             var types = new List<ArmorPieceTypeEnum>()
                 { ArmorPieceTypeEnum.Head, ArmorPieceTypeEnum.Chest, ArmorPieceTypeEnum.Gauntlets, ArmorPieceTypeEnum.Legs };
             foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(MaxSimultaniousRequests))
             {
-                Task.WaitAll(batch.Select(type => GetData(type)).ToArray());
+                Task<List<ArmorSet>>[] tasks = batch.Select(type => GetData(type)).ToArray();
+                Task.WaitAll(tasks);
+
+                foreach(Task<List<ArmorSet>> t in tasks.Where(x => x.Result.Count > 0))
+                {
+                    ArmorSets.AddRange(t.Result);
+                    ArmorPieces.AddRange(t.Result.SelectMany(x => x.ArmorPieces));
+                }
             }
+
+            await EnsureUniqueness();
 
             ArmorPieces = ArmorPieces.OrderBy(x => x.ArmorSetId).ToList();
 
@@ -177,18 +170,14 @@ namespace ScrapeWiki
                 string name = a.InnerText?.Replace("&nbsp;", "")?.Trim();
                 if (string.IsNullOrEmpty(name)) throw new ScrapeParsingException(set.ResourceName, "Empty Piece name.");
 
-                int id;
-                lock (armorPieceIdLock)
-                {
-                    id = ArmorPieceIdCounter++;
-                }
-
-                set.ArmorPieces.Add(new ArmorPiece() { ArmorPieceId = id, ArmorSetId = set.ArmorSetId, Name = name });
+                set.ArmorPieces.Add(new ArmorPiece() { ArmorSetId = set.ArmorSetId, Name = name });
             }
         }
 
-        private async Task GetData(ArmorPieceTypeEnum armorPieceType)
+        private async Task<List<ArmorSet>> GetData(ArmorPieceTypeEnum armorPieceType)
         {
+            var standaloneArmorPieceSets = new List<ArmorSet>();
+
             string resourceName = null;
             switch (armorPieceType)
             {
@@ -235,15 +224,8 @@ namespace ScrapeWiki
                                 newSetId = ArmorSetIdCounter++;
                             }
 
-                            int newPieceId;
-                            lock (armorPieceIdLock)
-                            {
-                                newPieceId = ArmorPieceIdCounter++;
-                            }
-
-                            piece = new ArmorPiece() { ArmorPieceId = newPieceId, ArmorSetId = newSetId, Name = armorPieceName };
-                            ArmorPieces.Add(piece);
-                            ArmorSets.Add(new ArmorSet() { ArmorSetId = newSetId, Name = armorPieceName, ArmorPieces = new List<ArmorPiece>() { piece } });
+                            piece = new ArmorPiece() { ArmorSetId = newSetId, Name = armorPieceName };
+                            standaloneArmorPieceSets.Add(new ArmorSet() { ArmorSetId = newSetId, Name = armorPieceName, ArmorPieces = new List<ArmorPiece>() { piece } });
                         }
 
                         if (piece.IsProcessed) throw new ScrapeParsingException(resourceName, $"Attempted to process Armor Piece {armorPieceName} multiple times.");
@@ -271,6 +253,8 @@ namespace ScrapeWiki
                     i++;
                 }
             }
+
+            return standaloneArmorPieceSets;
         }
 
         private void ParseTableCell(bool parseSucceded, Action assignValue, string propertyName, string armorPieceName, string resourceName)
@@ -279,6 +263,33 @@ namespace ScrapeWiki
                 assignValue.Invoke();
             else
                 throw new ScrapeParsingException(resourceName, $"Couldn't parse {propertyName} for Armor Piece: {armorPieceName}");
+        }
+
+        private async Task EnsureUniqueness()
+        {
+            if (ArmorSets.Select(x => x.Name).Distinct().Count() != ArmorSets.Count)
+            {
+                await _console.WriteLine("There are multiple armor sets with the same name:");
+                foreach (ArmorSet s in ArmorSets.GroupBy(x => x.Name).Where(g => g.Count() > 1).Select(g => g.First()))
+                {
+                    await _console.WriteLine($"{s.Name}");
+                }
+                throw new ScrapeParsingException("Exiting.");
+            }
+
+            if (ArmorPieces.Select(x => x.Name).Distinct().Count() != ArmorPieces.Count)
+            {
+                await _console.WriteLine("There are multiple armor pieces with the same name:");
+                foreach (IGrouping<string, ArmorPiece> group in ArmorPieces.GroupBy(x => x.Name).Where(g => g.Count() > 1))
+                {
+                    foreach (ArmorPiece a in group)
+                    {
+                        ArmorSet set = ArmorSets.FirstOrDefault(x => x.ArmorSetId == a.ArmorSetId);
+                        await _console.WriteLine($"{set?.Name}: {a.Name}");
+                    }
+                }
+                throw new ScrapeParsingException("Exiting.");
+            }
         }
     }
 

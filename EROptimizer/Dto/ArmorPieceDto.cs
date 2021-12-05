@@ -10,6 +10,7 @@ namespace EROptimizer.Dto
     {
         public int ArmorSetId { get; set; }
         public string Name { get; set; }
+        public ArmorPieceTypeEnum? Type { get; set; }
 
         public double Physical { get; set; }
         public double PhysicalStrike { get; set; }
@@ -34,6 +35,7 @@ namespace EROptimizer.Dto
             {
                 ArmorSetId = a.ArmorSetId,
                 Name = a.Name,
+                Type = a.Type,
 
                 Physical = a.Physical,
                 PhysicalStrike = a.PhysicalStrike,

@@ -1,6 +1,6 @@
-<h1 class="h3">Admin Panel</h1>
+<h1>Admin Panel</h1>
 <div>
-  <h2 class="h4">Armor data updates</h2>
+  <h2>Armor data updates</h2>
   <div>
     <button type="button" class="btn btn-primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
     from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
@@ -9,6 +9,9 @@
       <span #scrapeConsole id="scrape-console" role="log" class="table-border">
         {{ scrapeConsoleText }}
       </span>
+    </div>
+    <div style="margin-top: 10px;">
+      <label style="display: block;" for="scrape-console">Changes:</label>
     </div>
   </div>
 </div>

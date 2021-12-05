@@ -24,8 +24,11 @@ export class OptimizerComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.dataService.getArmorData().subscribe((data: IArmorDataDto) => {
+    this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
+      this.isLoading = false;
+    }, (error: any) => {
+      //todo handle error
       this.isLoading = false;
     });
 

@@ -10,6 +10,7 @@
     <None Remove="ClientApp\src\service\data.service.ts" />
     <None Remove="ClientApp\src\service\dto\IArmorDataDto.ts" />
     <None Remove="ClientApp\src\service\dto\IArmorPieceDto.ts" />
+    <None Remove="ClientApp\src\service\dto\IArmorSetDto.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +32,7 @@
     <TypeScriptCompile Include="ClientApp\src\service\data.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\service\dto\IArmorDataDto.ts" />
     <TypeScriptCompile Include="ClientApp\src\service\dto\IArmorPieceDto.ts" />
+    <TypeScriptCompile Include="ClientApp\src\service\dto\IArmorSetDto.ts" />
   </ItemGroup>
 
 </Project>
