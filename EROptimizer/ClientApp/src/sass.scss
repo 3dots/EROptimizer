@@ -43,15 +43,16 @@ $my-theme: mat.define-light-theme((
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($my-theme);
 
-@include mat.form-field-theme($my-theme);
-@include mat.button-theme($my-theme);
-@include mat.input-theme($my-theme);
 @include mat.progress-bar-theme($my-theme);
+@include mat.input-theme($my-theme);
+@include mat.form-field-theme($my-theme);
+@include mat.dialog-theme($my-theme);
+@include mat.button-theme($my-theme);
 
 // Styles
 
 .mat-typography {
-  h1, h2, .h3 {
+  h1, h2, h3, .h3 {
     margin-bottom: 8px;
   }
 }

@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\admin\dto\IArmorDataChangesDto.ts" />
+    <None Remove="ClientApp\src\app\admin\dto\IArmorPieceChangesDto.ts" />
     <None Remove="ClientApp\src\app\optimizer\model\OptimizerConfigDto.ts" />
     <None Remove="ClientApp\src\app\optimizer\optimizer.component.ts" />
     <None Remove="ClientApp\src\service\data.service.ts" />
@@ -27,6 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\admin\dto\IArmorDataChangesDto.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\admin\dto\IArmorPieceChangesDto.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\optimizer\model\OptimizerConfigDto.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\optimizer\optimizer.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\service\data.service.ts" />

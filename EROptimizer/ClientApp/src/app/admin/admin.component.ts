@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
+import { IArmorDataChangesDto } from './dto/IArmorDataChangesDto';
 
 @Component({
   selector: 'app-admin',
@@ -7,14 +8,18 @@ import * as signalR from "@microsoft/signalr";
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements AfterViewChecked {
-  
-  @ViewChild('scrapeConsole') scrapeConsole!: ElementRef;
+
+  socket!: signalR.HubConnection;
 
   isScrapeButtonDisabled: boolean = false;
   scrapeConsoleText: string = "";
+
+  @ViewChild('scrapeConsole') scrapeConsole!: ElementRef;
   isScrapeScrollUpdate: boolean = false;
 
-  socket!: signalR.HubConnection;
+  isScrapeDisplayChanges: boolean = false;
+  changes!: IArmorDataChangesDto | null;
+  isSaveButtonDisabled: boolean = true;
 
   ngAfterViewChecked(): void {
     if (this.isScrapeScrollUpdate) {
@@ -24,9 +29,11 @@ export class AdminComponent implements AfterViewChecked {
   }
 
   scrape() {
-
     this.isScrapeButtonDisabled = true;
     this.scrapeConsoleText = "";
+    this.isScrapeDisplayChanges = false;
+    this.changes = null;
+    this.isSaveButtonDisabled = false;
 
     this.socket = new signalR.HubConnectionBuilder().withUrl("/scrapeWikiHub").build();
     this.socket.on("WriteLine", this.onRecieveMessage.bind(this));
@@ -44,17 +51,27 @@ export class AdminComponent implements AfterViewChecked {
   }
 
   onSocketError(err: any) {
-    this.scrapeConsoleText = err.toString();
+    this.onRecieveMessage(err.toString());
     this.isScrapeButtonDisabled = false;
   }
 
   onScrapeEnd() {
     this.socket.stop().then(() => {
       this.isScrapeButtonDisabled = false;
+      this.isSaveButtonDisabled = true;
     });    
   }
 
-  onDataRetrieved(diffJson: string) {
-    console.log(diffJson);
+  onDataRetrieved(diff: IArmorDataChangesDto) {
+    this.changes = diff;
+    this.isScrapeDisplayChanges = true;
+  }
+
+  save() {
+    this.socket.invoke("DataSave").catch(this.onSocketError.bind(this));
+  }
+
+  cancel() {
+    this.onScrapeEnd();
   }
 }

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { DataService } from '../../service/data.service'
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 import { OptimizerConfigDto } from './model/OptimizerConfigDto';
 
@@ -18,7 +20,7 @@ export class OptimizerComponent implements OnInit {
 
   viewModel: OptimizerConfigDto = new OptimizerConfigDto();
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, public dialog: MatDialog) {
 
   }
 
@@ -28,8 +30,14 @@ export class OptimizerComponent implements OnInit {
       this.armorData = data;
       this.isLoading = false;
     }, (error: any) => {
-      //todo handle error
+      console.log(error);
       this.isLoading = false;
+      this.dialog.open(ErrorDialogComponent, {
+        data: {
+          errorText: "Armor data retrieval failed.",
+          errorException: error,
+        }
+      });
     });
 
   }

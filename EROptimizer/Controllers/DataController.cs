@@ -34,7 +34,7 @@ namespace EROptimizer.Controllers
 
             try
             {
-                using FileStream fileStream = System.IO.File.OpenRead(Path.Combine(path, fileName));
+                using FileStream fileStream = System.IO.File.Open(Path.Combine(path, fileName), FileMode.Open, FileAccess.Read, FileShare.Delete);
                 ArmorDataDto data = await JsonSerializer.DeserializeAsync<ArmorDataDto>(fileStream);
                 await fileStream.DisposeAsync();
 

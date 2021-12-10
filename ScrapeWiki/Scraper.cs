@@ -28,12 +28,11 @@ namespace ScrapeWiki
 
         public Scraper(IProgressConsole pc)
         {
-
+            _console = pc;
         }
 
-        public Scraper(IProgressConsole pc, string filesPath, bool createHtmlFilesInSource, bool useStaticFiles)
+        public Scraper(IProgressConsole pc, string filesPath, bool createHtmlFilesInSource, bool useStaticFiles) : this(pc)
         {
-            _console = pc;
             _createHtmlFilesInSource = createHtmlFilesInSource;
             _useStaticHtmlFiles = useStaticFiles;
             _filesPath = filesPath;
@@ -162,7 +161,8 @@ namespace ScrapeWiki
             HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => x.InnerText == headerText);
             if (h3ArmorPieces == null) throw new ScrapeParsingException(set.ResourceName, $"h3 with \"{headerText}\" not found.");
 
-            HtmlNode ul = h3ArmorPieces.NextSiblingElement();
+            HtmlNode ul = h3ArmorPieces.NextSiblingElement().NextSiblingElement();
+            if (ul.Name != "ul") throw new ScrapeParsingException(set.ResourceName, $"Could not find <ul> with armor pieces.");
             IList<HtmlNode> armorPieceAnchors = ul.QuerySelectorAll("a");
 
             foreach (HtmlNode a in armorPieceAnchors)

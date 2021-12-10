@@ -47,7 +47,7 @@
 		</script>
 		<script data-cfasync="false" defer type="text/javascript" src="https://swcdn.fextralife.com/js/utils-min.js?v=ZBa1"></script>
 		<!--script data-cfasync="false" defer type="text/javascript" src="https://swcdn.fextralife.com/wiki/js/page-general-modif.js?js=0001c"></script-->
-		<script data-cfasync="false" defer type="text/javascript" src="https://swcdn.fextralife.com/wiki/js/page-general-min.js?js=0004"></script>
+		<script data-cfasync="false" defer type="text/javascript" src="https://swcdn.fextralife.com/wiki/js/page-general-min.js?js=0004s"></script>
 		<script data-cfasync="false" type="text/javascript">
 			// Picture element HTML5 shiv
 			document.createElement( "picture" );
@@ -791,7 +791,7 @@ var ppp = ua == null || (ua != null && ua != '211' && ua != '111' && ua != '210'
 			
 				<div class="btn-group btn-group-sm" role="group">
 					<button id="btnPE" style="display: none;"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><span class="hidden-xs"> Edit</span></button>
-					<button id="btnComments" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="view discussions"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span><span id="amcom"> 2</span></button>
+					<button id="btnComments" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="view discussions"><span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span><span id="amcom"> </span></button>
 					<button id="btnPageHistory" class="btn btn-default hidden-xs hidden-sm" data-toggle="tooltip" data-placement="bottom" title="view 3 revisions"><span class="glyphicon glyphicon-time" aria-hidden="true"></span> 3</button>
 					<button type="button" class="btn btn-default" data-toggle="dropdown" aria-expanded="false" title="more options">&hellip;</button>
 					<ul class="dropdown-menu dropdown-menu-right" role="menu">
@@ -803,6 +803,8 @@ var ppp = ua == null || (ua != null && ua != '211' && ua != '111' && ua != '210'
 						<li><a id="btnTrddmF" href="" style="display: none;"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span> Redirect</a></li>
 						<li><a id="btnTrddmG" href="" style="display: none;"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Lock</a></li>
 						<li><a id="btnTrddmH" href="" style="display: none;"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Unlock</a></li>
+
+						<li><a id="btnTrddmI" href="" style="display: none;"><span class="glyphicon glyphicon-flag" aria-hidden="true"></span> Flag this page</a></li>
 
 						<li id="divider-trddm-a" class="divider" style="display: none;"></li>
 						<li><a id="btnTrddmJ" href="" style="display: none;"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Permissions</a></li>
@@ -1054,7 +1056,7 @@ var ppp = ua == null || (ua != null && ua != '211' && ua != '111' && ua != '210'
 					<div class="ng-scope">
 						<textarea id="dcomment" class="ng-pristine ng-untouched ng-invalid ng-invalid-required" placeholder="Input your comments:"></textarea>
 						<button id="btnPostComment" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Submit</button>
-						<img id="newCommentAvatar" src="//fextralife.com/forums/download/file.php?avatar=25290_1551145963.png"/>
+						<img id="newCommentAvatar" src="/images/avatar.png"/>
 					</div>
 				</div>
 			</div>
@@ -1251,7 +1253,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 		<script data-cfasync="false" type="text/javascript">
 			function loadJSON(callback) { var xobj = new XMLHttpRequest();xobj.overrideMimeType("application/json");xobj.open('GET', '/ws/user/unread-msgs', true);xobj.onreadystatechange = function () {if (xobj.readyState == 4 && xobj.status == "200") {callback(xobj.responseText);}};xobj.send(null);  }if (c != null) {loadJSON(function(response) {if (parseInt(response) > 0) {var nmsgs = response;var finbox = $('.finbox');finbox.text('Inbox (' + nmsgs + ')');var fuavtr = $('#user-avatar');fuavtr.replaceWith('<span id="priv-msgs" style="display: inline-block;width: 24px;height: 24px;line-height: 24px;background-color: #a00;color: #fff;font-weight: 700;text-align: center;vertical-align: middle;border-radius: 50%;margin-right: 3px;">' + nmsgs + '</span><img id="avatar" src="' + fuavtr.attr('src') + '" alt="" style="border-left-width:0px;width:30px;height:30px;"/>');}});}
 		</script>
-	<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v64f9daad31f64f81be21cbef6184a5e31634941392597" integrity="sha512-gV/bogrUTVP2N3IzTDKzgP0Js1gg4fbwtYB6ftgLbKQu/V8yH2+lrKCfKHelh4SO3DPzKj4/glTO+tNJGDnb0A==" data-cf-beacon='{"rayId":"6b231e7c0aaf54a3","token":"cc09ed1686d84f6bac4e02a118808d45","version":"2021.11.0","si":100}' crossorigin="anonymous"></script>
+	<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v64f9daad31f64f81be21cbef6184a5e31634941392597" integrity="sha512-gV/bogrUTVP2N3IzTDKzgP0Js1gg4fbwtYB6ftgLbKQu/V8yH2+lrKCfKHelh4SO3DPzKj4/glTO+tNJGDnb0A==" data-cf-beacon='{"rayId":"6b2eb14f5d6dd153","token":"cc09ed1686d84f6bac4e02a118808d45","version":"2021.11.0","si":100}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v64f9daad31f64f81be21cbef6184a5e31634941392597" integrity="sha512-gV/bogrUTVP2N3IzTDKzgP0Js1gg4fbwtYB6ftgLbKQu/V8yH2+lrKCfKHelh4SO3DPzKj4/glTO+tNJGDnb0A==" data-cf-beacon='{"rayId":"6bb92dd81da1f981","token":"cc09ed1686d84f6bac4e02a118808d45","version":"2021.12.0","si":100}' crossorigin="anonymous"></script>
 </body>
 	<link href="https://swcdn.fextralife.com/css/gallery-image.css?v=aa0" rel="stylesheet">
 	<link href="" rel="stylesheet" class="stylechanger">
