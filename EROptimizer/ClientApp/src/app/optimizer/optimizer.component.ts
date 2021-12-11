@@ -30,7 +30,6 @@ export class OptimizerComponent implements OnInit {
       this.armorData = data;
       this.isLoading = false;
     }, (error: any) => {
-      console.log(error);
       this.isLoading = false;
       this.dialog.open(ErrorDialogComponent, {
         data: {
@@ -39,6 +38,10 @@ export class OptimizerComponent implements OnInit {
         }
       });
     });
+
+  }
+
+  runOptimization(): void {
 
   }
 

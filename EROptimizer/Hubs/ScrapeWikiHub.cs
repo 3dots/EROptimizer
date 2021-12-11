@@ -23,8 +23,14 @@ namespace EROptimizer.Hubs
             _configuration = configuration;
         }
 
-        public async Task StartScrape()
+        public async Task StartScrape(string password)
         {
+            if (_configuration["AdminPassword"] != password)
+            {
+                await Clients.Caller.SendAsync("Denied");
+                return;
+            }
+
             Scraper scraper;
             if (_configuration["ScrapeWiki:UseStaticHtmlFiles"] == true.ToString())
                 scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], false, true);

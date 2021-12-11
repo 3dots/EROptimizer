@@ -21,6 +21,8 @@ export class AdminComponent implements AfterViewChecked {
   changes!: IArmorDataChangesDto | null;
   isSaveButtonDisabled: boolean = true;
 
+  password: string = "";
+
   ngAfterViewChecked(): void {
     if (this.isScrapeScrollUpdate) {
       this.isScrapeScrollUpdate = false;
@@ -39,9 +41,10 @@ export class AdminComponent implements AfterViewChecked {
     this.socket.on("WriteLine", this.onRecieveMessage.bind(this));
     this.socket.on("DataRetrieved", this.onDataRetrieved.bind(this));
     this.socket.on("ScrapeEnd", this.onScrapeEnd.bind(this));
+    this.socket.on("Denied", this.onDenied.bind(this));
 
     this.socket.start().then(() => {
-      this.socket.invoke("StartScrape").catch(this.onSocketError.bind(this));
+      this.socket.invoke("StartScrape", this.password).catch(this.onSocketError.bind(this));
     }).catch(this.onSocketError.bind(this));
   }
 
@@ -65,6 +68,10 @@ export class AdminComponent implements AfterViewChecked {
   onDataRetrieved(diff: IArmorDataChangesDto) {
     this.changes = diff;
     this.isScrapeDisplayChanges = true;
+  }
+
+  onDenied() {
+    this.socket.stop();
   }
 
   save() {

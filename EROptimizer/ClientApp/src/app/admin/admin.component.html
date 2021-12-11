@@ -2,8 +2,16 @@
 <div>
   <h2>Armor data updates</h2>
   <div>
-    <button mat-button mat-raised-button color="primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
-    from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
+    <div style="width: 150px;">
+      <mat-form-field appearance="fill">
+        <mat-label>Password:</mat-label>
+        <input matInput [(ngModel)]="password" type="password" />
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button mat-raised-button color="primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
+      from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
+    </div>    
     <div style="margin-top: 10px;">
       <label style="display: block;" for="scrape-console">Console output:</label>
       <span #scrapeConsole id="scrape-console" role="log" class="table-border">
