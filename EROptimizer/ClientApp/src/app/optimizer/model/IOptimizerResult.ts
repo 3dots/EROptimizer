@@ -1,16 +1,9 @@
 
-export enum ArmorPieceTypeEnum {
-  Head = 0,
-  Chest = 1,
-  Gauntlets = 2,
-  Legs = 3,
-}
-
-export interface IArmorPieceDto {
-  armorPieceId: number;
-  armorSetId: number;
-  name: string;
-  type: ArmorPieceTypeEnum;
+export interface IOptimizerResult {
+  headPieceId: number;
+  chestPieceId: number;
+  gauntletsPieceId: number;
+  legsPieceId: number;
 
   physical: number;
   physicalStrike: number;

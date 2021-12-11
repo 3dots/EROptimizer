@@ -20,6 +20,8 @@ export class OptimizerComponent implements OnInit {
 
   viewModel: OptimizerConfigDto = new OptimizerConfigDto();
 
+  worker!: Worker;
+
   constructor(private dataService: DataService, public dialog: MatDialog) {
 
   }
@@ -29,6 +31,16 @@ export class OptimizerComponent implements OnInit {
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
       this.isLoading = false;
+
+      if (typeof Worker === 'undefined') {
+        this.dialog.open(ErrorDialogComponent, {
+          data: {
+            errorText: "Web Worker API is not supported on this browser. Please use a more modern browser",
+          }
+        });
+        return;
+      }      
+
     }, (error: any) => {
       this.isLoading = false;
       this.dialog.open(ErrorDialogComponent, {
@@ -42,7 +54,15 @@ export class OptimizerComponent implements OnInit {
   }
 
   runOptimization(): void {
+    
 
+    this.worker = new Worker(new URL('./optimizer.worker', import.meta.url));
+    this.worker.onmessage = ({ data }) => {
+      console.log(`page got message: ${data}`);
+    };
+
+
+    this.worker.postMessage({ key: "hello" });
   }
 
 }

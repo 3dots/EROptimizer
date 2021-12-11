@@ -8,6 +8,7 @@ namespace EROptimizer.Dto
 {
     public class ArmorPieceDto
     {
+        public int ArmorPieceId { get; set; }
         public int ArmorSetId { get; set; }
         public string Name { get; set; }
         public ArmorPieceTypeEnum? Type { get; set; }
@@ -29,31 +30,32 @@ namespace EROptimizer.Dto
 
         public double Weight { get; set; }
 
-        public static explicit operator ArmorPieceDto(ArmorPiece a)
+        public ArmorPieceDto() { }
+
+        public ArmorPieceDto(ArmorPiece p, int index)
         {
-            return new ArmorPieceDto()
-            {
-                ArmorSetId = a.ArmorSetId,
-                Name = a.Name,
-                Type = a.Type,
+            ArmorPieceId = index;
 
-                Physical = a.Physical,
-                PhysicalStrike = a.PhysicalStrike,
-                PhysicalSlash = a.PhysicalSlash,
-                PhysicalPierce = a.PhysicalPierce,
+            ArmorSetId = p.ArmorSetId;
+            Name = p.Name;
+            Type = p.Type;
 
-                Magic = a.Magic,
-                Fire = a.Fire,
-                Lightning = a.Lightning,
-                Holy = a.Holy,
+            Physical = p.Physical;
+            PhysicalStrike = p.PhysicalStrike;
+            PhysicalSlash = p.PhysicalSlash;
+            PhysicalPierce = p.PhysicalPierce;
 
-                Immunity = a.Immunity,
-                Robustness = a.Robustness,
-                Focus = a.Focus,
-                Death = a.Death,
+            Magic = p.Magic;
+            Fire = p.Fire;
+            Lightning = p.Lightning;
+            Holy = p.Holy;
 
-                Weight = a.Weight,
-            };
+            Immunity = p.Immunity;
+            Robustness = p.Robustness;
+            Focus = p.Focus;
+            Death = p.Death;
+
+            Weight = p.Weight;
         }
     }
 }

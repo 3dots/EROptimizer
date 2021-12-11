@@ -74,22 +74,24 @@ namespace EROptimizer.Hubs
         {
             var newData = new ArmorDataDto();
 
-            ArmorPieceDto emptyHead = new ArmorPieceDto() { ArmorSetId = 0, Name = "None", Type = ArmorPieceTypeEnum.Head };
-            ArmorPieceDto emptyChest = new ArmorPieceDto() { ArmorSetId = 0, Name = "None", Type = ArmorPieceTypeEnum.Chest };
-            ArmorPieceDto emptyGauntlets = new ArmorPieceDto() { ArmorSetId = 0, Name = "None", Type = ArmorPieceTypeEnum.Gauntlets };
-            ArmorPieceDto emptyLegs = new ArmorPieceDto() { ArmorSetId = 0, Name = "None", Type = ArmorPieceTypeEnum.Legs };
+            int index = 0;
+
+            ArmorPieceDto emptyHead = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Head };
+            ArmorPieceDto emptyChest = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Chest };
+            ArmorPieceDto emptyGauntlets = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Gauntlets };
+            ArmorPieceDto emptyLegs = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Legs };
 
             newData.Head.Add(emptyHead);
-            newData.Head.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Head).Select(x => (ArmorPieceDto)x));
+            newData.Head.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Head).Select(x => new ArmorPieceDto(x, index++)));
 
             newData.Chest.Add(emptyChest);
-            newData.Chest.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Chest).Select(x => (ArmorPieceDto)x));
+            newData.Chest.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Chest).Select(x => new ArmorPieceDto(x, index++)));
 
             newData.Gauntlets.Add(emptyGauntlets);
-            newData.Gauntlets.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Gauntlets).Select(x => (ArmorPieceDto)x));
+            newData.Gauntlets.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Gauntlets).Select(x => new ArmorPieceDto(x, index++)));
 
             newData.Legs.Add(emptyLegs);
-            newData.Legs.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Legs).Select(x => (ArmorPieceDto)x));
+            newData.Legs.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Legs).Select(x => new ArmorPieceDto(x, index++)));
 
             newData.ArmorSets.Add(new ArmorSetDto() { ArmorSetId = 0, Name = "None" });
             newData.ArmorSets.AddRange(s.ArmorSets.Select(x => (ArmorSetDto)x));
