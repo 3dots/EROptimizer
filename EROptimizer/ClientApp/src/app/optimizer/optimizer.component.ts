@@ -4,8 +4,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service'
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { IOptimizerWorkerRS } from './model/OptimizerWorkerRS';
 
 import { OptimizerConfigDto } from './model/OptimizerConfigDto';
+import { OptimizerWorkerRQ } from './model/OptimizerWorkerRQ';
 
 @Component({
   selector: 'app-optimizer',
@@ -38,7 +40,6 @@ export class OptimizerComponent implements OnInit {
             errorText: "Web Worker API is not supported on this browser. Please use a more modern browser",
           }
         });
-        return;
       }      
 
     }, (error: any) => {
@@ -55,14 +56,13 @@ export class OptimizerComponent implements OnInit {
 
   runOptimization(): void {
     
-
     this.worker = new Worker(new URL('./optimizer.worker', import.meta.url));
-    this.worker.onmessage = ({ data }) => {
-      console.log(`page got message: ${data}`);
+    this.worker.onmessage = (e: MessageEvent<IOptimizerWorkerRS>) => {
+      console.log("View recieved worker message");
+      console.log(e.data);
     };
 
-
-    this.worker.postMessage({ key: "hello" });
+    this.worker.postMessage(new OptimizerWorkerRQ(this.armorData, this.viewModel));
   }
 
 }

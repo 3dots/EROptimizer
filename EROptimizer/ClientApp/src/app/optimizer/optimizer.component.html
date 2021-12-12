@@ -85,7 +85,7 @@
 </div>
 <h2 class="h3">Optimization criteria:</h2>
 <div class="container-fluid container-mat-form-field-no-bottom-space">
-  <table class="table optimization-criteria-table">
+  <table class="table optimization-criteria-table" style="margin-bottom: 10px;">
     <thead>
       <tr>
         <th></th>
@@ -237,6 +237,30 @@
       </tr>
     </tbody>
   </table>
-  <button mat-button mat-raised-button color="primary" (click)="runOptimization()">Run Optimization</button>
 </div>
-<h2 style="margin-top: 15px;">Results</h2>
+<div class="container-fluid container-mat-form-field-less-bottom-space">
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7 col-lg-9">
+      <div class="row">
+        <div class="col col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label># of threads:</mat-label>
+            <input matInput [(ngModel)]="viewModel.numberOfThreads" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label># of results:</mat-label>
+            <input matInput [(ngModel)]="viewModel.numberOfResults" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col" style="align-self: center;">
+          <button mat-button mat-raised-button color="primary" (click)="runOptimization()">Run Optimization</button>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<h2>Results</h2>

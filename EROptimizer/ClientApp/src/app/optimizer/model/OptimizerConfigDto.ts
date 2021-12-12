@@ -42,6 +42,9 @@ export class OptimizerConfigDto {
   priFocus: number = 0;
   priDeath: number = 0;
 
+  numberOfResults: number = 10;
+  numberOfThreads: number = 4;
+
   public get maxWeight() {
     return this.strength * 2; //todo get correct formula
   }
