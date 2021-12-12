@@ -1,6 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
   <div class="container">
-    <a class="navbar-brand" [routerLink]="['/']">EROptimizer</a>
     <button class="navbar-toggler"
             type="button"
             data-toggle="collapse"
@@ -10,21 +9,15 @@
             (click)="toggle()">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end"
+    <div class="navbar-collapse collapse d-sm-inline-flex"
          [ngClass]="{ show: isExpanded }">
       <ul class="navbar-nav flex-grow">
-        <li class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }">
-          <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+        <li class="nav-item" [routerLinkActive]="['link-active']">
+          <a class="nav-link text-dark" [routerLink]="['/']">EROptimizer</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/admin']">Admin</a>
+          <a class="nav-link text-dark" [routerLink]="['/armor']">Armor Selections</a>
         </li>
-        <!--
-        <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/fetch-data']">Fetch data</a>
-        </li>-->
       </ul>
     </div>
   </div>

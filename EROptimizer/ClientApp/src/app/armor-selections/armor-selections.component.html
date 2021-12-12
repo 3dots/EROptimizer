@@ -1,0 +1,52 @@
+
+<h1>Armor Sets</h1>
+<div class="container-fluid" *ngIf="armorData">
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 30px;"></th>
+        <th scope="col">Head</th>
+        <th scope="col">Chest</th>
+        <th scope="col">Gauntlets</th>
+        <th scope="col">Legs</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Avg Physical</th>
+        <th scope="col">Physical</th>
+        <th scope="col">Strike</th>
+        <th scope="col">Slash</th>
+        <th scope="col">Pierce</th>
+        <th scope="col">Magic</th>
+        <th scope="col">Fire</th>
+        <th scope="col">Lightning</th>
+        <th scope="col">Holy</th>
+        <th scope="col">Immunity</th>
+        <th scope="col">Robustness</th>
+        <th scope="col">Focus</th>
+        <th scope="col">Death</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let set of armorData.armorSets">
+        <td></td>
+        <td>{{ set.combo.head.name }}</td>
+        <td>{{ set.combo.chest.name }}</td>
+        <td>{{ set.combo.gauntlets.name }}</td>
+        <td>{{ set.combo.legs.name }}</td>
+        <td>{{ set.combo.weight | number:'1.0-2' }}</td>
+        <td>{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
+        <td>{{ set.combo.physical | number:'1.0-2' }}</td>
+        <td>{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
+        <td>{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
+        <td>{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
+        <td>{{ set.combo.magic | number:'1.0-2' }}</td>
+        <td>{{ set.combo.fire | number:'1.0-2' }}</td>
+        <td>{{ set.combo.lightning | number:'1.0-2' }}</td>
+        <td>{{ set.combo.holy | number:'1.0-2' }}</td>
+        <td>{{ set.combo.immunity | number:'1.0-2' }}</td>
+        <td>{{ set.combo.robustness | number:'1.0-2' }}</td>
+        <td>{{ set.combo.focus | number:'1.0-2' }}</td>
+        <td>{{ set.combo.death | number:'1.0-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

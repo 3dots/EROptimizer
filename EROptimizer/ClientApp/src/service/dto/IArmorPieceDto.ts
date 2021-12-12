@@ -12,6 +12,8 @@ export interface IArmorPieceDto {
   name: string;
   type: ArmorPieceTypeEnum;
 
+  isEnabled: boolean;
+
   physical: number;
   physicalStrike: number;
   physicalSlash: number;

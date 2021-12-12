@@ -5,6 +5,8 @@ import { Observable, shareReplay, map } from 'rxjs';
 
 import { IArmorDataDto } from './dto/IArmorDataDto';
 import { IArmorSetDto } from './dto/IArmorSetDto';
+import { IArmorPieceDto } from './dto/IArmorPieceDto';
+import { ArmorCombo } from '../app/optimizer/model/ArmorCombo';
 
 @Injectable({
   providedIn: 'root'
@@ -22,17 +24,21 @@ export class DataService {
     if (this._armorData == null) {
       this._armorData = this.http.get<IArmorDataDto>(this.url).pipe(map(x => {
 
-        //the same object references.
+        //todo wire to cookie storage
+        x.head.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
+        x.chest.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
+        x.gauntlets.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
+        x.legs.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
+
         x.armorSets.forEach((s: IArmorSetDto) => {
 
-          let head = x.head.find(p => p.armorSetId == s.armorSetId);
-          if (head) s.armorPieces.push(head);
-          let chest = x.chest.find(p => p.armorSetId == s.armorSetId);
-          if (chest) s.armorPieces.push(chest);
-          let gauntlets = x.gauntlets.find(p => p.armorSetId == s.armorSetId);
-          if (gauntlets) s.armorPieces.push(gauntlets);
-          let legs = x.legs.find(p => p.armorSetId == s.armorSetId);
-          if (legs) s.armorPieces.push(legs);
+          //0 index piece is the "None".
+          let head = x.head.find(p => p.armorSetId == s.armorSetId) ?? x.head[0];
+          let chest = x.chest.find(p => p.armorSetId == s.armorSetId) ?? x.chest[0];
+          let gauntlets = x.gauntlets.find(p => p.armorSetId == s.armorSetId) ?? x.gauntlets[0];    
+          let legs = x.legs.find(p => p.armorSetId == s.armorSetId) ?? x.legs[0];
+
+          s.combo = new ArmorCombo(head, chest, gauntlets, legs, null);
 
         });
 

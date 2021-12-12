@@ -8,30 +8,50 @@ export class ArmorCombo {
     public chest: IArmorPieceDto,
     public gauntlets: IArmorPieceDto,
     public legs: IArmorPieceDto,
-    config: OptimizerConfigDto) {
+    config: OptimizerConfigDto | null) {
 
+    this.physical = head.physical + chest.physical + gauntlets.physical + legs.physical;
+    this.physicalStrike = head.physicalStrike + chest.physicalStrike + gauntlets.physicalStrike + legs.physicalStrike;
+    this.physicalSlash = head.physicalSlash + chest.physicalSlash + gauntlets.physicalSlash + legs.physicalSlash;
+    this.physicalPierce = head.physicalPierce + chest.physicalPierce + gauntlets.physicalPierce + legs.physicalPierce;
+    
+    this.avgPhysical = (this.physical + this.physicalStrike + this.physicalSlash + this.physicalPierce) / 4;
+
+    this.magic = head.magic + chest.magic + gauntlets.magic + legs.magic;
+    this.fire = head.fire + chest.fire + gauntlets.fire + legs.fire;
+    this.lightning = head.lightning + chest.lightning + gauntlets.lightning + legs.lightning;
+    this.holy = head.holy + chest.holy + gauntlets.holy + legs.holy;
+
+    this.immunity = head.immunity + chest.immunity + gauntlets.immunity + legs.immunity;
+    this.robustness = head.robustness + chest.robustness + gauntlets.robustness + legs.robustness;
+    this.focus = head.focus + chest.focus + gauntlets.focus + legs.focus;
+    this.death = head.death + chest.death + gauntlets.death + legs.death;
+
+    this.weight = head.weight + chest.weight + gauntlets.weight + legs.weight;
+
+    if (config != null) {
+      //score = 
+    }
   }
 
-  //physical: number;
-  //physicalStrike: number;
-  //physicalSlash: number;
-  //physicalPierce: number;
+  physical: number;
+  physicalStrike: number;
+  physicalSlash: number;
+  physicalPierce: number;
 
-  //magic: number;
-  //fire: number;
-  //lightning: number;
-  //holy: number;
+  avgPhysical: number;
 
-  //immunity: number;
-  //robustness: number;
-  //focus: number;
-  //death: number;
+  magic: number;
+  fire: number;
+  lightning: number;
+  holy: number;
 
-  //weight: number;
+  immunity: number;
+  robustness: number;
+  focus: number;
+  death: number;
 
-  //score: number;
+  weight: number;
 
-  //calculateScore(config: OptimizerConfigDto): number {
-
-  //}
+  score: number | undefined;
 }

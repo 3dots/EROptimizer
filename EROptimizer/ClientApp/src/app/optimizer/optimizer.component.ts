@@ -24,7 +24,7 @@ export class OptimizerComponent implements OnInit {
 
   worker!: Worker;
 
-  constructor(private dataService: DataService, public dialog: MatDialog) {
+  constructor(private dataService: DataService, private dialog: MatDialog) {
 
   }
 

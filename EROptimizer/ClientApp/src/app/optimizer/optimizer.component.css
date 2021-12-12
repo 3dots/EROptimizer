@@ -1,11 +1,5 @@
-@media screen and (min-width: 1300px) and (max-width: 1560px) {
-  :host {
-    font-size: 15px;
-  }
-}
-
 @media screen and (min-width: 1200px) and (max-width: 1299px) {
-  :host {
+  table.optimization-criteria-table {
     font-size: 14px;
   }
 }
