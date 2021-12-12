@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
+import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
@@ -34,4 +35,18 @@ export class ArmorSelectionsComponent implements OnInit {
     });
   }
 
+  enableArmorSet(set: IArmorSetDto, enable: boolean) {
+    if (set.armorSetId == 0) {
+      set.combo.head.isEnabled = enable;
+      set.combo.chest.isEnabled = enable;
+      set.combo.gauntlets.isEnabled = enable;
+      set.combo.legs.isEnabled = enable;
+    } else {
+      if (set.combo.head.armorSetId > 0) set.combo.head.isEnabled = enable;
+      if (set.combo.chest.armorSetId > 0) set.combo.chest.isEnabled = enable;
+      if (set.combo.gauntlets.armorSetId > 0) set.combo.gauntlets.isEnabled = enable;
+      if (set.combo.legs.armorSetId > 0) set.combo.legs.isEnabled = enable;
+    }
+    console.log(set);
+  }
 }

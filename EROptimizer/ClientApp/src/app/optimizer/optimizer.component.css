@@ -1,5 +1,27 @@
+
+
+table.optimization-criteria-table td:nth-of-type(6),
+table.optimization-criteria-table th:nth-of-type(7) {
+  color: var(--blue-input);
+}
+
+table.optimization-criteria-table td:nth-of-type(7),
+table.optimization-criteria-table th:nth-of-type(8) {
+  color: var(--red-input);
+}
+
+table.optimization-criteria-table td:nth-of-type(8),
+table.optimization-criteria-table th:nth-of-type(9) {
+  color: var(--yellow-input);
+}
+
+table.optimization-criteria-table td:nth-of-type(9),
+table.optimization-criteria-table th:nth-of-type(10) {
+  color: var(--holy-input);
+}
+
 @media screen and (min-width: 1200px) and (max-width: 1299px) {
-  table.optimization-criteria-table {
+  table .optimization-criteria-table {
     font-size: 14px;
   }
 }
@@ -58,7 +80,7 @@
   table.optimization-criteria-table td:nth-of-type(5):before {
     content: "Pierce";
   }
-
+ 
   table.optimization-criteria-table td:nth-of-type(6):before {
     content: "Magic";
   }

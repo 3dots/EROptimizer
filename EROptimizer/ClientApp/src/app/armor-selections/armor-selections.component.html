@@ -1,16 +1,16 @@
 
 <h1>Armor Sets</h1>
 <div class="container-fluid" *ngIf="armorData">
-  <table class="table">
+  <table class="table armor-selections-table">
     <thead>
       <tr>
-        <th style="width: 30px;"></th>
+        <th style="width: 63px;"></th>
         <th scope="col">Head</th>
         <th scope="col">Chest</th>
         <th scope="col">Gauntlets</th>
         <th scope="col">Legs</th>
         <th scope="col">Weight</th>
-        <th scope="col">Avg Physical</th>
+        <th scope="col" style="width: 72px;">Avg Physical</th>
         <th scope="col">Physical</th>
         <th scope="col">Strike</th>
         <th scope="col">Slash</th>
@@ -27,11 +27,32 @@
     </thead>
     <tbody>
       <tr *ngFor="let set of armorData.armorSets">
-        <td></td>
-        <td>{{ set.combo.head.name }}</td>
-        <td>{{ set.combo.chest.name }}</td>
-        <td>{{ set.combo.gauntlets.name }}</td>
-        <td>{{ set.combo.legs.name }}</td>
+        <td>
+          <button mat-icon-button class="toggle-icon" attr.aria-label="Enable armor set: {{ set.name }}" title="Enable armor set"
+                  (click)="enableArmorSet(set, true)">
+            <svg class="bi enable" fill="currentColor">
+              <use xlink:href="bootstrap-icons.svg#check-circle-fill" />
+            </svg>
+          </button>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable armor set" title="Disable armor set"
+                  (click)="enableArmorSet(set, false)">
+            <svg class="bi disable" fill="currentColor">
+              <use xlink:href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </td>
+        <td>
+          <span [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'">{{ set.combo.head.name }}</span>
+        </td>
+        <td>
+          <span [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'">{{ set.combo.chest.name }}</span>
+        </td>
+        <td>
+          <span [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'">{{ set.combo.gauntlets.name }}</span>
+        </td>
+        <td>
+          <span [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'">{{ set.combo.legs.name }}</span>
+        </td>
         <td>{{ set.combo.weight | number:'1.0-2' }}</td>
         <td>{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
         <td>{{ set.combo.physical | number:'1.0-2' }}</td>

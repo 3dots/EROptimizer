@@ -1,0 +1,20 @@
+
+table.armor-selections-table td:nth-of-type(12),
+table.armor-selections-table th:nth-of-type(12) {
+  color: var(--blue-input);
+}
+
+table.armor-selections-table td:nth-of-type(13),
+table.armor-selections-table th:nth-of-type(13) {
+  color: var(--red-input);
+}
+
+table.armor-selections-table td:nth-of-type(14),
+table.armor-selections-table th:nth-of-type(14) {
+  color: var(--yellow-input);
+}
+
+table.armor-selections-table td:nth-of-type(15),
+table.armor-selections-table th:nth-of-type(15) {
+  color: var(--holy-input);
+}

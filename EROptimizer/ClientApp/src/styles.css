@@ -15,10 +15,31 @@ mat-form-field {
 }
 
 .table {
-    font-size: 15px;
+  font-size: 15px;
 }
 
-.table .mat-form-field-appearance-fill .mat-form-field-flex {
+  .table .mat-form-field-appearance-fill .mat-form-field-flex {
     padding-top: 0;
+  }
+
+:root {
+  --blue-input: #1e5aea;
+  --red-input: #D52536;
+  --yellow-input: #707000;
+  --holy-input: #804000;
 }
 
+.mat-icon-button.toggle-icon,
+.mat-icon-button.toggle-icon svg {
+  height: 1.5em;
+  width: 1.5em;
+  line-height: 1.5em;
+}
+
+  .mat-icon-button.toggle-icon svg.enable {
+    color: var(--bs-green);
+  }
+
+  .mat-icon-button.toggle-icon svg.disable {
+    color: var(--bs-red);
+  }
