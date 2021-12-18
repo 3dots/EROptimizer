@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
+import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
@@ -47,6 +48,33 @@ export class ArmorSelectionsComponent implements OnInit {
       if (set.combo.gauntlets.armorSetId > 0) set.combo.gauntlets.isEnabled = enable;
       if (set.combo.legs.armorSetId > 0) set.combo.legs.isEnabled = enable;
     }
-    console.log(set);
+  }
+
+  toggleArmorPiece(piece: IArmorPieceDto) {
+    piece.isEnabled = !piece.isEnabled;
+  }
+
+  enableAllHead(enable: boolean) {
+    this.armorData.head.forEach((x) => {
+      if (x.armorSetId > 0) x.isEnabled = enable;
+    });
+  }
+
+  enableAllChest(enable: boolean) {
+    this.armorData.chest.forEach((x) => {
+      if (x.armorSetId > 0) x.isEnabled = enable;
+    });
+  }
+
+  enableAllGauntlets(enable: boolean) {
+    this.armorData.gauntlets.forEach((x) => {
+      if (x.armorSetId > 0) x.isEnabled = enable;
+    });
+  }
+
+  enableAllLegs(enable: boolean) {
+    this.armorData.legs.forEach((x) => {
+      if (x.armorSetId > 0) x.isEnabled = enable;
+    });
   }
 }

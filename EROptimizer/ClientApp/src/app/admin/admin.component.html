@@ -9,7 +9,7 @@
       </mat-form-field>
     </div>
     <div>
-      <button mat-button mat-raised-button color="primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
+      <button class="btn btn-primary" (click)="scrape()" [disabled]="isScrapeButtonDisabled"> Scrape armor data</button>
       from <a href="https://eldenring.wiki.fextralife.com/Armor" target="_blank">eldenring.wiki.fextralife.com/Armor</a>
     </div>    
     <div style="margin-top: 10px;">
@@ -30,8 +30,8 @@
           </ul>
         </li>
       </ul>
-      <button mat-button mat-raised-button color="primary" (click)="save()" [disabled]="isSaveButtonDisabled">Save</button>
-      <button mat-button mat-raised-button (click)="cancel()" [disabled]="isSaveButtonDisabled" style="margin-left: 10px;">Cancel</button>
+      <button class="btn btn-primary" (click)="save()" [disabled]="isSaveButtonDisabled">Save</button>
+      <button class="btn btn-secondary" (click)="cancel()" [disabled]="isSaveButtonDisabled" style="margin-left: 10px;">Cancel</button>
     </div>
   </div>
 </div>
