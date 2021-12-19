@@ -112,3 +112,27 @@ table.optimization-criteria-table th:nth-of-type(10) {
     content: "Death";
   }
 }
+
+table.optimizer-results-table td:nth-of-type(11),
+table.optimizer-results-table th:nth-of-type(11) {
+  color: var(--blue-input);
+}
+
+table.optimizer-results-table td:nth-of-type(12),
+table.optimizer-results-table th:nth-of-type(12) {
+  color: var(--red-input);
+}
+
+table.optimizer-results-table td:nth-of-type(13),
+table.optimizer-results-table th:nth-of-type(13) {
+  color: var(--yellow-input);
+}
+
+table.optimizer-results-table td:nth-of-type(14),
+table.optimizer-results-table th:nth-of-type(14) {
+  color: var(--holy-input);
+}
+
+.button-div button:not(:first-child) {
+    margin-left: 5px;
+}

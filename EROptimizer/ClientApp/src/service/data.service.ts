@@ -4,9 +4,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
 
 import { IArmorDataDto } from './dto/IArmorDataDto';
-import { IArmorSetDto } from './dto/IArmorSetDto';
+import { IArmorSetDto } from './dto/ArmorSetDto';
 import { IArmorPieceDto } from './dto/IArmorPieceDto';
 import { ArmorCombo } from '../app/optimizer/model/ArmorCombo';
+import { OptimizerConfigDto } from '../app/optimizer/model/OptimizerConfigDto';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class DataService {
 
   private url: string = "/data/";
   private _armorData!: Observable<IArmorDataDto>;
+
+  config: OptimizerConfigDto = new OptimizerConfigDto();
 
   constructor(private http: HttpClient) {
 

@@ -52,4 +52,8 @@ export class OptimizerConfigDto {
   public get totalAvailableWeight() {
     return this.maxWeight * this.weightFractionGoal;
   }
+
+  public constructor(init?: Partial<OptimizerConfigDto>) {
+    Object.assign(this, init);
+  }
 }

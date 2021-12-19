@@ -4,7 +4,20 @@
   <table class="table armor-selections-table">
     <thead>
       <tr>
-        <th style="width: 63px;"></th>
+        <th style="width: 63px;">
+          <button mat-icon-button class="toggle-icon" attr.aria-label="Enable all pieces" title="Enable all pieces"
+                  (click)="enableAll(true)">
+            <svg class="bi enable" fill="currentColor">
+              <use href="bootstrap-icons.svg#check-circle-fill" />
+            </svg>
+          </button>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all pieces" title="Disable all pieces"
+                  (click)="enableAll(false)">
+            <svg class="bi disable" fill="currentColor">
+              <use href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </th>
         <th scope="col">
           <span>Head</span>
           <span style="float: right;">

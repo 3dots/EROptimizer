@@ -239,15 +239,20 @@
   </table>
 </div>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
+  <div class="button-div" style="margin-bottom: 10px;">
+    <button class="btn btn-secondary" (click)="prioritizePhysicals()">Prioritize Just Physicals</button>
+    <button class="btn btn-secondary" (click)="prioritizeElementals()">Just Elementals</button>
+    <button class="btn btn-secondary" (click)="prioritizeBoth()">Both</button>
+  </div>
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
       <div class="row">
-        <div class="col col-lg-2">
+        <!--<div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label># of threads:</mat-label>
             <input matInput [(ngModel)]="viewModel.numberOfThreads" type="number" min="0" />
           </mat-form-field>
-        </div>
+        </div>-->
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label># of results:</mat-label>
@@ -255,12 +260,94 @@
           </mat-form-field>
         </div>
         <div class="col" style="align-self: center;">
-          <button mat-button mat-raised-button color="primary" (click)="runOptimization()">Run Optimization</button>
-        </div>
-        <div class="col">
+          <button class="btn btn-primary" (click)="runOptimization()">Run Optimization</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 <h2>Results</h2>
+<div class="container-fluid">
+  <table class="table optimizer-results-table">
+    <thead>
+      <tr>
+        <th scope="col">Head</th>
+        <th scope="col">Chest</th>
+        <th scope="col">Gauntlets</th>
+        <th scope="col">Legs</th>
+        <th scope="col">Weight</th>
+        <th scope="col">Avg <br /> Physical</th>
+        <th scope="col">Physical</th>
+        <th scope="col">Strike</th>
+        <th scope="col">Slash</th>
+        <th scope="col">Pierce</th>
+        <th scope="col">Magic</th>
+        <th scope="col">Fire</th>
+        <th scope="col">Lightning</th>
+        <th scope="col">Holy</th>
+        <th scope="col">Immunity</th>
+        <th scope="col">Robustness</th>
+        <th scope="col">Focus</th>
+        <th scope="col">Death</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let combo of results">
+        <td>
+          <span>{{ combo.head.name }}</span>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+                  attr.aria-label="Disable {{ combo.head.name }} and recalculate" title="Disable armor piece and recalculate"
+                  (click)="disableArmorPiece(combo.head)">
+            <svg class="bi disable" fill="currentColor">
+              <use href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </td>
+        <td>
+          <span>{{ combo.chest.name }}</span>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+                  attr.aria-label="Disable {{ combo.chest.name }} and recalculate" title="Disable armor piece and recalculate"
+                  (click)="disableArmorPiece(combo.chest)">
+            <svg class="bi disable" fill="currentColor">
+              <use href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </td>
+        <td>
+          <span>{{ combo.gauntlets.name }}</span>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+                  attr.aria-label="Disable {{ combo.gauntlets.name }} and recalculate" title="Disable armor piece and recalculate"
+                  (click)="disableArmorPiece(combo.gauntlets)">
+            <svg class="bi disable" fill="currentColor">
+              <use href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </td>
+        <td>
+          <span>{{ combo.legs.name }}</span>
+          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+                  attr.aria-label="Disable {{ combo.legs.name }} and recalculate" title="Disable armor piece and recalculate"
+                  (click)="disableArmorPiece(combo.legs)">
+            <svg class="bi disable" fill="currentColor">
+              <use href="bootstrap-icons.svg#x-circle-fill" />
+            </svg>
+          </button>
+        </td>
+        <td>{{ combo.weight | number:'1.0-2' }}</td>
+        <td>{{ combo.avgPhysical | number:'1.0-2' }}</td>
+        <td>{{ combo.physical | number:'1.0-2' }}</td>
+        <td>{{ combo.physicalStrike | number:'1.0-2' }}</td>
+        <td>{{ combo.physicalSlash | number:'1.0-2' }}</td>
+        <td>{{ combo.physicalPierce | number:'1.0-2' }}</td>
+        <td>{{ combo.magic | number:'1.0-2' }}</td>
+        <td>{{ combo.fire | number:'1.0-2' }}</td>
+        <td>{{ combo.lightning | number:'1.0-2' }}</td>
+        <td>{{ combo.holy | number:'1.0-2' }}</td>
+        <td>{{ combo.immunity | number:'1.0-2' }}</td>
+        <td>{{ combo.robustness | number:'1.0-2' }}</td>
+        <td>{{ combo.focus | number:'1.0-2' }}</td>
+        <td>{{ combo.death | number:'1.0-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -14,9 +14,10 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
   //console.log(e.data);
 
   let data: IArmorDataDto = e.data.data;
-  let config: OptimizerConfigDto = e.data.config;
+  let config: OptimizerConfigDto = new OptimizerConfigDto(e.data.config);
 
   let totalAvailableWeight = config.totalAvailableWeight;
+  console.log(totalAvailableWeight);
 
   let results: ArmorCombo[] = [];
 
