@@ -9,7 +9,7 @@
     <div id="content">
       <ng-content></ng-content>
       <div *ngIf="hasProgressBar" style="width: 400px;">
-        {{ progressLabel }}: {{ progressValue | percent }}
+        {{ progressLabel }}: {{ progressValue / 100 | percent }}
         <mat-progress-bar  mode="determinate" [value]="progressValue"></mat-progress-bar>
       </div>
     </div>    

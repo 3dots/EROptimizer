@@ -1,4 +1,4 @@
-import { IOptimizerResult } from "./IOptimizerResult";
+import { IOptimizerResult, OptimizerResult } from "./OptimizerResult";
 
 export enum OptimizerWorkerRSEnum {
   Progress = 0,
@@ -8,7 +8,7 @@ export enum OptimizerWorkerRSEnum {
 export class OptimizerWorkerRS implements IOptimizerWorkerRS {
   type!: OptimizerWorkerRSEnum;
   progress!: number;
-  finishedResponse!: IOptimizerWorkerFinished;
+  results!: OptimizerResult[];
 
   public constructor(init?: Partial<OptimizerWorkerRS>) {
     Object.assign(this, init);
@@ -18,9 +18,6 @@ export class OptimizerWorkerRS implements IOptimizerWorkerRS {
 export interface IOptimizerWorkerRS {
   type: OptimizerWorkerRSEnum;
   progress: number;
-  finishedResponse: IOptimizerWorkerFinished;
-}
-
-export interface IOptimizerWorkerFinished {
   results: IOptimizerResult[];
 }
+

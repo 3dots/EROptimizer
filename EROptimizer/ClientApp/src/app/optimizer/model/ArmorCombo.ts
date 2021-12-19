@@ -14,7 +14,7 @@ export class ArmorCombo {
     this.physicalStrike = head.physicalStrike + chest.physicalStrike + gauntlets.physicalStrike + legs.physicalStrike;
     this.physicalSlash = head.physicalSlash + chest.physicalSlash + gauntlets.physicalSlash + legs.physicalSlash;
     this.physicalPierce = head.physicalPierce + chest.physicalPierce + gauntlets.physicalPierce + legs.physicalPierce;
-    
+
     this.avgPhysical = (this.physical + this.physicalStrike + this.physicalSlash + this.physicalPierce) / 4;
 
     this.magic = head.magic + chest.magic + gauntlets.magic + legs.magic;
@@ -30,7 +30,20 @@ export class ArmorCombo {
     this.weight = head.weight + chest.weight + gauntlets.weight + legs.weight;
 
     if (config != null) {
-      //score = 
+      this.score = config.priPhysical * this.physical +
+        config.priPhysicalStrike * this.physicalStrike +
+        config.priPhysicalSlash * this.physicalSlash +
+        config.priPhysicalPierce * this.physicalPierce +
+        config.priMagic * this.magic +
+        config.priFire * this.fire +
+        config.priLightning * this.lightning +
+        config.priHoly * this.holy +
+        config.priImmunity * this.immunity +
+        config.priRobustness * this.robustness +
+        config.priFocus * this.focus +
+        config.priDeath * this.death;
+    } else {
+      this.score = -1;
     }
   }
 
@@ -53,5 +66,5 @@ export class ArmorCombo {
 
   weight: number;
 
-  score: number | undefined;
+  score: number;
 }
