@@ -35,7 +35,7 @@ namespace ScrapeWiki.Model
         public double Immunity { get; set; }
         public double Robustness { get; set; }
         public double Focus { get; set; }
-        public double Death { get; set; }
+        public double Vitality { get; set; }
 
         public double Weight { get; set; }
     }

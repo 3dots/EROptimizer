@@ -53,7 +53,7 @@ namespace EROptimizer.Dto
             Immunity = p.Immunity;
             Robustness = p.Robustness;
             Focus = p.Focus;
-            Death = p.Death;
+            Death = p.Vitality;
 
             Weight = p.Weight;
         }
