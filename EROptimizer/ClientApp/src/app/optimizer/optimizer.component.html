@@ -8,16 +8,16 @@
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
       <div class="row">
-        <div class="col col-lg-2">
+        <!--<div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label>Strength:</mat-label>
             <input matInput [(ngModel)]="viewModel.strength" type="number" min="0" />
           </mat-form-field>
-        </div>
+        </div>-->
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
-            <mat-label>Max weight:</mat-label>
-            <input matInput [value]="viewModel.maxWeight" disabled type="number" />
+            <mat-label>Equip Load:</mat-label>
+            <input matInput [(ngModel)]="viewModel.maxWeight" type="number" />
           </mat-form-field>
         </div>
         <div class="col">
@@ -102,7 +102,8 @@
         <th scope="col">Immunity</th>
         <th scope="col">Robustness</th>
         <th scope="col">Focus</th>
-        <th scope="col">Death</th>
+        <th scope="col">Vitality</th>
+        <th scope="col">Poise</th>
       </tr>
     </thead>
     <tbody>
@@ -169,7 +170,12 @@
         </td>
         <td>
           <mat-form-field appearance="fill">
-            <input matInput [(ngModel)]="viewModel.minDeath" type="number" min="0" />
+            <input matInput [(ngModel)]="viewModel.minVitality" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.minPoise" type="number" min="0" />
           </mat-form-field>
         </td>
       </tr>
@@ -232,7 +238,12 @@
         </td>
         <td>
           <mat-form-field appearance="fill">
-            <input matInput [(ngModel)]="viewModel.priDeath" type="number" min="0" />
+            <input matInput [(ngModel)]="viewModel.priVitality" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="viewModel.priPoise" type="number" min="0" />
           </mat-form-field>
         </td>
       </tr>
@@ -289,7 +300,8 @@
         <th scope="col">Immunity</th>
         <th scope="col">Robustness</th>
         <th scope="col">Focus</th>
-        <th scope="col">Death</th>
+        <th scope="col">Vitality</th>
+        <th scope="col">Poise</th>
       </tr>
     </thead>
     <tbody>
@@ -347,7 +359,8 @@
         <td>{{ combo.immunity | number:'1.0-2' }}</td>
         <td>{{ combo.robustness | number:'1.0-2' }}</td>
         <td>{{ combo.focus | number:'1.0-2' }}</td>
-        <td>{{ combo.death | number:'1.0-2' }}</td>
+        <td>{{ combo.vitality | number:'1.0-2' }}</td>
+        <td>{{ combo.poise | number:'1.0-2' }}</td>
       </tr>
     </tbody>
   </table>

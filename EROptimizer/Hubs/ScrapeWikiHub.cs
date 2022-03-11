@@ -243,7 +243,7 @@ namespace EROptimizer.Hubs
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Immunity, nameof(newPiece.Immunity));
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Robustness, nameof(newPiece.Robustness));
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Focus, nameof(newPiece.Focus));
-                    CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Death, nameof(newPiece.Death));
+                    CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Vitality, nameof(newPiece.Vitality));
 
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Weight, nameof(newPiece.Weight));
 

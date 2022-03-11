@@ -26,7 +26,9 @@ namespace EROptimizer.Dto
         public double Immunity { get; set; }
         public double Robustness { get; set; }
         public double Focus { get; set; }
-        public double Death { get; set; }
+        public double Vitality { get; set; }
+
+        public double Poise { get; set; }
 
         public double Weight { get; set; }
 
@@ -36,7 +38,7 @@ namespace EROptimizer.Dto
         {
             ArmorPieceId = index;
 
-            ArmorSetId = p.ArmorSetId;
+            //ArmorSetId = p.ArmorSetId;
             Name = p.Name;
             Type = p.Type;
 
@@ -53,7 +55,9 @@ namespace EROptimizer.Dto
             Immunity = p.Immunity;
             Robustness = p.Robustness;
             Focus = p.Focus;
-            Death = p.Vitality;
+            Vitality = p.Vitality;
+
+            Poise = p.Poise;
 
             Weight = p.Weight;
         }

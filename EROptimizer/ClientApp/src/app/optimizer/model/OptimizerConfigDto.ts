@@ -2,7 +2,7 @@
 export class OptimizerConfigDto {
 
   strength: number = 10;
-  weightFractionGoal: number = 0.5;
+  weightFractionGoal: number = 0.6999;
 
   rightHand1: number = 0;
   rightHand2: number = 0;
@@ -25,7 +25,9 @@ export class OptimizerConfigDto {
   minImmunity: number = 0;
   minRobustness: number = 0;
   minFocus: number = 0;
-  minDeath: number = 0;
+  minVitality: number = 0;
+
+  minPoise: number = 0;
 
   priPhysical: number = 1;
   priPhysicalStrike: number = 1;
@@ -40,14 +42,18 @@ export class OptimizerConfigDto {
   priImmunity: number = 0;
   priRobustness: number = 0;
   priFocus: number = 0;
-  priDeath: number = 0;
+  priVitality: number = 0;
+
+  priPoise: number = 0;
 
   numberOfResults: number = 10;
   numberOfThreads: number = 4;
 
-  public get maxWeight() {
-    return this.strength * 2; //todo get correct formula
-  }
+  maxWeight: number = 45;
+
+  //public get maxWeight() {
+  //  return this.strength * 2; //todo get correct formula
+  //}
 
   public get totalAvailableWeight() {
     return this.maxWeight * this.weightFractionGoal;

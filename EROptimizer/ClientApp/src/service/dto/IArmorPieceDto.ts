@@ -27,7 +27,9 @@ export interface IArmorPieceDto {
   immunity: number;
   robustness: number;
   focus: number;
-  death: number;
+  vitality: number;
+
+  poise: number;
 
   weight: number;
 }

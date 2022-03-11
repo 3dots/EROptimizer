@@ -16,8 +16,9 @@ namespace ScrapeWiki.Model
 
     public class ArmorPiece
     {
-        public int ArmorSetId { get; set; }
+        public List<int> ArmorSetIds { get; set; } = new List<int>();
         public string Name { get; set; }
+        public string ResourceName { get; set; }
         public ArmorPieceTypeEnum? Type { get; set; }
 
         public bool IsProcessed { get; set; }
@@ -36,6 +37,8 @@ namespace ScrapeWiki.Model
         public double Robustness { get; set; }
         public double Focus { get; set; }
         public double Vitality { get; set; }
+
+        public double Poise { get; set; }
 
         public double Weight { get; set; }
     }

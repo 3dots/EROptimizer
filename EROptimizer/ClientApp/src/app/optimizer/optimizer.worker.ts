@@ -61,7 +61,9 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
             combo.immunity < config.minImmunity ||
             combo.robustness < config.minRobustness ||
             combo.focus < config.minFocus ||
-            combo.death < config.minDeath) continue;
+            combo.vitality < config.minVitality ||
+            combo.poise < config.minPoise)
+              continue;
 
           if (results.length == 0) {
             results.push(combo);

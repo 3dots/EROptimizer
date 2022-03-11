@@ -74,7 +74,9 @@ export class OptimizerComponent implements OnInit {
     this.viewModel.priImmunity = 0;
     this.viewModel.priRobustness = 0;
     this.viewModel.priFocus = 0;
-    this.viewModel.priDeath = 0;
+    this.viewModel.priVitality = 0;
+
+    this.viewModel.priPoise = 0;
   }
 
   prioritizeElementals() {
@@ -91,7 +93,9 @@ export class OptimizerComponent implements OnInit {
     this.viewModel.priImmunity = 0;
     this.viewModel.priRobustness = 0;
     this.viewModel.priFocus = 0;
-    this.viewModel.priDeath = 0;
+    this.viewModel.priVitality = 0;
+
+    this.viewModel.priPoise = 0;
   }
 
   prioritizeBoth() {
@@ -108,7 +112,9 @@ export class OptimizerComponent implements OnInit {
     this.viewModel.priImmunity = 0;
     this.viewModel.priRobustness = 0;
     this.viewModel.priFocus = 0;
-    this.viewModel.priDeath = 0;
+    this.viewModel.priVitality = 0;
+
+    this.viewModel.priPoise = 0;
   }
 
   runOptimization(): void {

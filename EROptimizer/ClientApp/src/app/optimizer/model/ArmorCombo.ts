@@ -10,22 +10,24 @@ export class ArmorCombo {
     public legs: IArmorPieceDto,
     config: OptimizerConfigDto | null) {
 
-    this.physical = head.physical + chest.physical + gauntlets.physical + legs.physical;
-    this.physicalStrike = head.physicalStrike + chest.physicalStrike + gauntlets.physicalStrike + legs.physicalStrike;
-    this.physicalSlash = head.physicalSlash + chest.physicalSlash + gauntlets.physicalSlash + legs.physicalSlash;
-    this.physicalPierce = head.physicalPierce + chest.physicalPierce + gauntlets.physicalPierce + legs.physicalPierce;
+    this.physical = 100 * (1 - (1 - head.physical / 100) * (1 - chest.physical / 100) * (1 - gauntlets.physical / 100) * (1 - legs.physical / 100));
+    this.physicalStrike = 100 * (1 - (1 - head.physicalStrike / 100) * (1 - chest.physicalStrike / 100) * (1 - gauntlets.physicalStrike / 100) * (1 - legs.physicalStrike / 100));
+    this.physicalSlash = 100 * (1 - (1 - head.physicalSlash / 100) * (1 - chest.physicalSlash / 100) * (1 - gauntlets.physicalSlash / 100) * (1 - legs.physicalSlash / 100));
+    this.physicalPierce = 100 * (1 - (1 - head.physicalPierce / 100) * (1 - chest.physicalPierce / 100) * (1 - gauntlets.physicalPierce / 100) * (1 - legs.physicalPierce / 100));
 
     this.avgPhysical = (this.physical + this.physicalStrike + this.physicalSlash + this.physicalPierce) / 4;
 
-    this.magic = head.magic + chest.magic + gauntlets.magic + legs.magic;
-    this.fire = head.fire + chest.fire + gauntlets.fire + legs.fire;
-    this.lightning = head.lightning + chest.lightning + gauntlets.lightning + legs.lightning;
-    this.holy = head.holy + chest.holy + gauntlets.holy + legs.holy;
+    this.magic = 100 * (1 - (1 - head.magic / 100) * (1 - chest.magic / 100) * (1 - gauntlets.magic / 100) * (1 - legs.magic / 100));
+    this.fire = 100 * (1 - (1 - head.fire / 100) * (1 - chest.fire / 100) * (1 - gauntlets.fire / 100) * (1 - legs.fire / 100));
+    this.lightning = 100 * (1 - (1 - head.lightning / 100) * (1 - chest.lightning / 100) * (1 - gauntlets.lightning / 100) * (1 - legs.lightning / 100));
+    this.holy = 100 * (1 - (1 - head.holy / 100) * (1 - chest.holy / 100) * (1 - gauntlets.holy / 100) * (1 - legs.holy / 100));
 
     this.immunity = head.immunity + chest.immunity + gauntlets.immunity + legs.immunity;
     this.robustness = head.robustness + chest.robustness + gauntlets.robustness + legs.robustness;
     this.focus = head.focus + chest.focus + gauntlets.focus + legs.focus;
-    this.death = head.death + chest.death + gauntlets.death + legs.death;
+    this.vitality = head.vitality + chest.vitality + gauntlets.vitality + legs.vitality;
+
+    this.poise = head.poise + chest.poise + gauntlets.poise + legs.poise;
 
     this.weight = head.weight + chest.weight + gauntlets.weight + legs.weight;
 
@@ -41,7 +43,7 @@ export class ArmorCombo {
         config.priImmunity * this.immunity +
         config.priRobustness * this.robustness +
         config.priFocus * this.focus +
-        config.priDeath * this.death;
+        config.priVitality * this.vitality;
     } else {
       this.score = -1;
     }
@@ -62,7 +64,9 @@ export class ArmorCombo {
   immunity: number;
   robustness: number;
   focus: number;
-  death: number;
+  vitality: number;
+
+  poise: number;
 
   weight: number;
 

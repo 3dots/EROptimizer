@@ -43,6 +43,8 @@ export class DataService {
 
           s.combo = new ArmorCombo(head, chest, gauntlets, legs, null);
 
+          //console.log(`${s.name} ${head.name} ${chest.name} ${gauntlets.name} ${legs.name}`);
+
         });
 
         return x;
