@@ -37,8 +37,10 @@ namespace EROptimizer.Hubs
             else
                 scraper = new Scraper(this);
 
-            bool success = await scraper.Scrape();
-            if (success) await Evaluate(scraper);
+            //bool success = await scraper.Scrape();
+            //if (success) await Evaluate(scraper);
+
+            await ScrapeEnd();
         }
 
         public async Task WriteLine(string s)
@@ -76,10 +78,12 @@ namespace EROptimizer.Hubs
 
             int index = 0;
 
-            ArmorPieceDto emptyHead = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Head };
-            ArmorPieceDto emptyChest = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Chest };
-            ArmorPieceDto emptyGauntlets = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Gauntlets };
-            ArmorPieceDto emptyLegs = new ArmorPieceDto() { ArmorSetId = 0, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Legs };
+            var emptySetIdList = new List<int>() { 0 };
+
+            ArmorPieceDto emptyHead = new ArmorPieceDto() { ArmorSetIds = emptySetIdList, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Head };
+            ArmorPieceDto emptyChest = new ArmorPieceDto() { ArmorSetIds = emptySetIdList, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Chest };
+            ArmorPieceDto emptyGauntlets = new ArmorPieceDto() { ArmorSetIds = emptySetIdList, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Gauntlets };
+            ArmorPieceDto emptyLegs = new ArmorPieceDto() { ArmorSetIds = emptySetIdList, ArmorPieceId = index++, Name = "None", Type = ArmorPieceTypeEnum.Legs };
 
             newData.Head.Add(emptyHead);
             newData.Head.AddRange(s.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Head).Select(x => new ArmorPieceDto(x, index++)));
@@ -199,10 +203,10 @@ namespace EROptimizer.Hubs
         {
             dto.ArmorSets.ForEach(x =>
             {
-                x.ArmorPieces.AddRange(dto.Head.Where(p => p.ArmorSetId == x.ArmorSetId));
-                x.ArmorPieces.AddRange(dto.Chest.Where(p => p.ArmorSetId == x.ArmorSetId));
-                x.ArmorPieces.AddRange(dto.Gauntlets.Where(p => p.ArmorSetId == x.ArmorSetId));
-                x.ArmorPieces.AddRange(dto.Legs.Where(p => p.ArmorSetId == x.ArmorSetId));
+                x.ArmorPieces.AddRange(dto.Head.Where(p => p.ArmorSetIds.Contains(x.ArmorSetId)));
+                x.ArmorPieces.AddRange(dto.Chest.Where(p => p.ArmorSetIds.Contains(x.ArmorSetId)));
+                x.ArmorPieces.AddRange(dto.Gauntlets.Where(p => p.ArmorSetIds.Contains(x.ArmorSetId)));
+                x.ArmorPieces.AddRange(dto.Legs.Where(p => p.ArmorSetIds.Contains(x.ArmorSetId)));
             });
         }
 

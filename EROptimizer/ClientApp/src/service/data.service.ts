@@ -36,14 +36,14 @@ export class DataService {
         x.armorSets.forEach((s: IArmorSetDto) => {
 
           //0 index piece is the "None".
-          let head = x.head.find(p => p.armorSetId == s.armorSetId) ?? x.head[0];
-          let chest = x.chest.find(p => p.armorSetId == s.armorSetId) ?? x.chest[0];
-          let gauntlets = x.gauntlets.find(p => p.armorSetId == s.armorSetId) ?? x.gauntlets[0];    
-          let legs = x.legs.find(p => p.armorSetId == s.armorSetId) ?? x.legs[0];
+          let head = x.head.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.head[0];
+          let chest = x.chest.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.chest[0];
+          let gauntlets = x.gauntlets.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.gauntlets[0];
+          let legs = x.legs.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.legs[0];
 
           s.combo = new ArmorCombo(head, chest, gauntlets, legs, null);
 
-          //console.log(`${s.name} ${head.name} ${chest.name} ${gauntlets.name} ${legs.name}`);
+          console.log(`${s.name} ${head.name} ${chest.name} ${gauntlets.name} ${legs.name}`);
 
         });
 

@@ -9,7 +9,7 @@ namespace EROptimizer.Dto
     public class ArmorPieceDto
     {
         public int ArmorPieceId { get; set; }
-        public int ArmorSetId { get; set; }
+        public List<int> ArmorSetIds { get; set; } = new List<int>();
         public string Name { get; set; }
         public ArmorPieceTypeEnum? Type { get; set; }
 
@@ -38,7 +38,7 @@ namespace EROptimizer.Dto
         {
             ArmorPieceId = index;
 
-            //ArmorSetId = p.ArmorSetId;
+            ArmorSetIds = p.ArmorSetIds;
             Name = p.Name;
             Type = p.Type;
 

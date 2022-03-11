@@ -8,7 +8,7 @@ export enum ArmorPieceTypeEnum {
 
 export interface IArmorPieceDto {
   armorPieceId: number;
-  armorSetId: number;
+  armorSetIds: number[];
   name: string;
   type: ArmorPieceTypeEnum;
 

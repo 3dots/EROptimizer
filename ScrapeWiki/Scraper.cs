@@ -136,6 +136,17 @@ namespace ScrapeWiki
 
             await EnsureCorrectness();
 
+            ArmorSets = ArmorSets.OrderBy(x => x.Name).ToList();
+
+            bool debug = false;
+            if (debug)
+            {
+                foreach (ArmorSet set in ArmorSets)
+                {
+                    await PrintSet(true, set);
+                }
+            }
+
             await _console.WriteLine("Successfully scraped data.");
         }
 
@@ -641,10 +652,12 @@ namespace ScrapeWiki
 
         private async Task FlattenMultiples()
         {
+            bool debug = false;
+
             List<ArmorSet> armorSetsCopy = ArmorSets.ToList();
             foreach (ArmorSet set in armorSetsCopy.Where(x => x.ArmorPieces.GroupBy(p => p.Type).Where(g => g.Count() > 1).Any()))
             {
-                await PrintSet(set);
+                await PrintSet(debug, set);
 
                 List<ArmorPiece> NonAlteredHeads = set.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Head && !x.Name.EndsWith("(Altered)")).ToList();
                 List<ArmorPiece> NonAlteredChests = set.ArmorPieces.Where(x => x.Type == ArmorPieceTypeEnum.Chest && !x.Name.EndsWith("(Altered)")).ToList();
@@ -759,16 +772,16 @@ namespace ScrapeWiki
                                     isFirstCombo = false;
                                     set.ArmorPieces = combo;
                                     foreach (ArmorPiece p in combo) p.ArmorSetIds.Add(set.ArmorSetId);
-                                    await PrintSet(set);
+                                    await PrintSet(debug, set);
                                 }
                                 else
                                 {
-                                    await CreateNewSetFrom(set, combo, false);
+                                    await CreateNewSetFrom(set, combo, false, debug);
                                 }
 
                                 if (alteredCombo != null)
                                 {
-                                    await CreateNewSetFrom(set, alteredCombo, true);
+                                    await CreateNewSetFrom(set, alteredCombo, true, debug);
                                 }
                             }
                         }
@@ -777,21 +790,21 @@ namespace ScrapeWiki
             }
         }
 
-        private async Task CreateNewSetFrom(ArmorSet set, List<ArmorPiece> pieces, bool isAltered)
+        private async Task CreateNewSetFrom(ArmorSet set, List<ArmorPiece> pieces, bool isAltered, bool debug)
         {
             var newSet = new ArmorSet() { ArmorSetId = ArmorSetIdCounter++ };
             newSet.Name = isAltered ? $"{set.Name} (Altered)" : set.Name;
             newSet.ArmorPieces = pieces;
+            ArmorSets.Add(newSet);
             foreach (ArmorPiece p in pieces)
             {
                 p.ArmorSetIds.Add(newSet.ArmorSetId);
             }
-            await PrintSet(newSet);
+            await PrintSet(debug, newSet);
         }
 
-        private async Task PrintSet(ArmorSet set)
+        private async Task PrintSet(bool debug, ArmorSet set)
         {
-            bool debug = false;
             if (debug)
             {
                 await _console.WriteLine(new string('-', 30));
