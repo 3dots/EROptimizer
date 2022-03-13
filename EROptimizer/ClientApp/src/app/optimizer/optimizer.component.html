@@ -1,7 +1,7 @@
-<app-loading *ngIf="isLoading" [hasProgressBar]="hasProgressBar" [progressValue]="progressValue"></app-loading>
+<app-loading *ngIf="isLoading" [hasProgressBar]="hasProgressBar" [progressValue]="progressValue" (cancelEvent)="cancelOptimization()"></app-loading>
 
 <h1 style="display: inline-block;">Elden Ring Armor Optimizer</h1>
-<span style="margin-left: 5px;">by <a href="https://github.com/3dots/">3dots</a></span>
+<span style="margin-left: 5px;">by <a href="https://github.com/3dots/" target="_blank">3dots</a></span>
 
 <h2 class="h3">Equipment:</h2>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
@@ -78,6 +78,36 @@
           <mat-form-field appearance="fill">
             <mat-label>Left hand 3:</mat-label>
             <input matInput [(ngModel)]="viewModel.leftHand3" type="number" min="0" />
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7 col-lg-9">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 1:</mat-label>
+            <input matInput [(ngModel)]="viewModel.talisman1" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 2:</mat-label>
+            <input matInput [(ngModel)]="viewModel.talisman2" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 3:</mat-label>
+            <input matInput [(ngModel)]="viewModel.talisman3" type="number" min="0" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 4:</mat-label>
+            <input matInput [(ngModel)]="viewModel.talisman4" type="number" min="0" />
           </mat-form-field>
         </div>
       </div>
@@ -259,12 +289,12 @@
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
       <div class="row">
-        <!--<div class="col col-lg-2">
+        <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label># of threads:</mat-label>
-            <input matInput [(ngModel)]="viewModel.numberOfThreads" type="number" min="0" />
+            <input matInput [(ngModel)]="viewModel.numberOfThreads" type="number" min="1" />
           </mat-form-field>
-        </div>-->
+        </div>
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label># of results:</mat-label>

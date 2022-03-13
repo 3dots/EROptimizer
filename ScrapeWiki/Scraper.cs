@@ -16,7 +16,7 @@ namespace ScrapeWiki
     {
         private const string BaseUrl = "https://eldenring.wiki.fextralife.com";
         private const int MaxSimultaniousRequests = 4;
-        private const int ScrapingPauseDuration = 1000;
+        private const int ScrapingPauseDuration = 2000;
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
@@ -75,19 +75,19 @@ namespace ScrapeWiki
 
             if (_useStaticHtmlFiles)
             {
-                try
+                //try
                 {
                     htmlString = await File.ReadAllTextAsync(Path.Combine(_filesPath, resourceFile));
                 }
-                catch (FileNotFoundException)
-                {
-                    var c = new HttpClient();
-                    htmlString = await c.GetStringAsync(url);
+                //catch (FileNotFoundException)
+                //{
+                //    var c = new HttpClient();
+                //    htmlString = await c.GetStringAsync(url);
 
-                    if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
+                //    if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
 
-                    Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
-                }
+                //    Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
+                //}
             }
             else
             {
@@ -199,7 +199,16 @@ namespace ScrapeWiki
             catch (HttpRequestException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "404"));
-                Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
+
+                lock (threadSafetyLock)
+                {
+                    ArmorSets.Remove(set);
+                }
+                return;
+            }
+            catch (FileNotFoundException)
+            {
+                await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "File not found."));
 
                 lock (threadSafetyLock)
                 {
@@ -465,6 +474,11 @@ namespace ScrapeWiki
                 Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
                 return false;
             }
+            catch (FileNotFoundException)
+            {
+                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "File not found."));
+                return false;
+            }
             catch
             {
                 throw;
@@ -542,6 +556,23 @@ namespace ScrapeWiki
                 }
             }
 
+            HtmlNode span = htmlDoc.QuerySelector("table.wiki_table > tbody > tr:nth-child(4) > td:nth-child(2) > span");
+            if (span == null)
+            {
+                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, couldn't find table weight span"));
+                return false;
+            }
+            double value;
+            if (double.TryParse(span.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", "."), out value))
+            {
+                piece.Weight = value;
+            }
+            else
+            {
+                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse weight"));
+                return false;
+            }
+
             return true;
         }
 
@@ -567,7 +598,7 @@ namespace ScrapeWiki
 
                 bool parsed;
                 double value;
-                parsed = double.TryParse(data.InnerText.Replace("\n", "").Replace("&nbsp;", " "), out value);
+                parsed = double.TryParse(data.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", "."), out value);
                 if (parsed)
                 {
                     assignment.Invoke(piece, value);
@@ -634,6 +665,15 @@ namespace ScrapeWiki
                     ArmorSets.Remove(set);
                 }
             }
+
+            if (ArmorPieces.Where(x => x.Weight == 0).Count() > 0)
+            {
+                foreach (ArmorPiece piece in ArmorPieces.Where(x => x.Weight == 0))
+                {
+                    await _console.WriteLine($"Piece with 0 weight: {piece.Name}");
+                }
+                throw new ScrapeParsingException("Exiting.");
+            }            
 
             await FlattenMultiples();
 

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-loading',
@@ -9,4 +9,10 @@ export class LoadingComponent {
   @Input() hasProgressBar: boolean = false;
   @Input() progressValue: number = 0;
   @Input() progressLabel: string = "Loading";
+
+  @Output() cancelEvent = new EventEmitter();
+
+  cancel() {
+    this.cancelEvent.emit();
+  }
 }

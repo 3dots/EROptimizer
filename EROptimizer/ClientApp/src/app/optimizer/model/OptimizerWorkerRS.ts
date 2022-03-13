@@ -9,6 +9,7 @@ export class OptimizerWorkerRS implements IOptimizerWorkerRS {
   type!: OptimizerWorkerRSEnum;
   progress!: number;
   results!: OptimizerResult[];
+  workerIndex!: number;
 
   public constructor(init?: Partial<OptimizerWorkerRS>) {
     Object.assign(this, init);
@@ -19,5 +20,6 @@ export interface IOptimizerWorkerRS {
   type: OptimizerWorkerRSEnum;
   progress: number;
   results: IOptimizerResult[];
+  workerIndex: number;
 }
 

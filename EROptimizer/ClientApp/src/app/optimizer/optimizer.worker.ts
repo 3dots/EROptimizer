@@ -17,12 +17,12 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
   let config: OptimizerConfigDto = new OptimizerConfigDto(e.data.config);
 
   let totalAvailableWeight = config.totalAvailableWeight;
-  console.log(totalAvailableWeight);
+  //console.log(totalAvailableWeight);
 
   let results: ArmorCombo[] = [];
 
   for (let i = 0; i < data.head.length; i++) {
-    if (i > 0) postMessage(new OptimizerWorkerRS({ type: OptimizerWorkerRSEnum.Progress, progress: 100 * i / data.head.length }));
+    if (i > 0) postMessage(new OptimizerWorkerRS({ type: OptimizerWorkerRSEnum.Progress, progress: 100 * i / data.head.length, workerIndex: e.data.workerIndex }));
 
     let head: IArmorPieceDto = data.head[i];
 
@@ -89,6 +89,10 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
     }
   }
 
-  postMessage(new OptimizerWorkerRS({ type: OptimizerWorkerRSEnum.Finished, results: results.map((x) => new OptimizerResult(x)) }))
+  postMessage(new OptimizerWorkerRS({
+    type: OptimizerWorkerRSEnum.Finished,
+    results: results.map((x) => new OptimizerResult(x)),
+    workerIndex: e.data.workerIndex
+  }))
 
 });

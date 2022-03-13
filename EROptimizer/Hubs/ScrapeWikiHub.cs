@@ -37,10 +37,8 @@ namespace EROptimizer.Hubs
             else
                 scraper = new Scraper(this);
 
-            //bool success = await scraper.Scrape();
-            //if (success) await Evaluate(scraper);
-
-            await ScrapeEnd();
+            bool success = await scraper.Scrape();
+            if (success) await Evaluate(scraper);
         }
 
         public async Task WriteLine(string s)

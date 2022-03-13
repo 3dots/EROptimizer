@@ -44,14 +44,18 @@ export class ArmorSelectionsComponent implements OnInit {
       set.combo.legs.isEnabled = enable;
     } else {
       if (!set.combo.head.armorSetIds.includes(0)) set.combo.head.isEnabled = enable;
-      if (!set.combo.head.armorSetIds.includes(0)) set.combo.chest.isEnabled = enable;
-      if (!set.combo.head.armorSetIds.includes(0)) set.combo.gauntlets.isEnabled = enable;
-      if (!set.combo.head.armorSetIds.includes(0)) set.combo.legs.isEnabled = enable;
+      if (!set.combo.chest.armorSetIds.includes(0)) set.combo.chest.isEnabled = enable;
+      if (!set.combo.gauntlets.armorSetIds.includes(0)) set.combo.gauntlets.isEnabled = enable;
+      if (!set.combo.legs.armorSetIds.includes(0)) set.combo.legs.isEnabled = enable;
     }
   }
 
   toggleArmorPiece(piece: IArmorPieceDto) {
     piece.isEnabled = !piece.isEnabled;
+  }
+
+  enableArmorPiece(piece: IArmorPieceDto, enable: boolean) {
+    piece.isEnabled = enable;
   }
 
   enableAllHead(enable: boolean) {

@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import * as signalR from "@microsoft/signalr";
+import { HubConnectionState } from '@microsoft/signalr';
 import { IArmorDataChangesDto } from './dto/IArmorDataChangesDto';
 
 @Component({
@@ -38,14 +39,17 @@ export class AdminComponent implements AfterViewChecked {
     this.isSaveButtonDisabled = false;
 
     this.socket = new signalR.HubConnectionBuilder().withUrl("/scrapeWikiHub").build();
+
+    this.socket.onclose(() => { });
+
     this.socket.on("WriteLine", this.onRecieveMessage.bind(this));
     this.socket.on("DataRetrieved", this.onDataRetrieved.bind(this));
     this.socket.on("ScrapeEnd", this.onScrapeEnd.bind(this));
     this.socket.on("Denied", this.onDenied.bind(this));
 
     this.socket.start().then(() => {
-      this.socket.invoke("StartScrape", this.password).catch(this.onSocketError.bind(this));
-    }).catch(this.onSocketError.bind(this));
+      this.socket.invoke("StartScrape", this.password);
+    });
   }
 
   onRecieveMessage(message: string) {
@@ -54,8 +58,12 @@ export class AdminComponent implements AfterViewChecked {
   }
 
   onSocketError(err: any) {
-    this.onRecieveMessage(err.toString());
-    this.isScrapeButtonDisabled = false;
+
+    //console.log(err);
+    //console.log(this.socket.state);
+
+    //this.onRecieveMessage(err.toString());
+    //this.isScrapeButtonDisabled = false;
   }
 
   onScrapeEnd() {
@@ -75,7 +83,14 @@ export class AdminComponent implements AfterViewChecked {
   }
 
   save() {
-    this.socket.invoke("DataSave").catch(this.onSocketError.bind(this));
+
+    if (!(this.socket.state == HubConnectionState.Connected)) {
+      this.socket.start().then(() => {
+        this.socket.invoke("DataSave");
+      });
+    } else {
+      this.socket.invoke("DataSave");
+    }    
   }
 
   cancel() {

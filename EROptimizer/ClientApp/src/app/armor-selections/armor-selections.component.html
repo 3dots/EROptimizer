@@ -1,184 +1,226 @@
 
-<h1>Armor Sets</h1>
-<div class="container-fluid" *ngIf="armorData">
-  <table class="table armor-selections-table">
-    <thead>
-      <tr>
-        <th style="width: 63px;">
-          <button mat-icon-button class="toggle-icon" attr.aria-label="Enable all pieces" title="Enable all pieces"
-                  (click)="enableAll(true)">
-            <svg class="bi enable" fill="currentColor">
-              <use href="bootstrap-icons.svg#check-circle-fill" />
-            </svg>
-          </button>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all pieces" title="Disable all pieces"
-                  (click)="enableAll(false)">
-            <svg class="bi disable" fill="currentColor">
-              <use href="bootstrap-icons.svg#x-circle-fill" />
-            </svg>
-          </button>
-        </th>
-        <th scope="col">
-          <span>Head</span>
-          <span style="float: right;">
-            <button mat-icon-button class="toggle-icon" aria-label="Enable all Head" title="Enable all Head"
-                    (click)="enableAllHead(true)">
+<div style="display: flex; flex-direction: column; height: 100%;">
+  <h1>Armor Sets</h1>
+  <div class="container-fluid" *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
+    <table class="table armor-selections-table">
+      <thead>
+        <tr>
+          <th style="width: 63px;">
+            <button mat-icon-button class="toggle-icon" attr.aria-label="Enable all pieces" title="Enable all pieces"
+                    (click)="enableAll(true)">
               <svg class="bi enable" fill="currentColor">
                 <use href="bootstrap-icons.svg#check-circle-fill" />
               </svg>
             </button>
-            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Head" title="Disable all Head"
-                    (click)="enableAllHead(false)">
+            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all pieces" title="Disable all pieces"
+                    (click)="enableAll(false)">
               <svg class="bi disable" fill="currentColor">
                 <use href="bootstrap-icons.svg#x-circle-fill" />
               </svg>
             </button>
-          </span>
-        </th>
-        <th scope="col">
-          <span>Chest</span>
-          <span style="float: right;">
-            <button mat-icon-button class="toggle-icon" aria-label="Enable all Chest" title="Enable all Chest"
-                    (click)="enableAllChest(true)">
+          </th>
+          <th scope="col">
+            <span>Head</span>
+            <span style="float: right;">
+              <button mat-icon-button class="toggle-icon" aria-label="Enable all Head" title="Enable all Head"
+                      (click)="enableAllHead(true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Head" title="Disable all Head"
+                      (click)="enableAllHead(false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </span>
+          </th>
+          <th scope="col">
+            <span>Chest</span>
+            <span style="float: right;">
+              <button mat-icon-button class="toggle-icon" aria-label="Enable all Chest" title="Enable all Chest"
+                      (click)="enableAllChest(true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Chest" title="Disable all Chest"
+                      (click)="enableAllChest(false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </span>
+          </th>
+          <th scope="col">
+            <span>Gauntlets</span>
+            <span style="float: right;">
+              <button mat-icon-button class="toggle-icon" aria-label="Enable all Gauntlets" title="Enable all Gauntlets"
+                      (click)="enableAllGauntlets(true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Gauntlets" title="Disable all Gauntlets"
+                      (click)="enableAllGauntlets(false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </span>
+          </th>
+          <th scope="col">
+            <span>Legs</span>
+            <span style="float: right;">
+              <button mat-icon-button class="toggle-icon" aria-label="Enable all Legs" title="Enable all Legs"
+                      (click)="enableAllLegs(true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Legs" title="Disable all Legs"
+                      (click)="enableAllLegs(false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </span>
+          </th>
+          <th scope="col">Weight</th>
+          <th scope="col">Avg <br /> Physical</th>
+          <th scope="col">Physical</th>
+          <th scope="col">Strike</th>
+          <th scope="col">Slash</th>
+          <th scope="col">Pierce</th>
+          <th scope="col">Magic</th>
+          <th scope="col">Fire</th>
+          <th scope="col">Lightning</th>
+          <th scope="col">Holy</th>
+          <th scope="col">Immunity</th>
+          <th scope="col">Robustness</th>
+          <th scope="col">Focus</th>
+          <th scope="col">Vitality</th>
+          <th scope="col">Poise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let set of armorData.armorSets">
+          <td>
+            <button mat-icon-button class="toggle-icon" attr.aria-label="Enable armor set: {{ set.name }}" title="Enable armor set"
+                    (click)="enableArmorSet(set, true)">
               <svg class="bi enable" fill="currentColor">
                 <use href="bootstrap-icons.svg#check-circle-fill" />
               </svg>
             </button>
-            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Chest" title="Disable all Chest"
-                    (click)="enableAllChest(false)">
+            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable armor set" title="Disable armor set"
+                    (click)="enableArmorSet(set, false)">
               <svg class="bi disable" fill="currentColor">
                 <use href="bootstrap-icons.svg#x-circle-fill" />
               </svg>
             </button>
-          </span>
-        </th>
-        <th scope="col">
-          <span>Gauntlets</span>
-          <span style="float: right;">
-            <button mat-icon-button class="toggle-icon" aria-label="Enable all Gauntlets" title="Enable all Gauntlets"
-                    (click)="enableAllGauntlets(true)">
-              <svg class="bi enable" fill="currentColor">
-                <use href="bootstrap-icons.svg#check-circle-fill" />
-              </svg>
-            </button>
-            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Gauntlets" title="Disable all Gauntlets"
-                    (click)="enableAllGauntlets(false)">
-              <svg class="bi disable" fill="currentColor">
-                <use href="bootstrap-icons.svg#x-circle-fill" />
-              </svg>
-            </button>
-          </span>
-        </th>
-        <th scope="col">
-          <span>Legs</span>
-          <span style="float: right;">
-            <button mat-icon-button class="toggle-icon" aria-label="Enable all Legs" title="Enable all Legs"
-                    (click)="enableAllLegs(true)">
-              <svg class="bi enable" fill="currentColor">
-                <use href="bootstrap-icons.svg#check-circle-fill" />
-              </svg>
-            </button>
-            <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable all Legs" title="Disable all Legs"
-                    (click)="enableAllLegs(false)">
-              <svg class="bi disable" fill="currentColor">
-                <use href="bootstrap-icons.svg#x-circle-fill" />
-              </svg>
-            </button>
-          </span>
-        </th>
-        <th scope="col">Weight</th>
-        <th scope="col">Avg <br /> Physical</th>
-        <th scope="col">Physical</th>
-        <th scope="col">Strike</th>
-        <th scope="col">Slash</th>
-        <th scope="col">Pierce</th>
-        <th scope="col">Magic</th>
-        <th scope="col">Fire</th>
-        <th scope="col">Lightning</th>
-        <th scope="col">Holy</th>
-        <th scope="col">Immunity</th>
-        <th scope="col">Robustness</th>
-        <th scope="col">Focus</th>
-        <th scope="col">Vitality</th>
-        <th scope="col">Poise</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let set of armorData.armorSets">
-        <td>
-          <button mat-icon-button class="toggle-icon" attr.aria-label="Enable armor set: {{ set.name }}" title="Enable armor set"
-                  (click)="enableArmorSet(set, true)">
-            <svg class="bi enable" fill="currentColor">
-              <use href="bootstrap-icons.svg#check-circle-fill" />
-            </svg>
-          </button>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px;" aria-label="Disable armor set" title="Disable armor set"
-                  (click)="enableArmorSet(set, false)">
-            <svg class="bi disable" fill="currentColor">
-              <use href="bootstrap-icons.svg#x-circle-fill" />
-            </svg>
-          </button>
-        </td>
-        <td>
-          <span [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'">{{ set.combo.head.name }}</span>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
-                  attr.aria-label="{{ set.combo.head.isEnabled ? 'Disable' : 'Enable' }} armor piece: {{ set.combo.head.name }}"
-                  title="{{ set.combo.head.isEnabled ? 'Disable' : 'Enable' }} armor piece"
-                  (click)="toggleArmorPiece(set.combo.head)">
-            <svg class="bi {{ set.combo.head.isEnabled ? 'disable' : 'enable' }}" fill="currentColor">
-              <use attr.href="bootstrap-icons.svg#{{ set.combo.head.isEnabled ? 'x-circle-fill' : 'check-circle-fill' }}" />
-            </svg>
-          </button>
-        </td>
-        <td>
-          <span [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'">{{ set.combo.chest.name }}</span>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
-                  attr.aria-label="{{ set.combo.chest.isEnabled ? 'Disable' : 'Enable' }} armor piece: {{ set.combo.chest.name }}"
-                  title="{{ set.combo.chest.isEnabled ? 'Disable' : 'Enable' }} armor piece"
-                  (click)="toggleArmorPiece(set.combo.chest)">
-            <svg class="bi {{ set.combo.chest.isEnabled ? 'disable' : 'enable' }}" fill="currentColor">
-              <use attr.href="bootstrap-icons.svg#{{ set.combo.chest.isEnabled ? 'x-circle-fill' : 'check-circle-fill' }}" />
-            </svg>
-          </button>
-        </td>
-        <td>
-          <span [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'">{{ set.combo.gauntlets.name }}</span>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
-                  attr.aria-label="{{ set.combo.gauntlets.isEnabled ? 'Disable' : 'Enable' }} armor piece: {{ set.combo.gauntlets.name }}"
-                  title="{{ set.combo.gauntlets.isEnabled ? 'Disable' : 'Enable' }} armor piece"
-                  (click)="toggleArmorPiece(set.combo.gauntlets)">
-            <svg class="bi {{ set.combo.gauntlets.isEnabled ? 'disable' : 'enable' }}" fill="currentColor">
-              <use attr.href="bootstrap-icons.svg#{{ set.combo.gauntlets.isEnabled ? 'x-circle-fill' : 'check-circle-fill' }}" />
-            </svg>
-          </button>
-        </td>
-        <td>
-          <span [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'">{{ set.combo.legs.name }}</span>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
-                  attr.aria-label="{{ set.combo.legs.isEnabled ? 'Disable' : 'Enable' }} armor piece: {{ set.combo.legs.name }}"
-                  title="{{ set.combo.legs.isEnabled ? 'Disable' : 'Enable' }} armor piece"
-                  (click)="toggleArmorPiece(set.combo.legs)">
-            <svg class="bi {{ set.combo.legs.isEnabled ? 'disable' : 'enable' }}" fill="currentColor">
-              <use attr.href="bootstrap-icons.svg#{{ set.combo.legs.isEnabled ? 'x-circle-fill' : 'check-circle-fill' }}" />
-            </svg>
-          </button>
-        </td>
-        <td>{{ set.combo.weight | number:'1.0-2' }}</td>
-        <td>{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
-        <td>{{ set.combo.physical | number:'1.0-2' }}</td>
-        <td>{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
-        <td>{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
-        <td>{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
-        <td>{{ set.combo.magic | number:'1.0-2' }}</td>
-        <td>{{ set.combo.fire | number:'1.0-2' }}</td>
-        <td>{{ set.combo.lightning | number:'1.0-2' }}</td>
-        <td>{{ set.combo.holy | number:'1.0-2' }}</td>
-        <td>{{ set.combo.immunity | number:'1.0-2' }}</td>
-        <td>{{ set.combo.robustness | number:'1.0-2' }}</td>
-        <td>{{ set.combo.focus | number:'1.0-2' }}</td>
-        <td>{{ set.combo.vitality | number:'1.0-2' }}</td>
-        <td>{{ set.combo.poise | number:'1.0-2' }}</td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td>
+            <span [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'">{{ set.combo.head.name }}</span>
+            <div class="toggles">
+              <button mat-icon-button class="toggle-icon"
+                      attr.aria-label="Enable armor piece: {{ set.combo.head.name }}"
+                      title="Enable armor piece"
+                      (click)="enableArmorPiece(set.combo.head, true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;"
+                      attr.aria-label="Disable armor piece: {{ set.combo.head.name }}"
+                      title="Disable armor piece"
+                      (click)="enableArmorPiece(set.combo.head, false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </div>
+          </td>
+          <td>
+            <span [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'">{{ set.combo.chest.name }}</span>
+            <div class="toggles">
+              <button mat-icon-button class="toggle-icon"
+                      attr.aria-label="Enable armor piece: {{ set.combo.chest.name }}"
+                      title="Enable armor piece"
+                      (click)="enableArmorPiece(set.combo.chest, true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;"
+                      attr.aria-label="Disable armor piece: {{ set.combo.chest.name }}"
+                      title="Disable armor piece"
+                      (click)="enableArmorPiece(set.combo.chest, false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </div>
+          </td>
+          <td>
+            <span [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'">{{ set.combo.gauntlets.name }}</span>
+            <div class="toggles">
+              <button mat-icon-button class="toggle-icon"
+                      attr.aria-label="Enable armor piece: {{ set.combo.gauntlets.name }}"
+                      title="Enable armor piece"
+                      (click)="enableArmorPiece(set.combo.gauntlets, true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;"
+                      attr.aria-label="Disable armor piece: {{ set.combo.gauntlets.name }}"
+                      title="Disable armor piece"
+                      (click)="enableArmorPiece(set.combo.gauntlets, false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </div>
+          </td>
+          <td>
+            <span [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'">{{ set.combo.legs.name }}</span>
+            <div class="toggles">
+              <button mat-icon-button class="toggle-icon"
+                      attr.aria-label="Enable armor piece: {{ set.combo.legs.name }}"
+                      title="Enable armor piece"
+                      (click)="enableArmorPiece(set.combo.legs, true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;"
+                      attr.aria-label="Disable armor piece: {{ set.combo.legs.name }}"
+                      title="Disable armor piece"
+                      (click)="enableArmorPiece(set.combo.legs, false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </div>
+          </td>
+          <td>{{ set.combo.weight | number:'1.0-2' }}</td>
+          <td>{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
+          <td>{{ set.combo.physical | number:'1.0-2' }}</td>
+          <td>{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
+          <td>{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
+          <td>{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
+          <td>{{ set.combo.magic | number:'1.0-2' }}</td>
+          <td>{{ set.combo.fire | number:'1.0-2' }}</td>
+          <td>{{ set.combo.lightning | number:'1.0-2' }}</td>
+          <td>{{ set.combo.holy | number:'1.0-2' }}</td>
+          <td>{{ set.combo.immunity | number:'1.0-2' }}</td>
+          <td>{{ set.combo.robustness | number:'1.0-2' }}</td>
+          <td>{{ set.combo.focus | number:'1.0-2' }}</td>
+          <td>{{ set.combo.vitality | number:'1.0-2' }}</td>
+          <td>{{ set.combo.poise | number:'1.0-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

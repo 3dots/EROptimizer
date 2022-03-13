@@ -18,3 +18,30 @@ table.armor-selections-table td:nth-of-type(15),
 table.armor-selections-table th:nth-of-type(15) {
   color: var(--holy-input);
 }
+
+.toggles {
+    text-align: right;
+}
+
+  table.armor-selections-table > thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+  }
+
+table.armor-selections-table > :not(:first-child) {
+  border-top: none;
+}
+
+table.armor-selections-table {
+  border-collapse: separate;
+}
+
+table.armor-selections-table > thead {
+  border-collapse: separate;
+}
+
+table.armor-selections-table > thead > tr > th {
+  border-bottom: 2px solid currentColor;
+}

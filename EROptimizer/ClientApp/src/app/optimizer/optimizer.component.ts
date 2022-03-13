@@ -26,7 +26,8 @@ export class OptimizerComponent implements OnInit {
 
   viewModel: OptimizerConfigDto;
 
-  worker!: Worker;
+  workers!: Worker[];
+  progressDictionary: { [key: number]: { progress: number, status: OptimizerWorkerRSEnum } } = {};
 
   results: ArmorCombo[] = [];
 
@@ -38,7 +39,6 @@ export class OptimizerComponent implements OnInit {
 
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
-      this.isLoading = false;
 
       if (typeof Worker === 'undefined') {
         this.dialog.open(ErrorDialogComponent, {
@@ -46,7 +46,11 @@ export class OptimizerComponent implements OnInit {
             errorText: "Web Worker API is not supported on this browser. Please use a more modern browser",
           }
         });
+      } else {
+        this.createWorkers();
       }
+
+      this.isLoading = false;
 
     }, (error: any) => {
       this.isLoading = false;
@@ -58,6 +62,19 @@ export class OptimizerComponent implements OnInit {
       });
     });
 
+  }
+
+  createWorkers() {
+    this.workers = [];
+    for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+      this.workers.push(this.createWorker());
+    }
+  }
+
+  createWorker(): Worker {
+    let worker = new Worker(new URL('./optimizer.worker', import.meta.url));
+    worker.onmessage = this.handleWorkerMessageResponse.bind(this);
+    return worker;
   }
 
   prioritizePhysicals() {
@@ -123,28 +140,35 @@ export class OptimizerComponent implements OnInit {
     this.hasProgressBar = true;
     this.progressValue = 0;
 
-    this.worker = new Worker(new URL('./optimizer.worker', import.meta.url));
-    this.worker.onmessage = (e: MessageEvent<IOptimizerWorkerRS>) => {
+    this.progressDictionary = {};
+    for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+      this.progressDictionary[i] = { progress: 0, status: OptimizerWorkerRSEnum.Progress };
+    }
 
-      let rs: IOptimizerWorkerRS = e.data;
+    this.results = [];
 
-      if (rs.type == OptimizerWorkerRSEnum.Progress) {
-        this.progressValue = rs.progress;
-      } else if (rs.type == OptimizerWorkerRSEnum.Finished) {
+    if (this.workers.length != this.viewModel.numberOfThreads) {
 
-        this.results = rs.results.map(x =>
-          new ArmorCombo(
-            this.armorData.head.find(p => p.armorPieceId == x.headPieceId)!,
-            this.armorData.chest.find(p => p.armorPieceId == x.chestPieceId)!,
-            this.armorData.gauntlets.find(p => p.armorPieceId == x.gauntletsPieceId)!,
-            this.armorData.legs.find(p => p.armorPieceId == x.legsPieceId)!, null)
-        );
+      let newWorkerArray: Worker[] = [];
 
-        this.isLoading = false;
+      let i = 0;
+      while (i < this.viewModel.numberOfThreads) {
+        if (i < this.workers.length)
+          newWorkerArray.push(this.workers[i]);
+        else
+          newWorkerArray.push(this.createWorker());
+
+        i++;
       }
 
-    };
+      while (i < this.workers.length) {
+        this.workers[i].terminate();
+        i++;
+      }
 
+      this.workers = newWorkerArray;
+    }
+    
     let data = new ArmorDataDto({
       head: this.armorData.head.filter(x => x.isEnabled),
       chest: this.armorData.chest.filter(x => x.isEnabled),
@@ -166,7 +190,75 @@ export class OptimizerComponent implements OnInit {
       return;
     }
 
-    this.worker.postMessage(new OptimizerWorkerRQ(data, this.viewModel));
+    let chunks: ArmorDataDto[] = [];
+    if (
+      data.head.length >= data.chest.length &&
+      data.head.length >= data.gauntlets.length &&
+      data.head.length >= data.legs.length) {
+
+      var i, j, temporary, chunk = Math.ceil(data.head.length / this.viewModel.numberOfThreads);
+      for (i = 0, j = data.head.length; i < j; i += chunk) {
+        temporary = data.head.slice(i, i + chunk);
+        chunks.push(new ArmorDataDto({
+          head: temporary,
+          chest: data.chest,
+          gauntlets: data.gauntlets,
+          legs: data.legs
+        }));
+      }
+
+    } else if (
+      data.chest.length >= data.gauntlets.length &&
+      data.chest.length >= data.legs.length) {
+
+      var i, j, temporary, chunk = Math.ceil(data.chest.length / this.viewModel.numberOfThreads);
+      for (i = 0, j = data.chest.length; i < j; i += chunk) {
+        temporary = data.chest.slice(i, i + chunk);
+        chunks.push(new ArmorDataDto({
+          head: data.head,
+          chest: temporary,
+          gauntlets: data.gauntlets,
+          legs: data.legs
+        }));
+      }
+
+    } else if (
+      data.gauntlets.length >= data.legs.length) {
+
+      var i, j, temporary, chunk = Math.ceil(data.gauntlets.length / this.viewModel.numberOfThreads);
+      for (i = 0, j = data.gauntlets.length; i < j; i += chunk) {
+        temporary = data.gauntlets.slice(i, i + chunk);
+        chunks.push(new ArmorDataDto({
+          head: data.head,
+          chest: data.chest,
+          gauntlets: temporary,
+          legs: data.legs
+        }));
+      }
+
+    } else {
+
+      var i, j, temporary, chunk = Math.ceil(data.legs.length / this.viewModel.numberOfThreads);
+      for (i = 0, j = data.legs.length; i < j; i += chunk) {
+        temporary = data.legs.slice(i, i + chunk);
+        chunks.push(new ArmorDataDto({
+          head: data.head,
+          chest: data.chest,
+          gauntlets: data.gauntlets,
+          legs: temporary
+        }));
+      }
+
+    }
+
+    if (chunks.length != this.viewModel.numberOfThreads || this.workers.length != this.viewModel.numberOfThreads) {
+      this.dialog.open(ErrorDialogComponent, { data: { errorText: "My math messed up." } });
+      return;
+    }
+
+    for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+      this.workers[i].postMessage(new OptimizerWorkerRQ(chunks[i], this.viewModel, i));
+    }
   }
 
   disableArmorPiece(piece: IArmorPieceDto) {
@@ -174,4 +266,83 @@ export class OptimizerComponent implements OnInit {
     this.runOptimization();
   }
 
+  cancelOptimization() {
+    this.workers.forEach(x => x.terminate());
+    this.createWorkers();
+    this.isLoading = false;
+  }
+
+  handleWorkerMessageResponse(e: MessageEvent<IOptimizerWorkerRS>) {
+    let rs: IOptimizerWorkerRS = e.data;
+
+    if (rs.type == OptimizerWorkerRSEnum.Progress) {
+      
+      this.progressDictionary[rs.workerIndex].progress = rs.progress;
+
+      let currentProgress = 0;
+      for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+        currentProgress += this.progressDictionary[i].progress / this.viewModel.numberOfThreads;
+      }
+
+      this.progressValue = currentProgress;
+
+    } else if (rs.type == OptimizerWorkerRSEnum.Finished) {
+
+      this.progressDictionary[rs.workerIndex].status = OptimizerWorkerRSEnum.Finished;
+
+      let responseResults = rs.results.map(x =>
+        new ArmorCombo(
+          this.armorData.head.find(p => p.armorPieceId == x.headPieceId)!,
+          this.armorData.chest.find(p => p.armorPieceId == x.chestPieceId)!,
+          this.armorData.gauntlets.find(p => p.armorPieceId == x.gauntletsPieceId)!,
+          this.armorData.legs.find(p => p.armorPieceId == x.legsPieceId)!, this.viewModel)
+      );
+
+      //same code as optimizer.worker.ts
+      for (let i = 0; i < responseResults.length; i++) {
+
+        let combo: ArmorCombo = responseResults[i];
+
+        if (this.results.length == 0) {
+          this.results.push(combo);
+        } else if (this.results.length == this.viewModel.numberOfResults && combo.score <= this.results[this.results.length - 1].score) {
+          continue;
+        } else {
+          for (let m = 0; m < this.results.length; m++) {
+            let item: ArmorCombo = this.results[m];
+            if (item.score < combo.score) {
+              //Push all items down, insert at m.
+              this.results.splice(m, 0, combo);
+
+              //Remove last item if necessary
+              if (this.results.length > this.viewModel.numberOfResults) this.results.splice(this.results.length - 1, 1);
+
+              break;
+            }
+          }
+        }
+
+      }
+
+      let isFinished = true;
+      for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+        if (this.progressDictionary[i].status != OptimizerWorkerRSEnum.Finished) {
+          isFinished = false;
+          break;
+        }
+      }
+
+      if (isFinished) {
+
+        if (this.results.length > 0) {
+          console.log(this.results[0].head);
+          console.log(this.results[0].chest);
+          console.log(this.results[0].gauntlets);
+          console.log(this.results[0].legs);
+        }
+
+        this.isLoading = false;
+      }
+    }
+  }
 }

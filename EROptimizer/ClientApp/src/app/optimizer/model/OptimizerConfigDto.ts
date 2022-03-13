@@ -11,6 +11,11 @@ export class OptimizerConfigDto {
   leftHand2: number = 0;
   leftHand3: number = 0;
 
+  talisman1: number = 0;
+  talisman2: number = 0;
+  talisman3: number = 0;
+  talisman4: number = 0;
+
   minAvgPhysical: number = 0;
   minPhysical: number = 0;
   minPhysicalStrike: number = 0;
@@ -56,7 +61,10 @@ export class OptimizerConfigDto {
   //}
 
   public get totalAvailableWeight() {
-    return this.maxWeight * this.weightFractionGoal;
+    return this.maxWeight * this.weightFractionGoal
+      - this.rightHand1 - this.rightHand2 - this.rightHand3
+      - this.leftHand1 - this.leftHand2 - this.leftHand3
+      - this.talisman1 - this.talisman2  - this.talisman3 - this.talisman4;
   }
 
   public constructor(init?: Partial<OptimizerConfigDto>) {
