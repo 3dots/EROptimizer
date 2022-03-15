@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin/admin.component'
 import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
 import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
+import { BestClassComponent } from './best-class/best-class.component';
 import { OptimizerComponent } from './optimizer/optimizer.component'
 
 const routes: Routes = [
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'optimizer', component: OptimizerComponent },
   { path: 'armor', component: ArmorSelectionsComponent },
   { path: 'pieces', component: ArmorPiecesComponent },
+  { path: 'bestclass', component: BestClassComponent },
 ];
 
 @NgModule({

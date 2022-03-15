@@ -19,6 +19,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
 import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
+import { BestClassComponent } from './best-class/best-class.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
     LoadingComponent,
     ErrorDialogComponent,
     ArmorSelectionsComponent,
-    ArmorPiecesComponent
+    ArmorPiecesComponent,
+    BestClassComponent
   ],
   imports: [
     BrowserModule,

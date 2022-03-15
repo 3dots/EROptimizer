@@ -31,6 +31,8 @@ export class OptimizerComponent implements OnInit {
 
   results: ArmorCombo[] = [];
 
+  numberOfDisabledPieces: number = 0;
+
   constructor(private dataService: DataService, private dialog: MatDialog) {
     this.viewModel = dataService.config;
   }
@@ -39,6 +41,7 @@ export class OptimizerComponent implements OnInit {
 
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
+      this.setNumberOfDisabledPieces();
 
       if (typeof Worker === 'undefined') {
         this.dialog.open(ErrorDialogComponent, {
@@ -134,8 +137,13 @@ export class OptimizerComponent implements OnInit {
     this.viewModel.priPoise = 0;
   }
 
-  runOptimization(): void {
+  reset() {
+    this.viewModel = this.dataService.resetConfig();
+    this.setNumberOfDisabledPieces();
+  }
 
+  runOptimization(): void {
+    
     this.isLoading = true;
     this.hasProgressBar = true;
     this.progressValue = 0;
@@ -178,17 +186,23 @@ export class OptimizerComponent implements OnInit {
 
     if (data.head.length == 0) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Head pieces are disabled. Please enable at least one Head piece." } });
+      this.isLoading = false;
       return;
     } else if (data.chest.length == 0) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Chest pieces are disabled. Please enable at least one Chest piece." } });
+      this.isLoading = false;
       return;
     } else if (data.gauntlets.length == 0) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Gauntlets pieces are disabled. Please enable at least one Gauntlets piece." } });
+      this.isLoading = false;
       return;
     } else if (data.legs.length == 0) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Legs pieces are disabled. Please enable at least one Legs piece." } });
+      this.isLoading = false;
       return;
     }
+
+    this.dataService.storeToLocalStorage();
 
     let chunks: ArmorDataDto[] = [];
     if (
@@ -251,6 +265,9 @@ export class OptimizerComponent implements OnInit {
 
     }
 
+    //console.log(chunks);
+    //debugger;
+
     if (chunks.length != this.viewModel.numberOfThreads || this.workers.length != this.viewModel.numberOfThreads) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "My math messed up." } });
       return;
@@ -263,7 +280,18 @@ export class OptimizerComponent implements OnInit {
 
   disableArmorPiece(piece: IArmorPieceDto) {
     piece.isEnabled = false;
+    this.numberOfDisabledPieces++;
     this.runOptimization();
+  }
+
+  setNumberOfDisabledPieces() {
+    let count = 0;
+    this.armorData.head.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.chest.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.gauntlets.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.legs.forEach(x => { if (!x.isEnabled) count++; });
+
+    this.numberOfDisabledPieces = count;
   }
 
   cancelOptimization() {
@@ -298,6 +326,9 @@ export class OptimizerComponent implements OnInit {
           this.armorData.legs.find(p => p.armorPieceId == x.legsPieceId)!, this.viewModel)
       );
 
+      //console.log(this.results);
+      console.log(responseResults);
+
       //same code as optimizer.worker.ts
       for (let i = 0; i < responseResults.length; i++) {
 
@@ -308,11 +339,14 @@ export class OptimizerComponent implements OnInit {
         } else if (this.results.length == this.viewModel.numberOfResults && combo.score <= this.results[this.results.length - 1].score) {
           continue;
         } else {
+
+          let inserted = false;
           for (let m = 0; m < this.results.length; m++) {
-            let item: ArmorCombo = this.results[m];
+            let item: ArmorCombo = this.results[m];            
             if (item.score < combo.score) {
               //Push all items down, insert at m.
               this.results.splice(m, 0, combo);
+              inserted = true;
 
               //Remove last item if necessary
               if (this.results.length > this.viewModel.numberOfResults) this.results.splice(this.results.length - 1, 1);
@@ -320,6 +354,11 @@ export class OptimizerComponent implements OnInit {
               break;
             }
           }
+
+          if (this.results.length < this.viewModel.numberOfResults && !inserted) {
+            this.results.push(combo);
+          }
+
         }
 
       }
@@ -334,12 +373,12 @@ export class OptimizerComponent implements OnInit {
 
       if (isFinished) {
 
-        if (this.results.length > 0) {
-          console.log(this.results[0].head);
-          console.log(this.results[0].chest);
-          console.log(this.results[0].gauntlets);
-          console.log(this.results[0].legs);
-        }
+        //if (this.results.length > 0) {
+        //  console.log(this.results[0].head);
+        //  console.log(this.results[0].chest);
+        //  console.log(this.results[0].gauntlets);
+        //  console.log(this.results[0].legs);
+        //}
 
         this.isLoading = false;
       }

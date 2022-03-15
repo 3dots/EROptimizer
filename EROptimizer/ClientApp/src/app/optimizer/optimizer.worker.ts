@@ -70,17 +70,25 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
           } else if (results.length == config.numberOfResults && combo.score <= results[results.length - 1].score) {
             continue;
           } else {
+
+            let inserted = false;
+
             for (let m = 0; m < results.length; m++) {
               let item: ArmorCombo = results[m];
               if (item.score < combo.score) {
                 //Push all items down, insert at m.
                 results.splice(m, 0, combo);
+                inserted = true;
 
                 //Remove last item if necessary
                 if (results.length > config.numberOfResults) results.splice(results.length - 1, 1);
 
                 break;
               }
+            }
+
+            if (results.length < config.numberOfResults && !inserted) {
+              results.push(combo);
             }
           }
         }

@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, shareReplay, map } from 'rxjs';
 
 import { IArmorDataDto } from './dto/IArmorDataDto';
-import { IArmorSetDto } from './dto/ArmorSetDto';
-import { IArmorPieceDto } from './dto/IArmorPieceDto';
+import { IArmorSetDto } from './dto/IArmorSetDto';
+import { ArmorPieceTypeEnum, IArmorPieceDto } from './dto/IArmorPieceDto';
 import { ArmorCombo } from '../app/optimizer/model/ArmorCombo';
 import { OptimizerConfigDto } from '../app/optimizer/model/OptimizerConfigDto';
 
@@ -15,23 +15,37 @@ import { OptimizerConfigDto } from '../app/optimizer/model/OptimizerConfigDto';
 export class DataService {
 
   private url: string = "/data/";
-  private _armorData!: Observable<IArmorDataDto>;
+  private _armorDataObservable!: Observable<IArmorDataDto>;
+  private _armorData!: IArmorDataDto;
 
-  config: OptimizerConfigDto = new OptimizerConfigDto();
+  private _localStorageKey = "EROptimizerKey";
+
+  config: OptimizerConfigDto;
 
   constructor(private http: HttpClient) {
 
+    let json = localStorage.getItem(this._localStorageKey);
+    if (json) {
+      try {
+        this.config = new OptimizerConfigDto(JSON.parse(json));
+      } catch {
+        this.config = new OptimizerConfigDto();
+      }
+    } else {
+      this.config = new OptimizerConfigDto();
+    }
+
+    //console.log(this.config.disabledList);
   }
 
   get armorData(): Observable<IArmorDataDto> {
-    if (this._armorData == null) {
-      this._armorData = this.http.get<IArmorDataDto>(this.url).pipe(map(x => {
+    if (this._armorDataObservable == null) {
+      this._armorDataObservable = this.http.get<IArmorDataDto>(this.url).pipe(map(x => {
 
-        //todo wire to cookie storage
-        x.head.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
-        x.chest.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
-        x.gauntlets.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
-        x.legs.forEach((p: IArmorPieceDto) => { p.isEnabled = true; });
+        x.head.forEach(this.enableItem.bind(this));
+        x.chest.forEach(this.enableItem.bind(this));
+        x.gauntlets.forEach(this.enableItem.bind(this));
+        x.legs.forEach(this.enableItem.bind(this));
 
         x.armorSets.forEach((s: IArmorSetDto) => {
 
@@ -47,11 +61,56 @@ export class DataService {
 
         });
 
+        this._armorData = x;
+
         return x;
       })).pipe(shareReplay(1));
-      return this._armorData;
+      return this._armorDataObservable;
     } else {
-      return this._armorData;
+      return this._armorDataObservable;
     }
+  }
+
+  storeToLocalStorage() {
+
+    this.config.disabledList = [
+      ...this._armorData.head.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneHead" : x.name),
+      ...this._armorData.chest.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneChest" : x.name),
+      ...this._armorData.gauntlets.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneGauntlets" : x.name),
+      ...this._armorData.legs.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneLegs" : x.name),
+    ];
+
+    localStorage.setItem(this._localStorageKey, JSON.stringify(this.config));
+
+    this.config.disabledList = []; //dont store in memory.
+  }
+
+  enableItem(p: IArmorPieceDto) {
+
+    let pieceName = p.name;
+
+    if (p.name == "None") {
+
+      if (p.type == ArmorPieceTypeEnum.Head) pieceName = "NoneHead";
+      else if (p.type == ArmorPieceTypeEnum.Chest) pieceName = "NoneChest";
+      else if (p.type == ArmorPieceTypeEnum.Gauntlets) pieceName = "NoneGauntlets";
+      else pieceName = "NoneLegs";
+    }
+
+    if (!this.config.disabledList.includes(pieceName)) {
+      p.isEnabled = true;
+    }
+  }
+
+  resetConfig(): OptimizerConfigDto {
+
+    this.config = new OptimizerConfigDto();
+
+    this._armorData.head.forEach(this.enableItem.bind(this));
+    this._armorData.chest.forEach(this.enableItem.bind(this));
+    this._armorData.gauntlets.forEach(this.enableItem.bind(this));
+    this._armorData.legs.forEach(this.enableItem.bind(this));
+
+    return this.config;
   }
 }

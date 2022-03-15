@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
-import { IArmorSetDto } from '../../service/dto/ArmorSetDto';
+import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({

@@ -6,6 +6,10 @@ mat-form-field {
   width: 100%;
 }
 
+.mat-form-field-flex .mat-form-field-infix {
+  width: 100px;
+}
+
 .container-mat-form-field-less-bottom-space .mat-form-field-wrapper {
   margin-bottom: calc(-1.3em + var(--bs-gutter-x) * 0.5);
 }

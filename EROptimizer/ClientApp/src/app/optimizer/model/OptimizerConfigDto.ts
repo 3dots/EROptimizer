@@ -1,7 +1,6 @@
 
 export class OptimizerConfigDto {
 
-  strength: number = 10;
   weightFractionGoal: number = 0.6999;
 
   rightHand1: number = 0;
@@ -56,18 +55,16 @@ export class OptimizerConfigDto {
 
   maxWeight: number = 45;
 
-  //public get maxWeight() {
-  //  return this.strength * 2; //todo get correct formula
-  //}
+  disabledList: string[] = [];
+
+  public constructor(init?: Partial<OptimizerConfigDto>) {
+    Object.assign(this, init);
+  }
 
   public get totalAvailableWeight() {
     return this.maxWeight * this.weightFractionGoal
       - this.rightHand1 - this.rightHand2 - this.rightHand3
       - this.leftHand1 - this.leftHand2 - this.leftHand3
       - this.talisman1 - this.talisman2  - this.talisman3 - this.talisman4;
-  }
-
-  public constructor(init?: Partial<OptimizerConfigDto>) {
-    Object.assign(this, init);
   }
 }

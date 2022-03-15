@@ -1,5 +1,5 @@
 import { IArmorPieceDto } from './IArmorPieceDto';
-import { IArmorSetDto } from './ArmorSetDto';
+import { IArmorSetDto } from './IArmorSetDto';
 
 export class ArmorDataDto implements IArmorDataDto {
   head: IArmorPieceDto[] = [];
