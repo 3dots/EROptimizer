@@ -36,10 +36,7 @@ table.armor-selections-table > :not(:first-child) {
 
 table.armor-selections-table {
   border-collapse: separate;
-}
-
-table.armor-selections-table > thead {
-  border-collapse: separate;
+  border-spacing: 0;
 }
 
 table.armor-selections-table > thead > tr > th {

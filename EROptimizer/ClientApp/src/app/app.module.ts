@@ -18,6 +18,7 @@ import { OptimizerComponent } from './optimizer/optimizer.component';
 import { AdminComponent } from './admin/admin.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
+import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ArmorSelectionsComponent } from './armor-selections/armor-selections.co
     AdminComponent,
     LoadingComponent,
     ErrorDialogComponent,
-    ArmorSelectionsComponent
+    ArmorSelectionsComponent,
+    ArmorPiecesComponent
   ],
   imports: [
     BrowserModule,

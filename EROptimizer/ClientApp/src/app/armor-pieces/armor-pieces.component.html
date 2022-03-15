@@ -1,0 +1,36 @@
+<div style="display: flex; flex-direction: column; height: 100%;">
+  <h1>Armor Pieces</h1>
+  <ul class="selection-list" style="margin-bottom: 0;">
+    <li>
+      <h2>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="armorType == ArmorPieceTypeEnum.Head"
+           (click)="switchToType(ArmorPieceTypeEnum.Head)">Helms</a>
+      </h2>
+    </li>
+    <li>
+      <h2>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="armorType == ArmorPieceTypeEnum.Chest"
+           (click)="switchToType(ArmorPieceTypeEnum.Chest)">Chests Armor</a>
+      </h2>
+    </li>
+    <li>
+      <h2>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="armorType == ArmorPieceTypeEnum.Gauntlets"
+           (click)="switchToType(ArmorPieceTypeEnum.Gauntlets)">Gauntlets</a>
+      </h2>
+    </li>
+    <li>
+      <h2>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="armorType == ArmorPieceTypeEnum.Legs"
+           (click)="switchToType(ArmorPieceTypeEnum.Legs)">Legs</a>
+      </h2>
+    </li>
+  </ul>
+  <div *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
+
+  </div>
+</div>
