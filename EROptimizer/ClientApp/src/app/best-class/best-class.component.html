@@ -1,1 +1,80 @@
-<p>best-class works!</p>
+<h1>Best Starting Class</h1>
+<span>Best class is: {{ bestClass.name }}</span>
+<button style="margin-left: 10px;" class="btn btn-secondary" (click)="reset()">Reset</button>
+<table class="table container-mat-form-field-no-bottom-space">
+  <thead>
+    <tr>
+      <th scope="col">Starting class</th>
+      <th scope="col">Vigor</th>
+      <th scope="col">Mind</th>
+      <th scope="col">Endurance</th>
+      <th scope="col">Strength</th>
+      <th scope="col">Dexterity</th>
+      <th scope="col">Intelligence</th>
+      <th scope="col">Faith</th>
+      <th scope="col">Arcane</th>
+      <th scope="col">Starting Level</th>
+      <th scope="col">Soul Level Needed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row" style="vertical-align: middle;">Your build:</th>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.vigor" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.mind" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.endurance" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.strength" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.dexterity" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.intelligence" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.faith" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td>
+        <mat-form-field appearance="fill">
+          <input matInput [(ngModel)]="yourBuild.arcane" type="number" min="0" />
+        </mat-form-field>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr *ngFor="let class of startingClasses" [class.best-class]="bestClass.name == class.name">
+      <th scope="row">{{class.name}}</th>
+      <td>{{class.vigor}}</td>
+      <td>{{class.mind}}</td>
+      <td>{{class.endurance}}</td>
+      <td>{{class.strength}}</td>
+      <td>{{class.dexterity}}</td>
+      <td>{{class.intelligence}}</td>
+      <td>{{class.faith}}</td>
+      <td>{{class.arcane}}</td>
+      <td>{{class.startingLevel}}</td>
+      <td>{{soulLevelNeeded(class)}}</td>
+    </tr>
+  </tbody>
+</table>
