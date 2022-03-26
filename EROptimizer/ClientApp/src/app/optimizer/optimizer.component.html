@@ -335,7 +335,7 @@
     <tbody>
       <tr *ngFor="let combo of results">
         <td>
-          <span>{{ combo.head.name }}</span>
+          <a [attr.href]="getURL(combo.head)" target="_blank">{{ combo.head.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.head.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.head)">
@@ -345,7 +345,7 @@
           </button>
         </td>
         <td>
-          <span>{{ combo.chest.name }}</span>
+          <a [attr.href]="getURL(combo.chest)" target="_blank">{{ combo.chest.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.chest.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.chest)">
@@ -355,7 +355,7 @@
           </button>
         </td>
         <td>
-          <span>{{ combo.gauntlets.name }}</span>
+          <a [attr.href]="getURL(combo.gauntlets)" target="_blank">{{ combo.gauntlets.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.gauntlets.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.gauntlets)">
@@ -365,7 +365,7 @@
           </button>
         </td>
         <td>
-          <span>{{ combo.legs.name }}</span>
+          <a [attr.href]="getURL(combo.legs)" target="_blank">{{ combo.legs.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.legs.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.legs)">

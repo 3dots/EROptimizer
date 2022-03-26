@@ -65,4 +65,9 @@ export class ArmorPiecesComponent implements OnInit {
   enableArmorPiece(piece: IArmorPieceDto, enable: boolean) {
     piece.isEnabled = enable;
   }
+
+  getURL(piece: IArmorPieceDto): string | null {
+    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
+    else return null;
+  }
 }

@@ -31,8 +31,8 @@
       </h2>
     </li>
   </ul>
-  <div *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
-    <table class="table fixed-thead armor-pieces-table">
+  <div *ngIf="armorData" style="flex-grow: 1; overflow: auto; margin-right: auto;">
+    <table class="table fixed-thead armor-pieces-table" style="width: auto;">
       <thead>
         <tr>
           <th scope="col">Name</th>
@@ -55,7 +55,7 @@
       <tbody>
         <tr *ngFor="let p of armorPieces">
           <td>
-            <span [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'">{{ p.name }}</span>
+            <a [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'" [attr.href]="getURL(p)" target="_blank">{{ p.name }}</a>
             <div class="toggles" style="float: right;">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ p.name }}"

@@ -32,6 +32,8 @@ namespace EROptimizer.Dto
 
         public double Weight { get; set; }
 
+        public string ResourceName { get; set; }
+
         public ArmorPieceDto() { }
 
         public ArmorPieceDto(ArmorPiece p, int index)
@@ -60,6 +62,8 @@ namespace EROptimizer.Dto
             Poise = p.Poise;
 
             Weight = p.Weight;
+
+            ResourceName = p.ResourceName;
         }
     }
 }

@@ -32,4 +32,6 @@ export interface IArmorPieceDto {
   poise: number;
 
   weight: number;
+
+  resourceName: string;
 }

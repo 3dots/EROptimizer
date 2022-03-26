@@ -284,6 +284,11 @@ export class OptimizerComponent implements OnInit {
     this.runOptimization();
   }
 
+  getURL(piece: IArmorPieceDto): string | null {
+    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
+    else return null;
+  }
+
   setNumberOfDisabledPieces() {
     let count = 0;
     this.armorData.head.forEach(x => { if (!x.isEnabled) count++; });
@@ -383,5 +388,5 @@ export class OptimizerComponent implements OnInit {
         this.isLoading = false;
       }
     }
-  }
+  }  
 }

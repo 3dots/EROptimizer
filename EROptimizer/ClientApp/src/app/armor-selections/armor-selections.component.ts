@@ -96,4 +96,9 @@ export class ArmorSelectionsComponent implements OnInit {
       else if (!x.armorSetIds.includes(0)) x.isEnabled = false;
     });
   }
+
+  getURL(piece: IArmorPieceDto): string | null {
+    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
+    else return null;
+  }
 }

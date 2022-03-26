@@ -121,7 +121,8 @@
             </button>
           </td>
           <td>
-            <span [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'">{{ set.combo.head.name }}</span>
+            <a [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'"
+               [attr.href]="getURL(set.combo.head)" target="_blank">{{ set.combo.head.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ set.combo.head.name }}"
@@ -142,7 +143,8 @@
             </div>
           </td>
           <td>
-            <span [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'">{{ set.combo.chest.name }}</span>
+            <a [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'"
+               [attr.href]="getURL(set.combo.chest)" target="_blank">{{ set.combo.chest.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ set.combo.chest.name }}"
@@ -163,7 +165,8 @@
             </div>
           </td>
           <td>
-            <span [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'">{{ set.combo.gauntlets.name }}</span>
+            <a [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'"
+               [attr.href]="getURL(set.combo.gauntlets)" target="_blank">{{ set.combo.gauntlets.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ set.combo.gauntlets.name }}"
@@ -184,7 +187,8 @@
             </div>
           </td>
           <td>
-            <span [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'">{{ set.combo.legs.name }}</span>
+            <a [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'"
+               [attr.href]="getURL(set.combo.legs)" target="_blank">{{ set.combo.legs.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ set.combo.legs.name }}"

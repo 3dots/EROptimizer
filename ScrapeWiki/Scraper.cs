@@ -500,14 +500,14 @@ namespace ScrapeWiki
             HtmlNode tr = htmlDoc.QuerySelector("table.wiki_table > tbody > tr:nth-child(3)");
             if (tr == null)
             {
-                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, couldn't find table tr"));
+                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Individual Piece fetch, couldn't find table tr"));
                 return false;
             }
 
             IList<HtmlNode> tds = tr.QuerySelectorAll("td");
             if (tds == null || tds.Count != 2)
             {
-                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, not two tds"));
+                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Individual Piece fetch, not two tds"));
                 return false;
             }
 
@@ -579,7 +579,7 @@ namespace ScrapeWiki
 
                 if (node == null || node.Name != "#text")
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, couldn't find table weight html."));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Individual Piece fetch, couldn't find table weight html."));
                     return false;
                 }    
             }
