@@ -50,10 +50,6 @@ export class ArmorSelectionsComponent implements OnInit {
     }
   }
 
-  toggleArmorPiece(piece: IArmorPieceDto) {
-    piece.isEnabled = !piece.isEnabled;
-  }
-
   enableArmorPiece(piece: IArmorPieceDto, enable: boolean) {
     piece.isEnabled = enable;
   }

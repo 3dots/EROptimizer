@@ -12,9 +12,9 @@
         {{ progressLabel }}: {{ progressValue / 100 | percent }}
         <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
       </div>
-      <div style="margin-top: 10px; text-align: right;">
+      <div *ngIf="hasProgressBar" style="margin-top: 10px; text-align: right;">
         <button class="btn btn-primary" (click)="cancel()">Cancel</button>
-      </div>      
-    </div>    
+      </div>
+    </div>
   </div>
 </div>

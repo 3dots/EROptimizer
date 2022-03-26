@@ -123,10 +123,10 @@
         <th scope="col">Strike</th>
         <th scope="col">Slash</th>
         <th scope="col">Pierce</th>
-        <th scope="col">Magic</th>
-        <th scope="col">Fire</th>
-        <th scope="col">Lightning</th>
-        <th scope="col">Holy</th>
+        <th scope="col" class="magic">Magic</th>
+        <th scope="col" class="fire">Fire</th>
+        <th scope="col" class="lightning">Lightning</th>
+        <th scope="col" class="holy">Holy</th>
         <th scope="col">Immunity</th>
         <th scope="col">Robustness</th>
         <th scope="col">Focus</th>
@@ -162,21 +162,21 @@
             <input matInput [(ngModel)]="viewModel.minPhysicalPierce" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="magic">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minMagic" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="fire">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minFire" type="number" min="0" />
           </mat-form-field>
-        <td>
+        <td class="lightning">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minLightning" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="holy">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minHoly" type="number" min="0" />
           </mat-form-field>
@@ -230,21 +230,21 @@
             <input matInput [(ngModel)]="viewModel.priPhysicalPierce" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="magic">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priMagic" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="fire">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priFire" type="number" min="0" />
           </mat-form-field>
-        <td>
+        <td class="lightning">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priLightning" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td class="holy">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priHoly" type="number" min="0" />
           </mat-form-field>
@@ -321,10 +321,10 @@
         <th scope="col">Strike</th>
         <th scope="col">Slash</th>
         <th scope="col">Pierce</th>
-        <th scope="col">Magic</th>
-        <th scope="col">Fire</th>
-        <th scope="col">Lightning</th>
-        <th scope="col">Holy</th>
+        <th scope="col" class="magic">Magic</th>
+        <th scope="col" class="fire">Fire</th>
+        <th scope="col" class="lightning">Lightning</th>
+        <th scope="col" class="holy">Holy</th>
         <th scope="col">Immunity</th>
         <th scope="col">Robustness</th>
         <th scope="col">Focus</th>
@@ -380,10 +380,10 @@
         <td>{{ combo.physicalStrike | number:'1.0-2' }}</td>
         <td>{{ combo.physicalSlash | number:'1.0-2' }}</td>
         <td>{{ combo.physicalPierce | number:'1.0-2' }}</td>
-        <td>{{ combo.magic | number:'1.0-2' }}</td>
-        <td>{{ combo.fire | number:'1.0-2' }}</td>
-        <td>{{ combo.lightning | number:'1.0-2' }}</td>
-        <td>{{ combo.holy | number:'1.0-2' }}</td>
+        <td class="magic">{{ combo.magic | number:'1.0-2' }}</td>
+        <td class="fire">{{ combo.fire | number:'1.0-2' }}</td>
+        <td class="lightning">{{ combo.lightning | number:'1.0-2' }}</td>
+        <td class="holy">{{ combo.holy | number:'1.0-2' }}</td>
         <td>{{ combo.immunity | number:'1.0-2' }}</td>
         <td>{{ combo.robustness | number:'1.0-2' }}</td>
         <td>{{ combo.focus | number:'1.0-2' }}</td>

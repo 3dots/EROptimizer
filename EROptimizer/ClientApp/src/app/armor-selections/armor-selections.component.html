@@ -1,8 +1,8 @@
-
+<app-loading *ngIf="isLoading"></app-loading>
 <div style="display: flex; flex-direction: column; height: 100%;">
   <h1>Armor Sets</h1>
   <div *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
-    <table class="table armor-selections-table">
+    <table class="table fixed-thead armor-selections-table">
       <thead>
         <tr>
           <th style="width: 63px;">
@@ -93,10 +93,10 @@
           <th scope="col">Strike</th>
           <th scope="col">Slash</th>
           <th scope="col">Pierce</th>
-          <th scope="col">Magic</th>
-          <th scope="col">Fire</th>
-          <th scope="col">Lightning</th>
-          <th scope="col">Holy</th>
+          <th scope="col" class="magic">Magic</th>
+          <th scope="col" class="fire">Fire</th>
+          <th scope="col" class="lightning">Lightning</th>
+          <th scope="col" class="holy">Holy</th>
           <th scope="col">Immunity</th>
           <th scope="col">Robustness</th>
           <th scope="col">Focus</th>
@@ -210,10 +210,10 @@
           <td>{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
           <td>{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
           <td>{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
-          <td>{{ set.combo.magic | number:'1.0-2' }}</td>
-          <td>{{ set.combo.fire | number:'1.0-2' }}</td>
-          <td>{{ set.combo.lightning | number:'1.0-2' }}</td>
-          <td>{{ set.combo.holy | number:'1.0-2' }}</td>
+          <td class="magic">{{ set.combo.magic | number:'1.0-2' }}</td>
+          <td class="fire">{{ set.combo.fire | number:'1.0-2' }}</td>
+          <td class="lightning">{{ set.combo.lightning | number:'1.0-2' }}</td>
+          <td class="holy">{{ set.combo.holy | number:'1.0-2' }}</td>
           <td>{{ set.combo.immunity | number:'1.0-2' }}</td>
           <td>{{ set.combo.robustness | number:'1.0-2' }}</td>
           <td>{{ set.combo.focus | number:'1.0-2' }}</td>

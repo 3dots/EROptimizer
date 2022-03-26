@@ -136,7 +136,10 @@ namespace ScrapeWiki
 
             await EnsureCorrectness();
 
+            await EnsureUniqueness();
+
             ArmorSets = ArmorSets.OrderBy(x => x.Name).ToList();
+            ArmorPieces = ArmorPieces.OrderBy(x => x.Name).ToList();
 
             bool debug = false;
             if (debug)

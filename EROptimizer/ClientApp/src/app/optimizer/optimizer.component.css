@@ -1,25 +1,4 @@
 
-
-table.optimization-criteria-table td:nth-of-type(6),
-table.optimization-criteria-table th:nth-of-type(7) {
-  color: var(--blue-input);
-}
-
-table.optimization-criteria-table td:nth-of-type(7),
-table.optimization-criteria-table th:nth-of-type(8) {
-  color: var(--red-input);
-}
-
-table.optimization-criteria-table td:nth-of-type(8),
-table.optimization-criteria-table th:nth-of-type(9) {
-  color: var(--yellow-input);
-}
-
-table.optimization-criteria-table td:nth-of-type(9),
-table.optimization-criteria-table th:nth-of-type(10) {
-  color: var(--holy-input);
-}
-
 @media screen and (min-width: 1200px) and (max-width: 1299px) {
   table .optimization-criteria-table {
     font-size: 14px;
@@ -111,26 +90,9 @@ table.optimization-criteria-table th:nth-of-type(10) {
   table.optimization-criteria-table td:nth-of-type(13):before {
     content: "Vitality";
   }
-}
-
-table.optimizer-results-table td:nth-of-type(11),
-table.optimizer-results-table th:nth-of-type(11) {
-  color: var(--blue-input);
-}
-
-table.optimizer-results-table td:nth-of-type(12),
-table.optimizer-results-table th:nth-of-type(12) {
-  color: var(--red-input);
-}
-
-table.optimizer-results-table td:nth-of-type(13),
-table.optimizer-results-table th:nth-of-type(13) {
-  color: var(--yellow-input);
-}
-
-table.optimizer-results-table td:nth-of-type(14),
-table.optimizer-results-table th:nth-of-type(14) {
-  color: var(--holy-input);
+  table.optimization-criteria-table td:nth-of-type(14):before {
+    content: "Poise";
+  }
 }
 
 .button-div button:not(:first-child) {

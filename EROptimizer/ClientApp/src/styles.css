@@ -47,3 +47,39 @@ mat-form-field {
   .mat-icon-button.toggle-icon svg.disable {
     color: var(--bs-red);
   }
+
+table.fixed-thead {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+table.fixed-thead > thead {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 100;
+}
+
+table.fixed-thead > :not(:first-child) {
+  border-top: none;
+}
+
+table.fixed-thead > thead > tr > th {
+  border-bottom: 2px solid currentColor;
+}
+
+.magic {
+  color: var(--blue-input);
+}
+
+.fire {
+  color: var(--red-input);
+}
+
+.lightning {
+  color: var(--yellow-input);
+}
+
+.holy {
+  color: var(--holy-input);
+}

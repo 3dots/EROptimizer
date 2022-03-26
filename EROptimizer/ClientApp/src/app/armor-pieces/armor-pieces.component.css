@@ -1,26 +1,26 @@
 ul.selection-list {
-    display: flex;
-    list-style: none;
+  display: flex;
+  list-style: none;
 }
 
   ul.selection-list > li {
     padding: 8px;
   }
 
-  h2 {
-      margin-bottom: 0;
-  }
+h2 {
+  margin-bottom: 0;
+}
 
 
 ul.selection-list a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-ul.selection-list a.link-active {
-  border-bottom: 1px solid var(--blue-input);
-}
+  ul.selection-list a.link-active {
+    border-bottom: 1px solid var(--blue-input);
+  }
 
-ul.selection-list a:hover {
-  background-color: #eeeeee;
-  border-radius: 3px;
-}
+  ul.selection-list a:hover {
+    background-color: #eeeeee;
+    border-radius: 3px;
+  }

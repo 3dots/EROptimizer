@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
-import { ArmorPieceTypeEnum } from '../../service/dto/IArmorPieceDto';
+import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
@@ -18,14 +18,15 @@ export class ArmorPiecesComponent implements OnInit {
 
   ArmorPieceTypeEnum = ArmorPieceTypeEnum;
   armorType: ArmorPieceTypeEnum = ArmorPieceTypeEnum.Head;
+  armorPieces: IArmorPieceDto[] = [];
 
-  constructor(private dataService: DataService, private dialog: MatDialog) {
-
+  constructor(private dataService: DataService, private dialog: MatDialog) {    
   }
 
   ngOnInit(): void {
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
+      this.switchToType(this.armorType);
       this.isLoading = false;
     }, (error: any) => {
       this.isLoading = false;
@@ -40,6 +41,28 @@ export class ArmorPiecesComponent implements OnInit {
 
   switchToType(type: ArmorPieceTypeEnum) {
     this.armorType = type;
+
+    switch (type) {
+      case ArmorPieceTypeEnum.Head: {
+        this.armorPieces = this.armorData.head;
+        break;
+      }
+      case ArmorPieceTypeEnum.Chest: {
+        this.armorPieces = this.armorData.chest;
+        break;
+      }
+      case ArmorPieceTypeEnum.Gauntlets: {
+        this.armorPieces = this.armorData.gauntlets;
+        break;
+      }
+      case ArmorPieceTypeEnum.Legs: {
+        this.armorPieces = this.armorData.legs;
+        break;
+      }
+    }
   }
 
+  enableArmorPiece(piece: IArmorPieceDto, enable: boolean) {
+    piece.isEnabled = enable;
+  }
 }

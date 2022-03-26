@@ -1,3 +1,4 @@
+<app-loading *ngIf="isLoading"></app-loading>
 <div style="display: flex; flex-direction: column; height: 100%;">
   <h1>Armor Pieces</h1>
   <ul class="selection-list" style="margin-bottom: 0;">
@@ -31,6 +32,65 @@
     </li>
   </ul>
   <div *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
-
+    <table class="table fixed-thead armor-pieces-table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Weight</th>
+          <th scope="col">Physical</th>
+          <th scope="col">Strike</th>
+          <th scope="col">Slash</th>
+          <th scope="col">Pierce</th>
+          <th scope="col" class="magic">Magic</th>
+          <th scope="col" class="fire">Fire</th>
+          <th scope="col" class="lightning">Lightning</th>
+          <th scope="col" class="holy">Holy</th>
+          <th scope="col">Immunity</th>
+          <th scope="col">Robustness</th>
+          <th scope="col">Focus</th>
+          <th scope="col">Vitality</th>
+          <th scope="col">Poise</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of armorPieces">
+          <td>
+            <span [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'">{{ p.name }}</span>
+            <div class="toggles" style="float: right;">
+              <button mat-icon-button class="toggle-icon"
+                      attr.aria-label="Enable armor piece: {{ p.name }}"
+                      title="Enable armor piece"
+                      (click)="enableArmorPiece(p, true)">
+                <svg class="bi enable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#check-circle-fill" />
+                </svg>
+              </button>
+              <button mat-icon-button class="toggle-icon" style="margin-left: 5px;"
+                      attr.aria-label="Disable armor piece: {{ p.name }}"
+                      title="Disable armor piece"
+                      (click)="enableArmorPiece(p, false)">
+                <svg class="bi disable" fill="currentColor">
+                  <use href="bootstrap-icons.svg#x-circle-fill" />
+                </svg>
+              </button>
+            </div>
+          </td>
+          <td>{{p.weight}}</td>
+          <td>{{p.physical}}</td>
+          <td>{{p.physicalStrike}}</td>
+          <td>{{p.physicalSlash}}</td>
+          <td>{{p.physicalPierce}}</td>
+          <td class="magic">{{p.magic}}</td>
+          <td class="fire">{{p.fire}}</td>
+          <td class="lightning">{{p.lightning}}</td>
+          <td class="holy">{{p.holy}}</td>
+          <td>{{p.immunity}}</td>
+          <td>{{p.robustness}}</td>
+          <td>{{p.focus}}</td>
+          <td>{{p.vitality}}</td>
+          <td>{{p.poise}}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
