@@ -1,6 +1,8 @@
 import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import * as signalR from "@microsoft/signalr";
 import { HubConnectionState } from '@microsoft/signalr';
+import { TestLayoutDialogComponent } from '../test-layout-dialog/test-layout-dialog.component';
 import { IArmorDataChangesDto } from './dto/IArmorDataChangesDto';
 
 @Component({
@@ -23,6 +25,10 @@ export class AdminComponent implements AfterViewChecked {
   isSaveButtonDisabled: boolean = true;
 
   password: string = "";
+
+  constructor(private dialog: MatDialog) {
+    
+  }
 
   ngAfterViewChecked(): void {
     if (this.isScrapeScrollUpdate) {
@@ -95,5 +101,14 @@ export class AdminComponent implements AfterViewChecked {
 
   cancel() {
     this.onScrapeEnd();
+  }
+
+  testDialog() {
+    this.dialog.open(TestLayoutDialogComponent, {
+      data: {
+        errorText: "test",
+      },
+      /*width: "100%"*/
+    });
   }
 }

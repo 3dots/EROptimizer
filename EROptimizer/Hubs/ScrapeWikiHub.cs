@@ -247,6 +247,8 @@ namespace EROptimizer.Hubs
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Focus, nameof(newPiece.Focus));
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Vitality, nameof(newPiece.Vitality));
 
+                    CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Poise, nameof(newPiece.Poise));
+
                     CheckProperty(pieceChanges, existingPiece, newPiece, x => x.Weight, nameof(newPiece.Weight));
 
                     if (pieceChanges.Changes.Count > 0) dto.ArmorPieceChanges.Add(pieceChanges);

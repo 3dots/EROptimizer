@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../../service/data.service';
 import { ERBuild } from './model/ERBuild';
 
 @Component({
@@ -8,10 +9,10 @@ import { ERBuild } from './model/ERBuild';
 })
 export class BestClassComponent implements OnInit {
 
-  yourBuild: ERBuild = new ERBuild();
+  yourBuild: ERBuild;
   startingClasses: ERBuild[];
 
-  constructor() {
+  constructor(private dataService: DataService) {
     this.startingClasses = [];
     this.startingClasses.push(new ERBuild({ name: "Hero", startingLevel: 7, vigor: 14, mind: 9, endurance: 12, strength: 16, dexterity: 9, intelligence: 7, faith: 8, arcane: 11 }));
     this.startingClasses.push(new ERBuild({ name: "Bandit", startingLevel: 5, vigor: 10, mind: 11, endurance: 10, strength: 9, dexterity: 13, intelligence: 9, faith: 8, arcane: 14 }));
@@ -24,7 +25,12 @@ export class BestClassComponent implements OnInit {
     this.startingClasses.push(new ERBuild({ name: "Prophet", startingLevel: 7, vigor: 10, mind: 14, endurance: 8, strength: 11, dexterity: 10, intelligence: 7, faith: 16, arcane: 10 }));
     this.startingClasses.push(new ERBuild({ name: "Samurai", startingLevel: 9, vigor: 12, mind: 11, endurance: 13, strength: 12, dexterity: 15, intelligence: 9, faith: 8, arcane: 8 }));
 
-    this.setMinStats();
+    if (dataService.model.build) this.yourBuild = dataService.model.build;
+    else {
+      dataService.model.build = this.yourBuild = new ERBuild();
+      this.setMinStats();
+    }
+    
   }
 
   setMinStats() {
@@ -74,5 +80,9 @@ export class BestClassComponent implements OnInit {
 
   reset() {
     this.setMinStats();
+  }
+
+  store() {
+    this.dataService.storeToLocalStorage();
   }
 }

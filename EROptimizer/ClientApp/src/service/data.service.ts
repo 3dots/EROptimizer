@@ -8,6 +8,7 @@ import { IArmorSetDto } from './dto/IArmorSetDto';
 import { ArmorPieceTypeEnum, IArmorPieceDto } from './dto/IArmorPieceDto';
 import { ArmorCombo } from '../app/optimizer/model/ArmorCombo';
 import { OptimizerConfigDto } from '../app/optimizer/model/OptimizerConfigDto';
+import { LocalStorageModel } from './model/LocalStorageModel';
 
 @Injectable({
   providedIn: 'root'
@@ -20,22 +21,33 @@ export class DataService {
 
   private _localStorageKey = "EROptimizerKey";
 
-  config: OptimizerConfigDto;
+  model: LocalStorageModel;
 
   constructor(private http: HttpClient) {
 
     let json = localStorage.getItem(this._localStorageKey);
     if (json) {
       try {
-        this.config = new OptimizerConfigDto(JSON.parse(json));
+
+        let obj = JSON.parse(json);
+
+        this.model = this.createDefaultModel();
+        if (obj.config) this.model.config = new OptimizerConfigDto(obj.config);
+        if (obj.build) this.model.build = obj.build;
+
       } catch {
-        this.config = new OptimizerConfigDto();
+        this.model = this.createDefaultModel();
       }
     } else {
-      this.config = new OptimizerConfigDto();
+      this.model = this.createDefaultModel();
     }
+  }
 
-    //console.log(this.config.disabledList);
+  private createDefaultModel(): LocalStorageModel {
+    let newModel = new LocalStorageModel();
+    newModel.config = new OptimizerConfigDto();
+    newModel.build = null;
+    return newModel;
   }
 
   get armorData(): Observable<IArmorDataDto> {
@@ -73,16 +85,18 @@ export class DataService {
 
   storeToLocalStorage() {
 
-    this.config.disabledList = [
-      ...this._armorData.head.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneHead" : x.name),
-      ...this._armorData.chest.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneChest" : x.name),
-      ...this._armorData.gauntlets.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneGauntlets" : x.name),
-      ...this._armorData.legs.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneLegs" : x.name),
-    ];
+    if (this._armorData) {
+      this.model.config.disabledList = [
+        ...this._armorData.head.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneHead" : x.name),
+        ...this._armorData.chest.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneChest" : x.name),
+        ...this._armorData.gauntlets.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneGauntlets" : x.name),
+        ...this._armorData.legs.filter(x => !x.isEnabled).map(x => x.name == "None" ? "NoneLegs" : x.name),
+      ];
+    }
+    
+    localStorage.setItem(this._localStorageKey, JSON.stringify(this.model));
 
-    localStorage.setItem(this._localStorageKey, JSON.stringify(this.config));
-
-    this.config.disabledList = []; //dont store in memory.
+    this.model.config.disabledList = []; //dont store in memory.
   }
 
   enableItem(p: IArmorPieceDto) {
@@ -97,20 +111,20 @@ export class DataService {
       else pieceName = "NoneLegs";
     }
 
-    if (!this.config.disabledList.includes(pieceName)) {
+    if (!this.model.config.disabledList.includes(pieceName)) {
       p.isEnabled = true;
     }
   }
 
   resetConfig(): OptimizerConfigDto {
 
-    this.config = new OptimizerConfigDto();
+    this.model.config = new OptimizerConfigDto();
 
     this._armorData.head.forEach(this.enableItem.bind(this));
     this._armorData.chest.forEach(this.enableItem.bind(this));
     this._armorData.gauntlets.forEach(this.enableItem.bind(this));
     this._armorData.legs.forEach(this.enableItem.bind(this));
 
-    return this.config;
+    return this.model.config;
   }
 }

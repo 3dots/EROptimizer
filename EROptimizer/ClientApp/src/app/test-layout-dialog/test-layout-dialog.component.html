@@ -1,0 +1,23 @@
+<h2 mat-dialog-title style="display: flex; align-items: center;">
+  Heading
+</h2>
+<mat-dialog-content class="mat-typography">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xxl-3 col-xl-4 col-lg-6 col-sm-12" *ngFor="let x of array">
+        <mat-form-field appearance="fill">
+          <mat-label>{{x.name}}</mat-label>
+          <input matInput [(ngModel)]="x.value" type="number" />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div style="display: grid;">
+    <div>
+      Element
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+</mat-dialog-actions>

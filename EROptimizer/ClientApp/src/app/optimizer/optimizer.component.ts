@@ -34,7 +34,7 @@ export class OptimizerComponent implements OnInit {
   numberOfDisabledPieces: number = 0;
 
   constructor(private dataService: DataService, private dialog: MatDialog) {
-    this.viewModel = dataService.config;
+    this.viewModel = dataService.model.config;
   }
 
   ngOnInit(): void {
@@ -327,7 +327,7 @@ export class OptimizerComponent implements OnInit {
       );
 
       //console.log(this.results);
-      console.log(responseResults);
+      //console.log(responseResults);
 
       //same code as optimizer.worker.ts
       for (let i = 0; i < responseResults.length; i++) {
@@ -373,12 +373,12 @@ export class OptimizerComponent implements OnInit {
 
       if (isFinished) {
 
-        //if (this.results.length > 0) {
-        //  console.log(this.results[0].head);
-        //  console.log(this.results[0].chest);
-        //  console.log(this.results[0].gauntlets);
-        //  console.log(this.results[0].legs);
-        //}
+        if (this.results.length > 0) {
+          console.log(this.results[0].head);
+          console.log(this.results[0].chest);
+          console.log(this.results[0].gauntlets);
+          console.log(this.results[0].legs);
+        }
 
         this.isLoading = false;
       }

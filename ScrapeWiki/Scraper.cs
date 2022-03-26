@@ -124,10 +124,10 @@ namespace ScrapeWiki
             //Get data
             var types = new List<ArmorPieceTypeEnum>()
                 { ArmorPieceTypeEnum.Head, ArmorPieceTypeEnum.Chest, ArmorPieceTypeEnum.Gauntlets, ArmorPieceTypeEnum.Legs };
-            foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(MaxSimultaniousRequests))
+            foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(1))
             {
                 Task.WaitAll(batch.Select(type => GetData(type)).ToArray());
-                if (!_useStaticHtmlFiles) Thread.Sleep(ScrapingPauseDuration);
+                if (!_useStaticHtmlFiles) Thread.Sleep(ScrapingPauseDuration/ScrapingPauseDuration);
             }
 
             await EnsureUniqueness();
@@ -176,11 +176,13 @@ namespace ScrapeWiki
                 }
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
-                if (new string[] { "Blackflame Set", "Erdtree Capital Set" }.Contains(setName))
+                if (new string[] { "Blackflame Set"}.Contains(setName))
                 {
                     await ScrapeExceptionContinue(new ScrapeParsingException(resourceName, $"Ignoring {setName}"));
                     continue;
                 }
+
+                if (setName == "Goldrick Soldier Set") setName = "Godrick Soldier Set";
 
                 await _console.WriteLine($"{setResourceName} {setName}");
 
@@ -224,13 +226,18 @@ namespace ScrapeWiki
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
 
-            string headerText = $"{set.Name} Armor Pieces in Elden Ring";
-            IList<HtmlNode> h3s = htmlDoc.QuerySelectorAll("#wiki-content-block > h3");
-            HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => new string[] {
+            var headingStrings = new List<string> {
                 $"{set.Name} Armor Pieces in Elden Ring",
                 $"{set.Name}Armor Pieces in Elden Ring",
                 $"{set.Name} Pieces in Elden Ring",
-                $"{set.Name} Armor Pieces"}.Contains(x.InnerText, StringComparer.InvariantCultureIgnoreCase));
+                $"{set.Name} Armor Pieces"};
+
+            if (set.Name == "Haligtree Soldier Set") headingStrings.Add("Haligtree Set Armor Pieces in Elden Ring");
+            else if (set.Name == "Melina's Set") headingStrings.Add("Traveler's Set Armor Pieces in Elden Ring");
+
+            string headerText = $"{set.Name} Armor Pieces in Elden Ring";
+            IList<HtmlNode> h3s = htmlDoc.QuerySelectorAll("#wiki-content-block > h3");
+            HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => headingStrings.Contains(x.InnerText.Replace("&nbsp;", " ")?.Trim(), StringComparer.InvariantCultureIgnoreCase));
             if (h3ArmorPieces == null)
             {
                 throw new ScrapeParsingException(set.ResourceName, $"h3 with \"{headerText}\" not found.");
@@ -386,7 +393,7 @@ namespace ScrapeWiki
                     {
                         bool p;
                         string text = td.InnerText.Replace("&nbsp;", " ").Trim();
-                        if (string.IsNullOrEmpty(text))
+                        if (string.IsNullOrEmpty(text) || text == "-")
                         {
                             if (!triedFetchFromPieceLink)
                             {
@@ -508,13 +515,14 @@ namespace ScrapeWiki
 
                 parsed = await TryParseIndividualData(anchor, "Phy", piece, (p, v) => { p.Physical = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
+                parsed = await TryParseIndividualData(anchor, "Physical", piece, (p, v) => { p.Physical = v; });
+                if (parsed == true) continue; else if (parsed == false) return false;
+
                 parsed = await TryParseIndividualData(anchor, "VS Strike", piece, (p, v) => { p.PhysicalStrike = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
                 parsed = await TryParseIndividualData(anchor, "VS Slash", piece, (p, v) => { p.PhysicalSlash = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
                 parsed = await TryParseIndividualData(anchor, "VS Pierce", piece, (p, v) => { p.PhysicalPierce = v; });
-                if (parsed == true) continue; else if (parsed == false) return false;
-                parsed = await TryParseIndividualData(anchor, "Phy", piece, (p, v) => { p.Physical = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
 
                 parsed = await TryParseIndividualData(anchor, "Magic", piece, (p, v) => { p.Magic = v; });
@@ -528,7 +536,7 @@ namespace ScrapeWiki
 
                 if (parsed == null)
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse any data??"));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse any data?? {anchor.InnerText}"));
                     return false;
                 }
             }
@@ -544,26 +552,37 @@ namespace ScrapeWiki
                 if (parsed == true) continue; else if (parsed == false) return false;
                 parsed = await TryParseIndividualData(anchor, "Focus", piece, (p, v) => { p.Focus = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
+
                 parsed = await TryParseIndividualData(anchor, "Vitality", piece, (p, v) => { p.Vitality = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
+                parsed = await TryParseIndividualData(anchor, "Death", piece, (p, v) => { p.Vitality = v; });
+                if (parsed == true) continue; else if (parsed == false) return false;
+
                 parsed = await TryParseIndividualData(anchor, "Poise", piece, (p, v) => { p.Poise = v; });
                 if (parsed == true) continue; else if (parsed == false) return false;
 
                 if (parsed == null)
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse any data??"));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse any data?? {anchor.InnerText}"));
                     return false;
                 }
             }
 
-            HtmlNode span = htmlDoc.QuerySelector("table.wiki_table > tbody > tr:nth-child(4) > td:nth-child(2) > span");
-            if (span == null)
+            HtmlNode node = htmlDoc.QuerySelector("table.wiki_table > tbody > tr:nth-child(4) > td:nth-child(2) > span");
+            if (node == null)
             {
-                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, couldn't find table weight span"));
-                return false;
+                node = htmlDoc.QuerySelector("table.wiki_table > tbody > tr:nth-child(4) > td:nth-child(2) > a");
+                if (node != null) node = node.NextSibling;
+
+                if (node == null || node.Name != "#text")
+                {
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Induvidual Piece fetch, couldn't find table weight html."));
+                    return false;
+                }    
             }
+
             double value;
-            if (double.TryParse(span.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", "."), out value))
+            if (double.TryParse(node.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", "."), out value))
             {
                 piece.Weight = value;
             }
@@ -578,7 +597,7 @@ namespace ScrapeWiki
 
         private async Task<bool?> TryParseIndividualData(HtmlNode anchor, string dataTypeText, ArmorPiece piece, Action<ArmorPiece, double> assignment)
         {
-            if (anchor.InnerText == dataTypeText)
+            if (anchor.InnerText.Replace("&nbsp;", " ").Trim() == dataTypeText)
             {
                 HtmlNode data;
                 if (anchor.ParentNode.Name == "span") //Magic/Fire/Light/Holy
@@ -598,7 +617,8 @@ namespace ScrapeWiki
 
                 bool parsed;
                 double value;
-                parsed = double.TryParse(data.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", "."), out value);
+                string text = data.InnerText.Replace("\n", "").Replace("&nbsp;", " ").Replace(",", ".");
+                parsed = double.TryParse(text, out value);
                 if (parsed)
                 {
                     assignment.Invoke(piece, value);
@@ -606,7 +626,7 @@ namespace ScrapeWiki
                 }
                 else
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse {dataTypeText}"));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse {dataTypeText} {text}"));
                     return false;
                 }
             }
@@ -752,7 +772,7 @@ namespace ScrapeWiki
                     piece.ArmorSetIds.Remove(set.ArmorSetId);
                 }
 
-                bool isFirstCombo = true;
+                int i = 1;
                 foreach (ArmorPiece head in NonAlteredHeads)
                 {
                     foreach (ArmorPiece chest in NonAlteredChests)
@@ -807,22 +827,23 @@ namespace ScrapeWiki
                                     else if (legs != null) alteredCombo.Add(legs);
                                 }
 
-                                if (isFirstCombo)
+                                if (i == 1)
                                 {
-                                    isFirstCombo = false;
                                     set.ArmorPieces = combo;
                                     foreach (ArmorPiece p in combo) p.ArmorSetIds.Add(set.ArmorSetId);
                                     await PrintSet(debug, set);
                                 }
                                 else
                                 {
-                                    await CreateNewSetFrom(set, combo, false, debug);
+                                    await CreateNewSetFrom(set, combo, false, i, debug);
                                 }
 
                                 if (alteredCombo != null)
                                 {
-                                    await CreateNewSetFrom(set, alteredCombo, true, debug);
+                                    await CreateNewSetFrom(set, alteredCombo, true, i, debug);
                                 }
+
+                                i++;
                             }
                         }
                     }
@@ -830,10 +851,15 @@ namespace ScrapeWiki
             }
         }
 
-        private async Task CreateNewSetFrom(ArmorSet set, List<ArmorPiece> pieces, bool isAltered, bool debug)
+        private async Task CreateNewSetFrom(ArmorSet set, List<ArmorPiece> pieces, bool isAltered, int versionIndex, bool debug)
         {
             var newSet = new ArmorSet() { ArmorSetId = ArmorSetIdCounter++ };
-            newSet.Name = isAltered ? $"{set.Name} (Altered)" : set.Name;
+
+            if (versionIndex > 1)
+                newSet.Name = isAltered ? $"{set.Name} v{versionIndex} (Altered)" : $"{set.Name} v{versionIndex}";
+            else
+                newSet.Name = isAltered ? $"{set.Name} (Altered)" : set.Name;
+
             newSet.ArmorPieces = pieces;
             ArmorSets.Add(newSet);
             foreach (ArmorPiece p in pieces)
