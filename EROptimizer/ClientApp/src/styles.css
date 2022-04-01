@@ -53,20 +53,20 @@ table.fixed-thead {
   border-spacing: 0;
 }
 
-table.fixed-thead > thead {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 100;
-}
+  table.fixed-thead > thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 100;
+  }
 
-table.fixed-thead > :not(:first-child) {
-  border-top: none;
-}
+  table.fixed-thead > :not(:first-child) {
+    border-top: none;
+  }
 
-table.fixed-thead > thead > tr > th {
-  border-bottom: 2px solid currentColor;
-}
+  table.fixed-thead > thead > tr > th {
+    border-bottom: 2px solid currentColor;
+  }
 
 .magic {
   color: var(--blue-input);
@@ -83,3 +83,25 @@ table.fixed-thead > thead > tr > th {
 .holy {
   color: var(--holy-input);
 }
+
+ul.selection-list {
+  display: flex;
+  list-style: none;
+}
+
+  ul.selection-list > li {
+    padding: 8px;
+  }
+
+  ul.selection-list a {
+    text-decoration: none;
+  }
+
+    ul.selection-list a.link-active {
+      border-bottom: 1px solid var(--blue-input);
+    }
+
+    ul.selection-list a:hover {
+      background-color: #eeeeee;
+      border-radius: 3px;
+    }

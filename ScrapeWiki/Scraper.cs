@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace ScrapeWiki
     {
         private const string BaseUrl = "https://eldenring.wiki.fextralife.com";
         private const int MaxSimultaniousRequests = 4;
-        private const int ScrapingPauseDuration = 2000;
+        private const int ScrapingPauseDuration = 4000;
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
@@ -28,6 +29,9 @@ namespace ScrapeWiki
         int ArmorSetIdCounter { get; set; } = 1;
         public List<ArmorSet> ArmorSets { get; private set; } = new List<ArmorSet>();
         public List<ArmorPiece> ArmorPieces { get; private set; } = new List<ArmorPiece>();
+
+        public List<double> EquipLoadArray { get; private set; } = new List<double>();
+        public List<Talisman> Talismans { get; private set; } = new List<Talisman>();
 
         public ConcurrentBag<string> ParsingContinueErrors { get; private set; } = new ConcurrentBag<string>();
 
@@ -53,7 +57,8 @@ namespace ScrapeWiki
         {
             try
             {
-                await BeginScrape();
+                //await BeginScrape();
+                await ScrapeTalismans();
                 return true;
             }
             catch (Exception e)
@@ -91,7 +96,20 @@ namespace ScrapeWiki
             }
             else
             {
-                var c = new HttpClient();
+                //var c = new HttpClient();
+                var c = new HttpClient(new LoggingHandler(new HttpClientHandler()));
+                c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0");
+                c.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
+                //c.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate, br");
+                c.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-CA,en-US;q=0.7,en;q=0.3");
+                c.DefaultRequestHeaders.Connection.ParseAdd("keep-alive");
+                c.DefaultRequestVersion = HttpVersion.Version20;
+                c.DefaultRequestHeaders.Add("DNT", "1");
+                c.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
+                c.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
+                c.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
+                c.DefaultRequestHeaders.Add("Sec-Fetch-User", "?1");
+                c.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
                 htmlString = await c.GetStringAsync(url);
 
                 if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
@@ -150,6 +168,9 @@ namespace ScrapeWiki
                 }
             }
 
+            await ScrapeEquipLoadArray();
+            await ScrapeTalismans();
+
             await _console.WriteLine("Successfully scraped data.");
         }
 
@@ -179,7 +200,7 @@ namespace ScrapeWiki
                 }
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
-                if (new string[] { "Blackflame Set"}.Contains(setName))
+                if (new string[] { "Blackflame Set" }.Contains(setName))
                 {
                     await ScrapeExceptionContinue(new ScrapeParsingException(resourceName, $"Ignoring {setName}"));
                     continue;
@@ -581,7 +602,7 @@ namespace ScrapeWiki
                 {
                     await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "Individual Piece fetch, couldn't find table weight html."));
                     return false;
-                }    
+                }
             }
 
             double value;
@@ -696,7 +717,7 @@ namespace ScrapeWiki
                     await _console.WriteLine($"Piece with 0 weight: {piece.Name}");
                 }
                 throw new ScrapeParsingException("Exiting.");
-            }            
+            }
 
             await FlattenMultiples();
 
@@ -760,7 +781,7 @@ namespace ScrapeWiki
 
                 //    throw new ScrapeParsingException("Groupings multiplicity. A piece belonged to multiple sets. How handle?");
                 //}
-               
+
                 if (NonAlteredHeads.Count == 0) NonAlteredHeads.Add(null);
                 if (NonAlteredChests.Count == 0) NonAlteredChests.Add(null);
                 if (NonAlteredGauntlets.Count == 0) NonAlteredGauntlets.Add(null);
@@ -889,6 +910,57 @@ namespace ScrapeWiki
             await _console.WriteLine($"WARNING: {acceptableException.Message}");
             ParsingContinueErrors.Add(acceptableException.Message);
         }
+
+        private async Task ScrapeEquipLoadArray()
+        {
+            string resourceName = "/Endurance";
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
+
+            IList<HtmlNode> tables = htmlDoc.QuerySelectorAll("table.wiki_table");
+            if (tables.Count < 3) throw new ScrapeParsingException(resourceName, $"Expected at least 3 tables.");
+
+            HtmlNode table = tables[2];
+
+            HtmlNode eqipLoadTd = table.QuerySelector("thead > tr > td:nth-child(2)");
+            if (eqipLoadTd == null || eqipLoadTd.InnerText != "Equip Load")
+                throw new ScrapeParsingException(resourceName, $"Expected 'Equip Load' in 3rd table.");
+
+            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
+            int i = 1;
+            foreach (HtmlNode tr in trs)
+            {
+                List<HtmlNode> tds = tr.GetChildElements().ToList();
+                if (tds[0].InnerText != (i++).ToString()) throw new ScrapeParsingException(resourceName, $"{i}'th row isn't indexed properly");
+                EquipLoadArray.Add(double.Parse(tds[1].InnerText));
+            }
+        }
+
+        private async Task ScrapeTalismans()
+        {
+            string resourceName = "/Talismans";
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
+
+            HtmlNode table = htmlDoc.QuerySelector("table.wiki_table");
+            if (table == null) throw new ScrapeParsingException(resourceName, $"Didn't find table");
+
+            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
+            foreach (HtmlNode tr in trs)
+            {
+                List<HtmlNode> tds = tr.GetChildElements().ToList();
+
+                Talisman t = new Talisman();
+                t.Name = tds[0].QuerySelector("a").InnerText.Replace("&nbsp;", " ").Trim();
+                t.Weight = double.Parse(tds[2].InnerText.Replace("&nbsp;", " ").Trim());
+
+                Talismans.Add(t);
+            }
+
+            Talismans = Talisman.Generate(Talismans);
+        }
     }
 
     class ScrapeParsingException : Exception
@@ -896,5 +968,36 @@ namespace ScrapeWiki
         public ScrapeParsingException(string message) : base(message) { }
 
         public ScrapeParsingException(string resourceName, string message) : base($"{resourceName}: {message}") { }
+    }
+
+    public class LoggingHandler : DelegatingHandler
+    {
+        public LoggingHandler(HttpMessageHandler innerHandler)
+            : base(innerHandler)
+        {
+        }
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Console.WriteLine("Request:");
+            Console.WriteLine(request.ToString());
+            if (request.Content != null)
+            {
+                Console.WriteLine(await request.Content.ReadAsStringAsync());
+            }
+            Console.WriteLine();
+
+            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+
+            Console.WriteLine("Response:");
+            Console.WriteLine(response.ToString());
+            if (response.Content != null)
+            {
+                Console.WriteLine(await response.Content.ReadAsStringAsync());
+            }
+            Console.WriteLine();
+
+            return response;
+        }
     }
 }

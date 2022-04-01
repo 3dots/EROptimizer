@@ -98,6 +98,8 @@ namespace EROptimizer.Hubs
             newData.ArmorSets.Add(new ArmorSetDto() { ArmorSetId = 0, Name = "None" });
             newData.ArmorSets.AddRange(s.ArmorSets.Select(x => (ArmorSetDto)x));
 
+            newData.EquipLoadArray = s.EquipLoadArray;
+
             string path = _configuration["StaticDataPath"];
             string staticDataTempFileName = _staticDataTempFileName;
 

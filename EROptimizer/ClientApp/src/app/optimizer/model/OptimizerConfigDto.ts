@@ -1,4 +1,3 @@
-
 export class OptimizerConfigDto {
 
   weightFractionGoal: number = 0.6999;
@@ -57,6 +56,14 @@ export class OptimizerConfigDto {
 
   disabledList: string[] = [];
 
+  configType: ConfigTypeEnum = ConfigTypeEnum.StatsAndDropdowns;
+
+  endurance: number = 8;
+
+  public maxWeightStats(equipLoadArray: number[]): number {
+    return equipLoadArray[this.endurance - 1];
+  }
+
   public constructor(init?: Partial<OptimizerConfigDto>) {
     Object.assign(this, init);
   }
@@ -65,6 +72,18 @@ export class OptimizerConfigDto {
     return this.maxWeight * this.weightFractionGoal
       - this.rightHand1 - this.rightHand2 - this.rightHand3
       - this.leftHand1 - this.leftHand2 - this.leftHand3
-      - this.talisman1 - this.talisman2  - this.talisman3 - this.talisman4;
+      - this.talisman1 - this.talisman2 - this.talisman3 - this.talisman4;
   }
+
+  public totalAvailableWeightStats(equipLoadArray: number[]): number {
+    return this.maxWeightStats(equipLoadArray) * this.weightFractionGoal
+      - this.rightHand1 - this.rightHand2 - this.rightHand3
+      - this.leftHand1 - this.leftHand2 - this.leftHand3
+      - this.talisman1 - this.talisman2 - this.talisman3 - this.talisman4;
+  }
+}
+
+export enum ConfigTypeEnum {
+  Weights = 0,
+  StatsAndDropdowns = 1,
 }

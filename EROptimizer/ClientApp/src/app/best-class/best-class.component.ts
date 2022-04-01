@@ -83,6 +83,7 @@ export class BestClassComponent implements OnInit {
   }
 
   store() {
+    this.dataService.model.config.endurance = this.yourBuild.endurance;
     this.dataService.storeToLocalStorage();
   }
 }

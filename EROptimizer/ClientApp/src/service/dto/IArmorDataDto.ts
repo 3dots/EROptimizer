@@ -9,6 +9,8 @@ export class ArmorDataDto implements IArmorDataDto {
 
   armorSets: IArmorSetDto[] = [];
 
+  equipLoadArray: number[] = [];
+
   public constructor(init?: Partial<ArmorDataDto>) {
     Object.assign(this, init);
   }
@@ -21,4 +23,6 @@ export interface IArmorDataDto {
   legs: IArmorPieceDto[];
 
   armorSets: IArmorSetDto[];
+
+  equipLoadArray: number[];
 }

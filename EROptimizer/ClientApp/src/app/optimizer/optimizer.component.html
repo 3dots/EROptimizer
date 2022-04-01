@@ -3,11 +3,25 @@
 <h1 style="display: inline-block;">Elden Ring Armor Optimizer</h1>
 <span style="margin-left: 5px;">by <a href="https://github.com/3dots/" target="_blank">3dots</a></span>
 
-<h2 class="h3">Equipment:</h2>
+<div>
+  <h2 class="h3" style="display: inline-block;">Equipment:</h2>
+  <ul class="selection-list" style="margin-bottom: 0; display: inline-flex; padding-left: 0;">
+    <li>
+      <a class="text-dark" href="javascript:void(0)"
+         [class.link-active]="viewModel.configType == ConfigTypeEnum.Weights"
+         (click)="switchConfigType(ConfigTypeEnum.Weights)">Weights</a>
+    </li>
+    <li>
+      <a class="text-dark" href="javascript:void(0)"
+         [class.link-active]="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns"
+         (click)="switchConfigType(ConfigTypeEnum.StatsAndDropdowns)">Stats</a>
+    </li>
+  </ul>
+</div>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
-      <div class="row">
+      <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label>Equip Load:</mat-label>
@@ -24,6 +38,32 @@
           <mat-form-field appearance="fill">
             <mat-label>Available weight for equipment:</mat-label>
             <input matInput [value]="viewModel.totalAvailableWeight | number:'1.0-2'" disabled type="number" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Endurance:</mat-label>
+            <input matInput [(ngModel)]="viewModel.endurance" type="number" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Equip Load:</mat-label>
+            <input matInput [value]="viewModel.maxWeightStats(armorData.equipLoadArray) | number:'1.0-2'" disabled type="number" />
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Weight Fraction Goal</mat-label>
+            <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Available weight for equipment:</mat-label>
+            <input matInput [value]="viewModel.totalAvailableWeightStats(armorData.equipLoadArray) | number:'1.0-2'" disabled type="number" />
           </mat-form-field>
         </div>
       </div>

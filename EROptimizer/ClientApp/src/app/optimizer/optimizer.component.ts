@@ -6,7 +6,7 @@ import { ArmorDataDto, IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { IOptimizerWorkerRS, OptimizerWorkerRSEnum } from './model/OptimizerWorkerRS';
 
-import { OptimizerConfigDto } from './model/OptimizerConfigDto';
+import { ConfigTypeEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
 import { OptimizerWorkerRQ } from './model/OptimizerWorkerRQ';
 import { ArmorCombo } from './model/ArmorCombo';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
@@ -17,6 +17,8 @@ import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
   styleUrls: ['./optimizer.component.css'],
 })
 export class OptimizerComponent implements OnInit {
+
+  //#region Fields and Properties
 
   isLoading: boolean = true;
   hasProgressBar: boolean = false;
@@ -33,9 +35,15 @@ export class OptimizerComponent implements OnInit {
 
   numberOfDisabledPieces: number = 0;
 
+  ConfigTypeEnum = ConfigTypeEnum;
+
   constructor(private dataService: DataService, private dialog: MatDialog) {
     this.viewModel = dataService.model.config;
   }
+
+  //#endregion
+
+  //#region Events
 
   ngOnInit(): void {
 
@@ -65,19 +73,6 @@ export class OptimizerComponent implements OnInit {
       });
     });
 
-  }
-
-  createWorkers() {
-    this.workers = [];
-    for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
-      this.workers.push(this.createWorker());
-    }
-  }
-
-  createWorker(): Worker {
-    let worker = new Worker(new URL('./optimizer.worker', import.meta.url));
-    worker.onmessage = this.handleWorkerMessageResponse.bind(this);
-    return worker;
   }
 
   prioritizePhysicals() {
@@ -142,8 +137,35 @@ export class OptimizerComponent implements OnInit {
     this.setNumberOfDisabledPieces();
   }
 
+  disableArmorPiece(piece: IArmorPieceDto) {
+    piece.isEnabled = false;
+    this.numberOfDisabledPieces++;
+    this.runOptimization();
+  }
+
+  switchConfigType(type: ConfigTypeEnum) {
+    this.viewModel.configType = type;
+  }
+
+  //#endregion
+
+  //#region Workers
+  
+  createWorkers() {
+    this.workers = [];
+    for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
+      this.workers.push(this.createWorker());
+    }
+  }
+
+  createWorker(): Worker {
+    let worker = new Worker(new URL('./optimizer.worker', import.meta.url));
+    worker.onmessage = this.handleWorkerMessageResponse.bind(this);
+    return worker;
+  }
+
   runOptimization(): void {
-    
+
     this.isLoading = true;
     this.hasProgressBar = true;
     this.progressValue = 0;
@@ -176,7 +198,7 @@ export class OptimizerComponent implements OnInit {
 
       this.workers = newWorkerArray;
     }
-    
+
     let data = new ArmorDataDto({
       head: this.armorData.head.filter(x => x.isEnabled),
       chest: this.armorData.chest.filter(x => x.isEnabled),
@@ -278,27 +300,6 @@ export class OptimizerComponent implements OnInit {
     }
   }
 
-  disableArmorPiece(piece: IArmorPieceDto) {
-    piece.isEnabled = false;
-    this.numberOfDisabledPieces++;
-    this.runOptimization();
-  }
-
-  getURL(piece: IArmorPieceDto): string | null {
-    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
-    else return null;
-  }
-
-  setNumberOfDisabledPieces() {
-    let count = 0;
-    this.armorData.head.forEach(x => { if (!x.isEnabled) count++; });
-    this.armorData.chest.forEach(x => { if (!x.isEnabled) count++; });
-    this.armorData.gauntlets.forEach(x => { if (!x.isEnabled) count++; });
-    this.armorData.legs.forEach(x => { if (!x.isEnabled) count++; });
-
-    this.numberOfDisabledPieces = count;
-  }
-
   cancelOptimization() {
     this.workers.forEach(x => x.terminate());
     this.createWorkers();
@@ -309,7 +310,7 @@ export class OptimizerComponent implements OnInit {
     let rs: IOptimizerWorkerRS = e.data;
 
     if (rs.type == OptimizerWorkerRSEnum.Progress) {
-      
+
       this.progressDictionary[rs.workerIndex].progress = rs.progress;
 
       let currentProgress = 0;
@@ -317,7 +318,8 @@ export class OptimizerComponent implements OnInit {
         currentProgress += this.progressDictionary[i].progress / this.viewModel.numberOfThreads;
       }
 
-      this.progressValue = currentProgress;
+      //console.log(currentProgress);
+      this.progressValue = Math.floor(currentProgress);
 
     } else if (rs.type == OptimizerWorkerRSEnum.Finished) {
 
@@ -347,7 +349,7 @@ export class OptimizerComponent implements OnInit {
 
           let inserted = false;
           for (let m = 0; m < this.results.length; m++) {
-            let item: ArmorCombo = this.results[m];            
+            let item: ArmorCombo = this.results[m];
             if (item.score < combo.score) {
               //Push all items down, insert at m.
               this.results.splice(m, 0, combo);
@@ -378,15 +380,37 @@ export class OptimizerComponent implements OnInit {
 
       if (isFinished) {
 
-        if (this.results.length > 0) {
-          console.log(this.results[0].head);
-          console.log(this.results[0].chest);
-          console.log(this.results[0].gauntlets);
-          console.log(this.results[0].legs);
-        }
+        //if (this.results.length > 0) {
+        //  console.log(this.results[0].head);
+        //  console.log(this.results[0].chest);
+        //  console.log(this.results[0].gauntlets);
+        //  console.log(this.results[0].legs);
+        //}
 
         this.isLoading = false;
       }
     }
-  }  
+  }
+
+  //#endregion
+
+  //#region Helpers
+  
+  getURL(piece: IArmorPieceDto): string | null {
+    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
+    else return null;
+  }
+
+  setNumberOfDisabledPieces() {
+    let count = 0;
+    this.armorData.head.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.chest.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.gauntlets.forEach(x => { if (!x.isEnabled) count++; });
+    this.armorData.legs.forEach(x => { if (!x.isEnabled) count++; });
+
+    this.numberOfDisabledPieces = count;
+  }
+
+  //#endregion
+
 }

@@ -13,5 +13,8 @@ namespace EROptimizer.Dto
         public List<ArmorPieceDto> Legs { get; set; } = new List<ArmorPieceDto>();
 
         public List<ArmorSetDto> ArmorSets { get; set; } = new List<ArmorSetDto>();
+
+        public List<double> EquipLoadArray { get; set; } = new List<double>();
+        public List<TalismanDto> Talismans { get; set; } = new List<TalismanDto>();
     }
 }
