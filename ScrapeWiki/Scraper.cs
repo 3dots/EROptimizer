@@ -1,9 +1,11 @@
 ﻿using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
+using OpenQA.Selenium.Chrome;
 using ScrapeWiki.Model;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -15,16 +17,22 @@ namespace ScrapeWiki
 {
     public class Scraper
     {
+        #region Fields
+
         private const string BaseUrl = "https://eldenring.wiki.fextralife.com";
-        private const int MaxSimultaniousRequests = 4;
-        private const int ScrapingPauseDuration = 4000;
+
+        private const int SCRAPING_PAUSE_AVG_MS = 15000;
+        private const int SCRAPING_PAUSE_STD_DEV_MS = 5000;
+
+        private readonly Random _random = new Random();
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
-        private readonly bool _createHtmlFilesInSource;
-        private bool _useStaticHtmlFiles; //readonly
+        private readonly ChromeDriver _chromeDriver;
 
-        object threadSafetyLock = new object();
+        #endregion
+
+        #region Properties
 
         int ArmorSetIdCounter { get; set; } = 1;
         public List<ArmorSet> ArmorSets { get; private set; } = new List<ArmorSet>();
@@ -33,124 +41,72 @@ namespace ScrapeWiki
         public List<double> EquipLoadArray { get; private set; } = new List<double>();
         public List<Talisman> Talismans { get; private set; } = new List<Talisman>();
 
-        public ConcurrentBag<string> ParsingContinueErrors { get; private set; } = new ConcurrentBag<string>();
+        #endregion
 
-        public Scraper(IProgressConsole pc)
+        #region Constructor
+
+        public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath)
         {
             _console = pc;
-        }
-
-        public Scraper(IProgressConsole pc, string filesPath, bool createHtmlFilesInSource, bool useStaticFiles) : this(pc)
-        {
-            _createHtmlFilesInSource = createHtmlFilesInSource;
-            _useStaticHtmlFiles = useStaticFiles;
             _filesPath = filesPath;
+
+            var options = new ChromeOptions();
+            options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
+            _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);
         }
 
-        public Scraper(IProgressConsole pc, string filesPath, string createHtmlFilesInSource, string useStaticFiles)
-            : this(pc, filesPath, bool.Parse(createHtmlFilesInSource), bool.Parse(useStaticFiles))
-        {
+        #endregion
 
-        }
+        #region Scrape main
 
         public async Task<bool> Scrape()
         {
+            bool success = false;
+
             try
             {
-                //await BeginScrape();
-                await ScrapeTalismans();
-                return true;
+                await BeginScrape();
+                success = true;
             }
             catch (Exception e)
             {
                 await _console.WriteLine("Scape failed. Exception:");
                 await _console.WriteLine(e.ToString());
-                return false;
             }
-        }
 
-        private async Task<string> GetHtml(string resourceName) //Expects slash "/Armor"
-        {
-            string resourceFile = $"{resourceName.Replace("/", "")}.html";
-            string url = $"{BaseUrl}{resourceName}";
-
-            await _console.WriteLine($"Scraping {url}");
-
-            string htmlString;
-
-            if (_useStaticHtmlFiles)
+            try
             {
-                //try
-                {
-                    htmlString = await File.ReadAllTextAsync(Path.Combine(_filesPath, resourceFile));
-                }
-                //catch (FileNotFoundException)
-                //{
-                //    var c = new HttpClient();
-                //    htmlString = await c.GetStringAsync(url);
-
-                //    if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
-
-                //    Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
-                //}
+                _chromeDriver.Close();
             }
-            else
+            catch
             {
-                //var c = new HttpClient();
-                var c = new HttpClient(new LoggingHandler(new HttpClientHandler()));
-                c.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0");
-                c.DefaultRequestHeaders.Accept.ParseAdd("text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8");
-                //c.DefaultRequestHeaders.AcceptEncoding.ParseAdd("gzip, deflate, br");
-                c.DefaultRequestHeaders.AcceptLanguage.ParseAdd("en-CA,en-US;q=0.7,en;q=0.3");
-                c.DefaultRequestHeaders.Connection.ParseAdd("keep-alive");
-                c.DefaultRequestVersion = HttpVersion.Version20;
-                c.DefaultRequestHeaders.Add("DNT", "1");
-                c.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
-                c.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
-                c.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
-                c.DefaultRequestHeaders.Add("Sec-Fetch-User", "?1");
-                c.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
-                htmlString = await c.GetStringAsync(url);
 
-                if (_createHtmlFilesInSource) await File.WriteAllTextAsync(Path.Combine(_filesPath, resourceFile), htmlString);
             }
 
-            await _console.WriteLine($"Retrieved {url}");
-            return htmlString;
+            return success;
         }
 
         private async Task BeginScrape()
         {
             await _console.WriteLine($"Begin Scrape.");
-            if (_createHtmlFilesInSource) await _console.WriteLine("Creating HTML files in source.");
-            if (_useStaticHtmlFiles) await _console.WriteLine($"Using static HTML files at {_filesPath}");
 
             //Getting armor set names
             await GetSets();
 
             List<ArmorSet> setsCopy = ArmorSets.ToList();
-            foreach (IEnumerable<ArmorSet> batch in setsCopy.Batch(MaxSimultaniousRequests))
+            foreach (ArmorSet s in setsCopy)
             {
-                Task.WaitAll(batch.Select(set => ProcessSet(set)).ToArray());
-                if (!_useStaticHtmlFiles) Thread.Sleep(ScrapingPauseDuration);
+                await ProcessSet(s);
             }
 
             await EnsureUniqueness();
 
-            //_useStaticHtmlFiles = false;
-
-            //Get data
-            var types = new List<ArmorPieceTypeEnum>()
-                { ArmorPieceTypeEnum.Head, ArmorPieceTypeEnum.Chest, ArmorPieceTypeEnum.Gauntlets, ArmorPieceTypeEnum.Legs };
-            foreach (IEnumerable<ArmorPieceTypeEnum> batch in types.Batch(1))
-            {
-                Task.WaitAll(batch.Select(type => GetData(type)).ToArray());
-                if (!_useStaticHtmlFiles) Thread.Sleep(ScrapingPauseDuration/ScrapingPauseDuration);
-            }
+            await GetData(ArmorPieceTypeEnum.Head);
+            await GetData(ArmorPieceTypeEnum.Chest);
+            await GetData(ArmorPieceTypeEnum.Gauntlets);
+            await GetData(ArmorPieceTypeEnum.Legs);
 
             await EnsureUniqueness();
-
-            //foreach (string m in ParsingContinueErrors) await _console.WriteLine(m);
 
             await EnsureCorrectness();
 
@@ -173,6 +129,64 @@ namespace ScrapeWiki
 
             await _console.WriteLine("Successfully scraped data.");
         }
+
+        #endregion
+
+        #region Selenium
+
+        private async Task<string> GetHtml(string resourceName) //Expects slash "/Armor"
+        {
+            string resourceFile = $"{resourceName.Replace("/", "")}.html";
+            string filePath = Path.Combine(_filesPath, resourceFile);
+
+            string htmlString = null;
+            if (File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
+            {
+                htmlString = await File.ReadAllTextAsync(filePath);
+            }
+
+            if (htmlString == "") throw new HttpRequestException("Empty file", null, HttpStatusCode.NotFound);
+
+            if (htmlString == null)
+            {
+                string url = $"{BaseUrl}{resourceName}";
+                await _console.WriteLine($"Scraping {url}");
+                Stopwatch stopwatchOverall = Stopwatch.StartNew();
+
+                Stopwatch stopwatch = Stopwatch.StartNew();
+
+                _chromeDriver.Navigate().GoToUrl(url);
+                htmlString = _chromeDriver.PageSource;
+
+                //todo: detect 404
+
+                await File.WriteAllTextAsync(filePath, htmlString);
+
+                stopwatch.Stop();
+
+                double u1 = 1.0 - _random.NextDouble(); //uniform(0,1] random doubles
+                double u2 = 1.0 - _random.NextDouble();
+                double randStdNormal = Math.Sqrt(-2.0 * Math.Log(u1)) *
+                             Math.Sin(2.0 * Math.PI * u2); //random normal(0,1)
+                double randNormal =
+                             SCRAPING_PAUSE_AVG_MS + SCRAPING_PAUSE_STD_DEV_MS * randStdNormal; //random normal(mean,stdDev^2)
+
+                double timeToSleep = randNormal - stopwatch.ElapsedMilliseconds;
+
+                if (timeToSleep > 0) Thread.Sleep((int)timeToSleep);
+
+                stopwatchOverall.Stop();
+
+                await _console.WriteLine($"Retrieved {url} in {stopwatchOverall.Elapsed.TotalSeconds:n2}s");
+            }
+
+            return htmlString;
+        }
+
+
+        #endregion
+
+        #region Scrape helpers
 
         private async Task GetSets()
         {
@@ -225,21 +239,7 @@ namespace ScrapeWiki
             catch (HttpRequestException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "404"));
-
-                lock (threadSafetyLock)
-                {
-                    ArmorSets.Remove(set);
-                }
-                return;
-            }
-            catch (FileNotFoundException)
-            {
-                await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "File not found."));
-
-                lock (threadSafetyLock)
-                {
-                    ArmorSets.Remove(set);
-                }
+                ArmorSets.Remove(set);
                 return;
             }
             catch
@@ -279,33 +279,25 @@ namespace ScrapeWiki
                 string name = a.InnerText?.Replace("&nbsp;", " ")?.Trim();
                 if (string.IsNullOrEmpty(name)) throw new ScrapeParsingException(set.ResourceName, "Empty Piece name.");
 
-                if (name == "Map Link")
+                if (new string[] { "Map Link", "runes", "Elden Ring Map here" }.Contains(name))
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "Ignoring Map Link"));
-                    continue;
-                }
-                else if (name == "runes")
-                {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, "Ignoring runes link"));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(set.ResourceName, $"Ignoring {name} Link"));
                     continue;
                 }
 
-                lock (threadSafetyLock)
+                ArmorPiece existingArmorPiece = ArmorPieces.FirstOrDefault(a => a.Name == name);
+                if (existingArmorPiece == null)
                 {
-                    ArmorPiece existingArmorPiece = ArmorPieces.FirstOrDefault(a => a.Name == name);
-                    if (existingArmorPiece == null)
-                    {
-                        ArmorPiece newPiece = new ArmorPiece() { Name = name };
-                        newPiece.ArmorSetIds.Add(set.ArmorSetId);
+                    ArmorPiece newPiece = new ArmorPiece() { Name = name };
+                    newPiece.ArmorSetIds.Add(set.ArmorSetId);
 
-                        ArmorPieces.Add(newPiece);
-                        set.ArmorPieces.Add(newPiece);
-                    }
-                    else
-                    {
-                        existingArmorPiece.ArmorSetIds.Add(set.ArmorSetId);
-                        set.ArmorPieces.Add(existingArmorPiece);
-                    }
+                    ArmorPieces.Add(newPiece);
+                    set.ArmorPieces.Add(newPiece);
+                }
+                else
+                {
+                    existingArmorPiece.ArmorSetIds.Add(set.ArmorSetId);
+                    set.ArmorPieces.Add(existingArmorPiece);
                 }
             }
         }
@@ -365,35 +357,28 @@ namespace ScrapeWiki
                         }
 
                         bool isStandAlonePiece = false;
-                        lock (threadSafetyLock)
+
+                        piece = ArmorPieces.FirstOrDefault(x => x.Name == armorPieceName);
+                        if (piece == null)
                         {
-                            piece = ArmorPieces.FirstOrDefault(x => x.Name == armorPieceName);
-                            if (piece == null)
+                            int lastIndexOfAltered = armorPieceName.LastIndexOf("(Altered)");
+                            if (lastIndexOfAltered > 0)
                             {
-                                int lastIndexOfAltered = armorPieceName.LastIndexOf("(Altered)");
-                                if (lastIndexOfAltered > 0)
+                                string nonAlteredName = armorPieceName.Substring(0, lastIndexOfAltered).Trim();
+                                ArmorPiece nonAlteredPiece = ArmorPieces.FirstOrDefault(x => x.Name == nonAlteredName);
+                                if (nonAlteredPiece != null)
                                 {
-                                    string nonAlteredName = armorPieceName.Substring(0, lastIndexOfAltered).Trim();
-                                    ArmorPiece nonAlteredPiece = ArmorPieces.FirstOrDefault(x => x.Name == nonAlteredName);
-                                    if (nonAlteredPiece != null)
-                                    {
-                                        if (nonAlteredPiece.ArmorSetIds.Count > 1)
-                                            throw new ScrapeParsingException(resourceName, $"Non Altered piece belongs to multiple sets???");
+                                    if (nonAlteredPiece.ArmorSetIds.Count > 1)
+                                        throw new ScrapeParsingException(resourceName, $"Non Altered piece belongs to multiple sets???");
 
-                                        int setId = nonAlteredPiece.ArmorSetIds.First();
-                                        ArmorSet armorSet = ArmorSets.First(x => x.ArmorSetId == setId);
+                                    int setId = nonAlteredPiece.ArmorSetIds.First();
+                                    ArmorSet armorSet = ArmorSets.First(x => x.ArmorSetId == setId);
 
-                                        piece = new ArmorPiece() { Name = armorPieceName };
-                                        piece.ArmorSetIds.Add(setId);
+                                    piece = new ArmorPiece() { Name = armorPieceName };
+                                    piece.ArmorSetIds.Add(setId);
 
-                                        ArmorPieces.Add(piece);
-                                        armorSet.ArmorPieces.Add(piece);
-                                    }
-                                    else
-                                    {
-                                        isStandAlonePiece = true;
-                                        piece = AddStandalonePiece(armorPieceName);
-                                    }
+                                    ArmorPieces.Add(piece);
+                                    armorSet.ArmorPieces.Add(piece);
                                 }
                                 else
                                 {
@@ -401,7 +386,13 @@ namespace ScrapeWiki
                                     piece = AddStandalonePiece(armorPieceName);
                                 }
                             }
+                            else
+                            {
+                                isStandAlonePiece = true;
+                                piece = AddStandalonePiece(armorPieceName);
+                            }
                         }
+
                         if (isStandAlonePiece) await _console.WriteLine($"Standalone armor piece found: {armorPieceName}");
 
                         if (piece.IsProcessed) throw new ScrapeParsingException(resourceName, $"Attempted to process Armor Piece {armorPieceName} multiple times.");
@@ -424,8 +415,6 @@ namespace ScrapeWiki
                                 triedFetchFromPieceLink = true;
 
                                 bool gotDataFromPiecePageInstead = await TryGetDataFromArmorPiecePage(piece);
-                                if (!_useStaticHtmlFiles) Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
-
                                 if (gotDataFromPiecePageInstead) break;
                                 else
                                 {
@@ -502,12 +491,6 @@ namespace ScrapeWiki
             catch (HttpRequestException e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "404"));
-                Thread.Sleep(ScrapingPauseDuration/MaxSimultaniousRequests);
-                return false;
-            }
-            catch (FileNotFoundException)
-            {
-                await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, "File not found."));
                 return false;
             }
             catch
@@ -660,6 +643,61 @@ namespace ScrapeWiki
             }
         }
 
+        private async Task ScrapeEquipLoadArray()
+        {
+            string resourceName = "/Endurance";
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
+
+            IList<HtmlNode> tables = htmlDoc.QuerySelectorAll("table.wiki_table");
+            if (tables.Count < 3) throw new ScrapeParsingException(resourceName, $"Expected at least 3 tables.");
+
+            HtmlNode table = tables[2];
+
+            HtmlNode eqipLoadTd = table.QuerySelector("thead > tr > td:nth-child(2)");
+            if (eqipLoadTd == null || eqipLoadTd.InnerText != "Equip Load")
+                throw new ScrapeParsingException(resourceName, $"Expected 'Equip Load' in 3rd table.");
+
+            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
+            int i = 1;
+            foreach (HtmlNode tr in trs)
+            {
+                List<HtmlNode> tds = tr.GetChildElements().ToList();
+                if (tds[0].InnerText != (i++).ToString()) throw new ScrapeParsingException(resourceName, $"{i}'th row isn't indexed properly");
+                EquipLoadArray.Add(double.Parse(tds[1].InnerText));
+            }
+        }
+
+        private async Task ScrapeTalismans()
+        {
+            string resourceName = "/Talismans";
+
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(await GetHtml(resourceName));
+
+            HtmlNode table = htmlDoc.QuerySelector("table.wiki_table");
+            if (table == null) throw new ScrapeParsingException(resourceName, $"Didn't find table");
+
+            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
+            foreach (HtmlNode tr in trs)
+            {
+                List<HtmlNode> tds = tr.GetChildElements().ToList();
+
+                Talisman t = new Talisman();
+                t.Name = tds[0].QuerySelector("a").InnerText.Replace("&nbsp;", " ").Trim();
+                t.Weight = double.Parse(tds[2].InnerText.Replace("&nbsp;", " ").Trim());
+
+                Talismans.Add(t);
+            }
+
+            Talismans = Talisman.Generate(Talismans);
+        }
+
+        #endregion
+
+        #region Data Integrity
+
         private async Task EnsureUniqueness()
         {
             if (ArmorSets.Select(x => x.Name).Distinct().Count() != ArmorSets.Count)
@@ -762,25 +800,10 @@ namespace ScrapeWiki
                             await _console.WriteLine($"Multiple pieces of the same type. {set.Name}, {group.Key}, {piece.Name}");
                         }
                     }
-                    throw new ScrapeParsingException("Multiple groupings multiplicity. How handle?");
+
+                    await ScrapeExceptionContinue(new ScrapeParsingException("Multiple groupings multiplicity. How handle?"));
+                    //throw ;
                 }
-
-                //if (set.ArmorPieces.Any(x => x.ArmorSetIds.Count > 1))
-                //{
-                //    foreach(ArmorPiece piece in set.ArmorPieces.Where(x => x.ArmorSetIds.Count > 1))
-                //    {
-                //        foreach (int armorSetId in piece.ArmorSetIds)
-                //        {
-                //            ArmorSet pieceSet = ArmorSets.First(x => x.ArmorSetId == armorSetId);
-                //            foreach (ArmorPiece p in pieceSet.ArmorPieces)
-                //            {
-                //                await _console.WriteLine($"{pieceSet.Name}: {p.Name}");
-                //            }
-                //        }
-                //    }
-
-                //    throw new ScrapeParsingException("Groupings multiplicity. A piece belonged to multiple sets. How handle?");
-                //}
 
                 if (NonAlteredHeads.Count == 0) NonAlteredHeads.Add(null);
                 if (NonAlteredChests.Count == 0) NonAlteredChests.Add(null);
@@ -905,99 +928,21 @@ namespace ScrapeWiki
             }
         }
 
+        #endregion
+
+        #region Exceptions
         private async Task ScrapeExceptionContinue(ScrapeParsingException acceptableException)
         {
             await _console.WriteLine($"WARNING: {acceptableException.Message}");
-            ParsingContinueErrors.Add(acceptableException.Message);
         }
 
-        private async Task ScrapeEquipLoadArray()
+        class ScrapeParsingException : Exception
         {
-            string resourceName = "/Endurance";
+            public ScrapeParsingException(string message) : base(message) { }
 
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(await GetHtml(resourceName));
-
-            IList<HtmlNode> tables = htmlDoc.QuerySelectorAll("table.wiki_table");
-            if (tables.Count < 3) throw new ScrapeParsingException(resourceName, $"Expected at least 3 tables.");
-
-            HtmlNode table = tables[2];
-
-            HtmlNode eqipLoadTd = table.QuerySelector("thead > tr > td:nth-child(2)");
-            if (eqipLoadTd == null || eqipLoadTd.InnerText != "Equip Load")
-                throw new ScrapeParsingException(resourceName, $"Expected 'Equip Load' in 3rd table.");
-
-            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
-            int i = 1;
-            foreach (HtmlNode tr in trs)
-            {
-                List<HtmlNode> tds = tr.GetChildElements().ToList();
-                if (tds[0].InnerText != (i++).ToString()) throw new ScrapeParsingException(resourceName, $"{i}'th row isn't indexed properly");
-                EquipLoadArray.Add(double.Parse(tds[1].InnerText));
-            }
+            public ScrapeParsingException(string resourceName, string message) : base($"{resourceName}: {message}") { }
         }
 
-        private async Task ScrapeTalismans()
-        {
-            string resourceName = "/Talismans";
-
-            var htmlDoc = new HtmlDocument();
-            htmlDoc.LoadHtml(await GetHtml(resourceName));
-
-            HtmlNode table = htmlDoc.QuerySelector("table.wiki_table");
-            if (table == null) throw new ScrapeParsingException(resourceName, $"Didn't find table");
-
-            IList<HtmlNode> trs = table.QuerySelectorAll("tbody > tr");
-            foreach (HtmlNode tr in trs)
-            {
-                List<HtmlNode> tds = tr.GetChildElements().ToList();
-
-                Talisman t = new Talisman();
-                t.Name = tds[0].QuerySelector("a").InnerText.Replace("&nbsp;", " ").Trim();
-                t.Weight = double.Parse(tds[2].InnerText.Replace("&nbsp;", " ").Trim());
-
-                Talismans.Add(t);
-            }
-
-            Talismans = Talisman.Generate(Talismans);
-        }
-    }
-
-    class ScrapeParsingException : Exception
-    {
-        public ScrapeParsingException(string message) : base(message) { }
-
-        public ScrapeParsingException(string resourceName, string message) : base($"{resourceName}: {message}") { }
-    }
-
-    public class LoggingHandler : DelegatingHandler
-    {
-        public LoggingHandler(HttpMessageHandler innerHandler)
-            : base(innerHandler)
-        {
-        }
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-        {
-            Console.WriteLine("Request:");
-            Console.WriteLine(request.ToString());
-            if (request.Content != null)
-            {
-                Console.WriteLine(await request.Content.ReadAsStringAsync());
-            }
-            Console.WriteLine();
-
-            HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-
-            Console.WriteLine("Response:");
-            Console.WriteLine(response.ToString());
-            if (response.Content != null)
-            {
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
-            }
-            Console.WriteLine();
-
-            return response;
-        }
+        #endregion
     }
 }

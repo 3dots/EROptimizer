@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
     <PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.2.1" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.1.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 

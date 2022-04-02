@@ -31,11 +31,7 @@ namespace EROptimizer.Hubs
                 return;
             }
 
-            Scraper scraper;
-            if (_configuration["ScrapeWiki:UseStaticHtmlFiles"] == true.ToString())
-                scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], false, true);
-            else
-                scraper = new Scraper(this);
+            var scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], _configuration["ScrapeWiki:ChromeDriverFolderPath"]);
 
             bool success = await scraper.Scrape();
             if (success) await Evaluate(scraper);
@@ -112,7 +108,7 @@ namespace EROptimizer.Hubs
             {
                 await HandleException(e);
                 return;
-            }                     
+            }
 
             string staticDataFileName = _staticDataFileName;
             try
@@ -228,7 +224,7 @@ namespace EROptimizer.Hubs
             }
             else
             {
-                if (existingPiece.Name != newPiece.Name) 
+                if (existingPiece.Name != newPiece.Name)
                     dto.Messages.Add($"Armor set: {existingSet.Name} {type} piece has changed name from: {existingPiece.Name} to: {newPiece.Name}");
                 else
                 {
@@ -258,7 +254,7 @@ namespace EROptimizer.Hubs
             }
         }
 
-        private void CheckProperty(ArmorPieceChangesDto dto, ArmorPieceDto existingPiece, ArmorPieceDto newPiece, 
+        private void CheckProperty(ArmorPieceChangesDto dto, ArmorPieceDto existingPiece, ArmorPieceDto newPiece,
                                     Func<ArmorPieceDto, double> compare, string propertyName)
         {
             if (compare(newPiece) != compare(existingPiece))
