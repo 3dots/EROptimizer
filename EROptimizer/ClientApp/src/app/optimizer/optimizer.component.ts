@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Observable, tap, startWith, map } from 'rxjs';
 
 import { DataService } from '../../service/data.service'
 import { ArmorDataDto, IArmorDataDto } from '../../service/dto/IArmorDataDto';
@@ -10,6 +11,8 @@ import { ConfigTypeEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
 import { OptimizerWorkerRQ } from './model/OptimizerWorkerRQ';
 import { ArmorCombo } from './model/ArmorCombo';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
+import { FormControl } from '@angular/forms';
+import { ITalismanDto } from '../../service/dto/ITalismanDto';
 
 @Component({
   selector: 'app-optimizer',
@@ -37,6 +40,15 @@ export class OptimizerComponent implements OnInit {
 
   ConfigTypeEnum = ConfigTypeEnum;
 
+  txtTalisman1: FormControl = new FormControl();
+  filteredTalismans1!: Observable<ITalismanDto[]>;
+  txtTalisman2: FormControl = new FormControl();
+  filteredTalismans2!: Observable<ITalismanDto[]>;
+  txtTalisman3: FormControl = new FormControl();
+  filteredTalismans3!: Observable<ITalismanDto[]>;
+  txtTalisman4: FormControl = new FormControl();
+  filteredTalismans4!: Observable<ITalismanDto[]>;
+
   constructor(private dataService: DataService, private dialog: MatDialog) {
     this.viewModel = dataService.model.config;
   }
@@ -60,6 +72,28 @@ export class OptimizerComponent implements OnInit {
       } else {
         this.createWorkers();
       }
+
+      this.filteredTalismans1 = this.txtTalisman1.valueChanges.pipe(
+        //tap(x => console.log(x)),
+        startWith(""),
+        map<string | ITalismanDto, string>(value => (typeof value === 'string' ? value : value.name)),
+        map<string, ITalismanDto[]>(name => this.filterTalismans(name))
+      );
+      this.filteredTalismans2 = this.txtTalisman2.valueChanges.pipe(
+        startWith(""),
+        map<string | ITalismanDto, string>(value => (typeof value === 'string' ? value : value.name)),
+        map<string, ITalismanDto[]>(name => this.filterTalismans(name))
+      );
+      this.filteredTalismans3 = this.txtTalisman3.valueChanges.pipe(
+        startWith(""),
+        map<string | ITalismanDto, string>(value => (typeof value === 'string' ? value : value.name)),
+        map<string, ITalismanDto[]>(name => this.filterTalismans(name))
+      );
+      this.filteredTalismans4 = this.txtTalisman4.valueChanges.pipe(
+        startWith(""),
+        map<string | ITalismanDto, string>(value => (typeof value === 'string' ? value : value.name)),
+        map<string, ITalismanDto[]>(name => this.filterTalismans(name))
+      );
 
       this.isLoading = false;
 
@@ -150,7 +184,7 @@ export class OptimizerComponent implements OnInit {
   //#endregion
 
   //#region Workers
-  
+
   createWorkers() {
     this.workers = [];
     for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
@@ -165,6 +199,8 @@ export class OptimizerComponent implements OnInit {
   }
 
   runOptimization(): void {
+
+    //console.log(this.txtTalisman1.value);
 
     this.isLoading = true;
     this.hasProgressBar = true;
@@ -395,7 +431,7 @@ export class OptimizerComponent implements OnInit {
   //#endregion
 
   //#region Helpers
-  
+
   getURL(piece: IArmorPieceDto): string | null {
     if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
     else return null;
@@ -411,6 +447,22 @@ export class OptimizerComponent implements OnInit {
     this.numberOfDisabledPieces = count;
   }
 
-  //#endregion
+  filterTalismans(name: string): ITalismanDto[] {
+    if (name) {
+      const filterValue = name.toLowerCase();
+      return this.armorData.talismans.filter(t => t.name.toLowerCase().includes(filterValue));
+    } else {
+      return this.armorData.talismans.slice();
+    }
+  }
 
+  displayTalisman(t: ITalismanDto): string {
+    return t && t.name ? t.name : "";
+  }
+
+  clearAutocomplete(txtAutocomplete: FormControl) {
+    txtAutocomplete.setValue("");
+  }
+
+  //#endregion
 }

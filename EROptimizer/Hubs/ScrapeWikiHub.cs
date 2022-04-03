@@ -31,7 +31,10 @@ namespace EROptimizer.Hubs
                 return;
             }
 
-            var scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], _configuration["ScrapeWiki:ChromeDriverFolderPath"]);
+            bool dontDownload = false;
+            bool.TryParse(_configuration["ScrapeWiki:DontDownload"], out dontDownload);
+
+            var scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], _configuration["ScrapeWiki:ChromeDriverFolderPath"], dontDownload);
 
             bool success = await scraper.Scrape();
             if (success) await Evaluate(scraper);
@@ -95,6 +98,9 @@ namespace EROptimizer.Hubs
             newData.ArmorSets.AddRange(s.ArmorSets.Select(x => (ArmorSetDto)x));
 
             newData.EquipLoadArray = s.EquipLoadArray;
+
+            index = 1;
+            newData.Talismans.AddRange(s.Talismans.Select(x => new TalismanDto(x, index++)));
 
             string path = _configuration["StaticDataPath"];
             string staticDataTempFileName = _staticDataTempFileName;

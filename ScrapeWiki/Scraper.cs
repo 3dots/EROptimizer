@@ -29,6 +29,7 @@ namespace ScrapeWiki
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
         private readonly ChromeDriver _chromeDriver;
+        private readonly bool _dontDownload;
 
         #endregion
 
@@ -45,10 +46,11 @@ namespace ScrapeWiki
 
         #region Constructor
 
-        public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath)
+        public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath, bool dontDownload)
         {
             _console = pc;
             _filesPath = filesPath;
+            _dontDownload = dontDownload;
 
             var options = new ChromeOptions();
             options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
@@ -140,7 +142,7 @@ namespace ScrapeWiki
             string filePath = Path.Combine(_filesPath, resourceFile);
 
             string htmlString = null;
-            if (File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
+            if (_dontDownload || File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
             {
                 htmlString = await File.ReadAllTextAsync(filePath);
             }

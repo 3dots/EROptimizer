@@ -48,9 +48,9 @@ $my-theme: mat.define-light-theme((
 @include mat.form-field-theme($my-theme);
 @include mat.dialog-theme($my-theme);
 @include mat.button-theme($my-theme);
+@include mat.autocomplete-theme($my-theme);
 
 // Styles
-
 .mat-typography {
   h1, h2, h3, .h3 {
     margin-bottom: 8px;

@@ -9,9 +9,13 @@ namespace ScrapeWiki
     {
         static async Task Main(string[] args)
         {
+            bool dontDownload = false;
+            bool.TryParse(ConfigurationManager.AppSettings.Get("DontDownload"), out dontDownload);
+
             var scraper = new Scraper(new ProgressConsole(),
                                         ConfigurationManager.AppSettings.Get("FilesPath"),
-                                        ConfigurationManager.AppSettings.Get("ChromeDriverFolderPath"));
+                                        ConfigurationManager.AppSettings.Get("ChromeDriverFolderPath"),
+                                        dontDownload);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             await scraper.Scrape();

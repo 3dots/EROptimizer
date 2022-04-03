@@ -19,7 +19,7 @@
   </ul>
 </div>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
-  <div class="row">
+  <div class="row" style="align-items: center;">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
       <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
         <div class="col col-lg-2">
@@ -41,7 +41,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+      <div class="row" *ngIf="armorData && viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Endurance:</mat-label>
@@ -67,6 +67,9 @@
           </mat-form-field>
         </div>
       </div>
+    </div>
+    <div class="col-xxl-6 col-xl-5 col-lg-3">
+      <button class="btn btn-secondary" (click)="reset()">Reset Everything</button>
     </div>
   </div>
   <div class="row">
@@ -117,9 +120,9 @@
       </div>
     </div>
   </div>
-  <div class="row" style="align-items: center;">
+  <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
-      <div class="row">
+      <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Talisman 1:</mat-label>
@@ -146,9 +149,75 @@
         </div>
       </div>
     </div>
-    <div class="col-xxl-6 col-xl-5 col-lg-3">
-      <button class="btn btn-secondary" (click)="reset()">Reset Everything</button>
-      <span style="margin-left: 10px;"># of Disabled Pieces: {{numberOfDisabledPieces}}</span>
+  </div>
+  <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+    <div class="col-xxl-8 col-xl-12">
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="fill" class="autocomplete-field">
+            <mat-label>Talisman 1:</mat-label>
+            <input type="text" matInput [formControl]="txtTalisman1" [matAutocomplete]="cmbTalisman1">
+            <mat-autocomplete #cmbTalisman1="matAutocomplete" [displayWith]="displayTalisman">
+              <mat-option *ngFor="let option of filteredTalismans1 | async" [value]="option">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtTalisman1)">
+              <svg class="bi" fill="currentColor">
+                <use href="bootstrap-icons.svg#x" />
+              </svg>
+            </a>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 2:</mat-label>
+            <input type="text" matInput [formControl]="txtTalisman2" [matAutocomplete]="cmbTalisman2">
+            <mat-autocomplete #cmbTalisman2="matAutocomplete" [displayWith]="displayTalisman">
+              <mat-option *ngFor="let option of filteredTalismans2 | async" [value]="option">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtTalisman2)">
+              <svg class="bi" fill="currentColor">
+                <use href="bootstrap-icons.svg#x" />
+              </svg>
+            </a>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 3:</mat-label>
+            <input type="text" matInput [formControl]="txtTalisman3" [matAutocomplete]="cmbTalisman3">
+            <mat-autocomplete #cmbTalisman3="matAutocomplete" [displayWith]="displayTalisman">
+              <mat-option *ngFor="let option of filteredTalismans3 | async" [value]="option">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtTalisman3)">
+              <svg class="bi" fill="currentColor">
+                <use href="bootstrap-icons.svg#x" />
+              </svg>
+            </a>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Talisman 4:</mat-label>
+            <input type="text" matInput [formControl]="txtTalisman4" [matAutocomplete]="cmbTalisman4">
+            <mat-autocomplete #cmbTalisman4="matAutocomplete" [displayWith]="displayTalisman">
+              <mat-option *ngFor="let option of filteredTalismans4 | async" [value]="option">
+                {{option.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtTalisman4)">
+              <svg class="bi" fill="currentColor">
+                <use href="bootstrap-icons.svg#x" />
+              </svg>
+            </a>
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -341,6 +410,7 @@
         </div>
         <div class="col" style="align-self: center;">
           <button class="btn btn-primary" (click)="runOptimization()">Run Optimization</button>
+          <span style="margin-left: 10px;"># of Disabled Pieces: {{numberOfDisabledPieces}}</span>
         </div>
       </div>
     </div>

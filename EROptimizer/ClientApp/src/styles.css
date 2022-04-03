@@ -105,3 +105,18 @@ ul.selection-list {
       background-color: #eeeeee;
       border-radius: 3px;
     }
+
+.autocomplete-icon {
+  position: absolute;
+  right: -0.5em;
+  bottom: 0.75em;
+}
+
+a.autocomplete-icon > svg {
+  height: 2em;
+  width: 2em;
+}
+
+mat-form-field.autocomplete-field .mat-form-field-infix {
+    padding-right: 1.5em;
+}
