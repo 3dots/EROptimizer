@@ -56,7 +56,7 @@ export class OptimizerConfigDto {
 
   disabledList: string[] = [];
 
-  configType: ConfigTypeEnum = ConfigTypeEnum.StatsAndDropdowns;
+  configType: ConfigTypeEnum = ConfigTypeEnum.Weights;
 
   endurance: number = 8;
 
