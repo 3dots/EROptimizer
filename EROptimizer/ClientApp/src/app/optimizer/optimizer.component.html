@@ -4,7 +4,7 @@
 <span style="margin-left: 5px;">by <a href="https://github.com/3dots/" target="_blank">3dots</a></span>
 
 <div>
-  <h2 class="h3" style="display: inline-block;">Equipment:</h2>
+  <h2 class="h3" style="display: inline-block; padding-right: 8px;">Equipment:</h2>
   <ul class="selection-list" style="margin-bottom: 0; display: inline-flex; padding-left: 0;">
     <li>
       <a class="text-dark" href="javascript:void(0)"
@@ -45,13 +45,13 @@
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Endurance:</mat-label>
-            <input matInput [(ngModel)]="viewModel.endurance" type="number" />
+            <input matInput [(ngModel)]="viewModel.endurance" type="number" min="8" />
           </mat-form-field>
         </div>
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Equip Load:</mat-label>
-            <input matInput [value]="viewModel.maxWeightStats(armorData.equipLoadArray) | number:'1.0-2'" disabled type="number" />
+            <input matInput [value]="viewModel.equipLoad(armorData) | number:'1.0-1'" disabled type="number" />
           </mat-form-field>
         </div>
         <div class="col">
@@ -63,7 +63,7 @@
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Available weight for equipment:</mat-label>
-            <input matInput [value]="viewModel.totalAvailableWeightStats(armorData.equipLoadArray) | number:'1.0-2'" disabled type="number" />
+            <input matInput [value]="viewModel.totalAvailableWeightStats(armorData) | number:'1.0-2'" disabled type="number" />
           </mat-form-field>
         </div>
       </div>
@@ -157,7 +157,7 @@
           <mat-form-field appearance="fill" class="autocomplete-field">
             <mat-label>Talisman 1:</mat-label>
             <input type="text" matInput [formControl]="txtTalisman1" [matAutocomplete]="cmbTalisman1">
-            <mat-autocomplete #cmbTalisman1="matAutocomplete" [displayWith]="displayTalisman">
+            <mat-autocomplete #cmbTalisman1="matAutocomplete" [displayWith]="displayTalisman" (optionSelected)="onTalismanChanged($event)">
               <mat-option *ngFor="let option of filteredTalismans1 | async" [value]="option">
                 {{option.name}}
               </mat-option>
@@ -170,10 +170,10 @@
           </mat-form-field>
         </div>
         <div class="col">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" class="autocomplete-field">
             <mat-label>Talisman 2:</mat-label>
             <input type="text" matInput [formControl]="txtTalisman2" [matAutocomplete]="cmbTalisman2">
-            <mat-autocomplete #cmbTalisman2="matAutocomplete" [displayWith]="displayTalisman">
+            <mat-autocomplete #cmbTalisman2="matAutocomplete" [displayWith]="displayTalisman" (optionSelected)="onTalismanChanged($event)">
               <mat-option *ngFor="let option of filteredTalismans2 | async" [value]="option">
                 {{option.name}}
               </mat-option>
@@ -186,10 +186,10 @@
           </mat-form-field>
         </div>
         <div class="col">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" class="autocomplete-field">
             <mat-label>Talisman 3:</mat-label>
             <input type="text" matInput [formControl]="txtTalisman3" [matAutocomplete]="cmbTalisman3">
-            <mat-autocomplete #cmbTalisman3="matAutocomplete" [displayWith]="displayTalisman">
+            <mat-autocomplete #cmbTalisman3="matAutocomplete" [displayWith]="displayTalisman" (optionSelected)="onTalismanChanged($event)">
               <mat-option *ngFor="let option of filteredTalismans3 | async" [value]="option">
                 {{option.name}}
               </mat-option>
@@ -202,10 +202,10 @@
           </mat-form-field>
         </div>
         <div class="col">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="fill" class="autocomplete-field">
             <mat-label>Talisman 4:</mat-label>
             <input type="text" matInput [formControl]="txtTalisman4" [matAutocomplete]="cmbTalisman4">
-            <mat-autocomplete #cmbTalisman4="matAutocomplete" [displayWith]="displayTalisman">
+            <mat-autocomplete #cmbTalisman4="matAutocomplete" [displayWith]="displayTalisman" (optionSelected)="onTalismanChanged($event)">
               <mat-option *ngFor="let option of filteredTalismans4 | async" [value]="option">
                 {{option.name}}
               </mat-option>
@@ -392,6 +392,21 @@
     <button class="btn btn-secondary" (click)="prioritizePhysicals()">Prioritize Just Physicals</button>
     <button class="btn btn-secondary" (click)="prioritizeElementals()">Just Elementals</button>
     <button class="btn btn-secondary" (click)="prioritizeBoth()">Both</button>
+  </div>
+  <div *ngIf="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+    <label class="h3 fw-bold" style="display: inline-block; padding-right: 8px;">Optimize for:</label>
+    <ul class="selection-list" style="margin-bottom: 0; display: inline-flex; padding-left: 0;">
+      <li>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="viewModel.optimizeForType == OptimizeForEnum.PVP"
+           (click)="switchOptimizeForType(OptimizeForEnum.PVP)">PVP</a>
+      </li>
+      <li>
+        <a class="text-dark" href="javascript:void(0)"
+           [class.link-active]="viewModel.optimizeForType == OptimizeForEnum.PVE"
+           (click)="switchOptimizeForType(OptimizeForEnum.PVE)">PVE</a>
+      </li>
+    </ul>
   </div>
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">

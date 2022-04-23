@@ -7,12 +7,13 @@ import { ArmorDataDto, IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 import { IOptimizerWorkerRS, OptimizerWorkerRSEnum } from './model/OptimizerWorkerRS';
 
-import { ConfigTypeEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
+import { ConfigTypeEnum, OptimizeForEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
 import { OptimizerWorkerRQ } from './model/OptimizerWorkerRQ';
 import { ArmorCombo } from './model/ArmorCombo';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { FormControl } from '@angular/forms';
 import { ITalismanDto } from '../../service/dto/ITalismanDto';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-optimizer',
@@ -39,6 +40,7 @@ export class OptimizerComponent implements OnInit {
   numberOfDisabledPieces: number = 0;
 
   ConfigTypeEnum = ConfigTypeEnum;
+  OptimizeForEnum = OptimizeForEnum;
 
   txtTalisman1: FormControl = new FormControl();
   filteredTalismans1!: Observable<ITalismanDto[]>;
@@ -95,6 +97,8 @@ export class OptimizerComponent implements OnInit {
         map<string, ITalismanDto[]>(name => this.filterTalismans(name))
       );
 
+      this.bindTalismanAutocompletes();
+      
       this.isLoading = false;
 
     }, (error: any) => {
@@ -169,6 +173,7 @@ export class OptimizerComponent implements OnInit {
   reset() {
     this.viewModel = this.dataService.resetConfig();
     this.setNumberOfDisabledPieces();
+    this.bindTalismanAutocompletes();
   }
 
   disableArmorPiece(piece: IArmorPieceDto) {
@@ -179,6 +184,19 @@ export class OptimizerComponent implements OnInit {
 
   switchConfigType(type: ConfigTypeEnum) {
     this.viewModel.configType = type;
+  }
+
+  switchOptimizeForType(type: OptimizeForEnum) {
+    this.viewModel.optimizeForType = type;
+  }
+
+  onTalismanChanged(ev: MatAutocompleteSelectedEvent) {
+    this.setTalismanIds();
+  }
+
+  clearAutocomplete(txtAutocomplete: FormControl) {
+    txtAutocomplete.setValue("");
+    this.setTalismanIds();
   }
 
   //#endregion
@@ -267,7 +285,6 @@ export class OptimizerComponent implements OnInit {
       data.head.length >= data.chest.length &&
       data.head.length >= data.gauntlets.length &&
       data.head.length >= data.legs.length) {
-
       var i, j, temporary, chunk = Math.ceil(data.head.length / this.viewModel.numberOfThreads);
       for (i = 0, j = data.head.length; i < j; i += chunk) {
         temporary = data.head.slice(i, i + chunk);
@@ -275,14 +292,14 @@ export class OptimizerComponent implements OnInit {
           head: temporary,
           chest: data.chest,
           gauntlets: data.gauntlets,
-          legs: data.legs
+          legs: data.legs,
+          talismans: this.viewModel.SelectedTalismans(this.armorData.talismans)
         }));
       }
 
     } else if (
       data.chest.length >= data.gauntlets.length &&
       data.chest.length >= data.legs.length) {
-
       var i, j, temporary, chunk = Math.ceil(data.chest.length / this.viewModel.numberOfThreads);
       for (i = 0, j = data.chest.length; i < j; i += chunk) {
         temporary = data.chest.slice(i, i + chunk);
@@ -290,13 +307,13 @@ export class OptimizerComponent implements OnInit {
           head: data.head,
           chest: temporary,
           gauntlets: data.gauntlets,
-          legs: data.legs
+          legs: data.legs,
+          talismans: this.viewModel.SelectedTalismans(this.armorData.talismans)
         }));
       }
 
     } else if (
       data.gauntlets.length >= data.legs.length) {
-
       var i, j, temporary, chunk = Math.ceil(data.gauntlets.length / this.viewModel.numberOfThreads);
       for (i = 0, j = data.gauntlets.length; i < j; i += chunk) {
         temporary = data.gauntlets.slice(i, i + chunk);
@@ -304,12 +321,12 @@ export class OptimizerComponent implements OnInit {
           head: data.head,
           chest: data.chest,
           gauntlets: temporary,
-          legs: data.legs
+          legs: data.legs,
+          talismans: this.viewModel.SelectedTalismans(this.armorData.talismans)
         }));
       }
 
     } else {
-
       var i, j, temporary, chunk = Math.ceil(data.legs.length / this.viewModel.numberOfThreads);
       for (i = 0, j = data.legs.length; i < j; i += chunk) {
         temporary = data.legs.slice(i, i + chunk);
@@ -317,7 +334,8 @@ export class OptimizerComponent implements OnInit {
           head: data.head,
           chest: data.chest,
           gauntlets: data.gauntlets,
-          legs: temporary
+          legs: temporary,
+          talismans: this.viewModel.SelectedTalismans(this.armorData.talismans)
         }));
       }
 
@@ -326,10 +344,23 @@ export class OptimizerComponent implements OnInit {
     //console.log(chunks);
     //debugger;
 
+    if (chunks.length < this.viewModel.numberOfThreads) { //there are more threads than there is data chunks.
+      while (chunks.length < this.viewModel.numberOfThreads) {
+        chunks.push(new ArmorDataDto({ //dummy chunks
+          head: [],
+          chest: [],
+          gauntlets: [],
+          legs: []
+        }))
+      }
+    }
+
     if (chunks.length != this.viewModel.numberOfThreads || this.workers.length != this.viewModel.numberOfThreads) {
       this.dialog.open(ErrorDialogComponent, { data: { errorText: "My math messed up." } });
       return;
     }
+
+    this.viewModel.calcTotal(this.armorData);
 
     for (let i = 0; i < this.viewModel.numberOfThreads; i++) {
       this.workers[i].postMessage(new OptimizerWorkerRQ(chunks[i], this.viewModel, i));
@@ -366,7 +397,8 @@ export class OptimizerComponent implements OnInit {
           this.armorData.head.find(p => p.armorPieceId == x.headPieceId)!,
           this.armorData.chest.find(p => p.armorPieceId == x.chestPieceId)!,
           this.armorData.gauntlets.find(p => p.armorPieceId == x.gauntletsPieceId)!,
-          this.armorData.legs.find(p => p.armorPieceId == x.legsPieceId)!, this.viewModel)
+          this.armorData.legs.find(p => p.armorPieceId == x.legsPieceId)!,
+          this.viewModel, this.viewModel.SelectedTalismans(this.armorData.talismans))
       );
 
       //console.log(this.results);
@@ -460,8 +492,34 @@ export class OptimizerComponent implements OnInit {
     return t && t.name ? t.name : "";
   }
 
-  clearAutocomplete(txtAutocomplete: FormControl) {
-    txtAutocomplete.setValue("");
+  setTalismanIds() {
+
+    if (typeof this.txtTalisman1.value == "string") this.viewModel.talisman1Id = null;
+    else this.viewModel.talisman1Id = (this.txtTalisman1.value as ITalismanDto).talismanId;
+
+    if (typeof this.txtTalisman2.value == "string") this.viewModel.talisman2Id = null;
+    else this.viewModel.talisman2Id = (this.txtTalisman2.value as ITalismanDto).talismanId;
+
+    if (typeof this.txtTalisman3.value == "string") this.viewModel.talisman3Id = null;
+    else this.viewModel.talisman3Id = (this.txtTalisman3.value as ITalismanDto).talismanId;
+
+    if (typeof this.txtTalisman4.value == "string") this.viewModel.talisman4Id = null;
+    else this.viewModel.talisman4Id = (this.txtTalisman4.value as ITalismanDto).talismanId;
+
+  }
+
+  bindTalismanAutocompletes() {
+    if (this.viewModel.talisman1Id) this.txtTalisman1.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman1Id));
+    else this.txtTalisman1.setValue("");
+
+    if (this.viewModel.talisman2Id) this.txtTalisman2.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman2Id));
+    else this.txtTalisman2.setValue("");
+
+    if (this.viewModel.talisman3Id) this.txtTalisman3.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman3Id));
+    else this.txtTalisman3.setValue("");
+
+    if (this.viewModel.talisman4Id) this.txtTalisman4.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman4Id));
+    else this.txtTalisman4.setValue("");
   }
 
   //#endregion

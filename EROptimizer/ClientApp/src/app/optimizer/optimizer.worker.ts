@@ -3,7 +3,7 @@
 import { IArmorDataDto } from "../../service/dto/IArmorDataDto";
 import { IArmorPieceDto } from "../../service/dto/IArmorPieceDto";
 import { ArmorCombo } from "./model/ArmorCombo";
-import { OptimizerConfigDto } from "./model/OptimizerConfigDto";
+import { ConfigTypeEnum, OptimizerConfigDto } from "./model/OptimizerConfigDto";
 import { OptimizerResult } from "./model/OptimizerResult";
 import { IOptimizerWorkerRQ } from "./model/OptimizerWorkerRQ";
 import { OptimizerWorkerRS, OptimizerWorkerRSEnum } from "./model/OptimizerWorkerRS";
@@ -16,7 +16,8 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
   let data: IArmorDataDto = e.data.data;
   let config: OptimizerConfigDto = new OptimizerConfigDto(e.data.config);
 
-  let totalAvailableWeight = config.totalAvailableWeight;
+  let totalAvailableWeight = config.totalAvailableWeightCalc;
+
   //console.log(totalAvailableWeight);
 
   let results: ArmorCombo[] = [];
@@ -47,7 +48,7 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
           weight = head.weight + chest.weight + gauntlets.weight + legs.weight;
           if (weight > totalAvailableWeight) continue;
 
-          let combo = new ArmorCombo(head, chest, gauntlets, legs, config);
+          let combo = new ArmorCombo(head, chest, gauntlets, legs, config, data.talismans);
 
           if (combo.avgPhysical < config.minAvgPhysical ||
             combo.physical < config.minPhysical ||

@@ -126,7 +126,7 @@ namespace ScrapeWiki
                 }
             }
 
-            await ScrapeEquipLoadArray();
+            await GetEquipLoadArray();
             await ScrapeTalismans();
 
             await _console.WriteLine("Successfully scraped data.");
@@ -643,6 +643,24 @@ namespace ScrapeWiki
             {
                 return null;
             }
+        }
+
+        private async Task GetEquipLoadArray()
+        {
+            //await ScrapeEquipLoadArray();
+            var path = Path.Combine(AppContext.BaseDirectory, "equip.load.csv");
+            string[] lines = await File.ReadAllLinesAsync(path);
+
+            for(int i = 1; i < lines.Length; i++)
+            {
+                string hexFloat = lines[i].Split(',')[1];
+                uint num = uint.Parse(hexFloat, System.Globalization.NumberStyles.AllowHexSpecifier);
+                byte[] floatVals = BitConverter.GetBytes(num);
+                float f = BitConverter.ToSingle(floatVals, 0);
+
+                double value = (double)f;
+                EquipLoadArray.Add(value);
+            }            
         }
 
         private async Task ScrapeEquipLoadArray()

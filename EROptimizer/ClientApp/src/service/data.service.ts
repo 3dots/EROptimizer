@@ -67,7 +67,7 @@ export class DataService {
           let gauntlets = x.gauntlets.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.gauntlets[0];
           let legs = x.legs.find(p => p.armorSetIds.includes(s.armorSetId)) ?? x.legs[0];
 
-          s.combo = new ArmorCombo(head, chest, gauntlets, legs, null);
+          s.combo = new ArmorCombo(head, chest, gauntlets, legs, null, null);
 
           //console.log(`${s.name} ${head.name} ${chest.name} ${gauntlets.name} ${legs.name}`);
 

@@ -1,3 +1,6 @@
+import { IArmorDataDto } from "../../../service/dto/IArmorDataDto";
+import { ITalismanDto } from "../../../service/dto/ITalismanDto";
+
 export class OptimizerConfigDto {
 
   weightFractionGoal: number = 0.6999;
@@ -56,14 +59,19 @@ export class OptimizerConfigDto {
 
   disabledList: string[] = [];
 
-  configType: ConfigTypeEnum = ConfigTypeEnum.Weights;
+  configType: ConfigTypeEnum = ConfigTypeEnum.StatsAndDropdowns;
 
   endurance: number = 8;
 
-  public maxWeightStats(equipLoadArray: number[]): number {
-    return equipLoadArray[this.endurance - 1];
-  }
+  totalAvailableWeightCalc: number = 0;
 
+  talisman1Id: number | null = null;
+  talisman2Id: number | null = null;
+  talisman3Id: number | null = null;
+  talisman4Id: number | null = null;
+
+  optimizeForType: OptimizeForEnum = OptimizeForEnum.PVP;
+  
   public constructor(init?: Partial<OptimizerConfigDto>) {
     Object.assign(this, init);
   }
@@ -75,15 +83,105 @@ export class OptimizerConfigDto {
       - this.talisman1 - this.talisman2 - this.talisman3 - this.talisman4;
   }
 
-  public totalAvailableWeightStats(equipLoadArray: number[]): number {
-    return this.maxWeightStats(equipLoadArray) * this.weightFractionGoal
+  public equipLoad(armorData: IArmorDataDto): number {
+
+    let talisman1: ITalismanDto | null | undefined = null;
+    if (this.talisman1Id) talisman1 = armorData.talismans.find(x => x.talismanId == this.talisman1Id);
+
+    let talisman2: ITalismanDto | null | undefined = null;
+    if (this.talisman2Id) talisman2 = armorData.talismans.find(x => x.talismanId == this.talisman2Id);
+
+    let talisman3: ITalismanDto | null | undefined = null;
+    if (this.talisman3Id) talisman3 = armorData.talismans.find(x => x.talismanId == this.talisman3Id);
+
+    let talisman4: ITalismanDto | null | undefined = null;
+    if (this.talisman4Id) talisman4 = armorData.talismans.find(x => x.talismanId == this.talisman4Id);
+
+    let endurance = this.endurance +
+      (talisman1?.enduranceBonus ?? 0) + (talisman2?.enduranceBonus ?? 0) + (talisman3?.enduranceBonus ?? 0) + (talisman4?.enduranceBonus ?? 0);
+
+    return armorData.equipLoadArray[endurance - 8] *
+      (1 + (talisman1?.weightBonus ?? 0) / 100) *
+      (1 + (talisman2?.weightBonus ?? 0) / 100) *
+      (1 + (talisman3?.weightBonus ?? 0) / 100) *
+      (1 + (talisman4?.weightBonus ?? 0) / 100);
+  }
+
+  public totalAvailableWeightStats(armorData: IArmorDataDto): number {
+   
+    //copy of equipLoad()
+
+    let talisman1: ITalismanDto | null | undefined = null;
+    if (this.talisman1Id) talisman1 = armorData.talismans.find(x => x.talismanId == this.talisman1Id);
+
+    let talisman2: ITalismanDto | null | undefined = null;
+    if (this.talisman2Id) talisman2 = armorData.talismans.find(x => x.talismanId == this.talisman2Id);
+
+    let talisman3: ITalismanDto | null | undefined = null;
+    if (this.talisman3Id) talisman3 = armorData.talismans.find(x => x.talismanId == this.talisman3Id);
+
+    let talisman4: ITalismanDto | null | undefined = null;
+    if (this.talisman4Id) talisman4 = armorData.talismans.find(x => x.talismanId == this.talisman4Id);
+
+    let endurance = this.endurance +
+      (talisman1?.enduranceBonus ?? 0) + (talisman2?.enduranceBonus ?? 0) + (talisman3?.enduranceBonus ?? 0) + (talisman4?.enduranceBonus ?? 0);
+
+    let equipLoad = armorData.equipLoadArray[endurance - 8] *
+      (1 + (talisman1?.weightBonus ?? 0) / 100) *
+      (1 + (talisman2?.weightBonus ?? 0) / 100) *
+      (1 + (talisman3?.weightBonus ?? 0) / 100) *
+      (1 + (talisman4?.weightBonus ?? 0) / 100);
+
+    let weightLeft = equipLoad * this.weightFractionGoal
       - this.rightHand1 - this.rightHand2 - this.rightHand3
-      - this.leftHand1 - this.leftHand2 - this.leftHand3
-      - this.talisman1 - this.talisman2 - this.talisman3 - this.talisman4;
+      - this.leftHand1 - this.leftHand2 - this.leftHand3;
+
+    if (talisman1) weightLeft -= talisman1.weight;
+    if (talisman2) weightLeft -= talisman2.weight;
+    if (talisman3) weightLeft -= talisman3.weight;
+    if (talisman4) weightLeft -= talisman4.weight;
+
+    return weightLeft;
+  }
+
+  public SelectedTalismans(allTalismans: ITalismanDto[]): ITalismanDto[] {
+
+    if (this.configType == ConfigTypeEnum.Weights) return [];
+
+    let selectedTalismans: ITalismanDto[] = [];
+
+    let talisman: ITalismanDto | null | undefined = null;
+    if (this.talisman1Id) talisman = allTalismans.find(x => x.talismanId == this.talisman1Id);
+    if (talisman) selectedTalismans.push(talisman);
+
+    talisman = null;
+    if (this.talisman2Id) talisman = allTalismans.find(x => x.talismanId == this.talisman2Id);
+    if (talisman) selectedTalismans.push(talisman);
+
+    talisman = null;
+    if (this.talisman3Id) talisman = allTalismans.find(x => x.talismanId == this.talisman3Id);
+    if (talisman) selectedTalismans.push(talisman);
+
+    talisman = null;
+    if (this.talisman4Id) talisman = allTalismans.find(x => x.talismanId == this.talisman4Id);
+    if (talisman) selectedTalismans.push(talisman);
+
+    return selectedTalismans;
+  }
+
+  public calcTotal(armorData: IArmorDataDto) {
+    this.totalAvailableWeightCalc = this.configType == ConfigTypeEnum.Weights ?
+      this.totalAvailableWeight :
+      this.totalAvailableWeightStats(armorData);
   }
 }
 
 export enum ConfigTypeEnum {
   Weights = 0,
   StatsAndDropdowns = 1,
+}
+
+export enum OptimizeForEnum {
+  PVP = 0,
+  PVE = 1,
 }
