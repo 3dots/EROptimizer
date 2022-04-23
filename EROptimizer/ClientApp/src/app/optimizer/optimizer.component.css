@@ -59,7 +59,7 @@
   table.optimization-criteria-table td:nth-of-type(5):before {
     content: "Pierce";
   }
- 
+
   table.optimization-criteria-table td:nth-of-type(6):before {
     content: "Magic";
   }
@@ -87,14 +87,38 @@
   table.optimization-criteria-table td:nth-of-type(12):before {
     content: "Focus";
   }
+
   table.optimization-criteria-table td:nth-of-type(13):before {
     content: "Vitality";
   }
+
   table.optimization-criteria-table td:nth-of-type(14):before {
     content: "Poise";
   }
 }
 
 .button-div button:not(:first-child) {
-    margin-left: 5px;
+  margin-left: 5px;
+}
+
+svg.help-tooltip-svg {
+  height: 1.25em;
+  width: 1.25em;
+  line-height: 1.25em;
+}
+
+.help-tooltip-div {
+  position: absolute;
+  bottom: 0;
+  left: 1.75em;
+  background: white;
+  z-index: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--blue-input);
+}
+
+.help-tooltip-container {
+  display: inline-block;
+  position: relative;
 }
