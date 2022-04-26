@@ -90,7 +90,8 @@ export class ArmorCombo {
         config.priImmunity * this.immunity +
         config.priRobustness * this.robustness +
         config.priFocus * this.focus +
-        config.priVitality * this.vitality;
+        config.priVitality * this.vitality+
+        config.priPoise * this.poise; // POISE Missing ! Fix untested
     } else {
       this.score = -1;
     }
