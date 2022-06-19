@@ -16,16 +16,18 @@ addEventListener('message', (e: MessageEvent<IOptimizerWorkerRQ>) => {
   let data: IArmorDataDto = e.data.data;
   let config: OptimizerConfigDto = new OptimizerConfigDto(e.data.config);
 
-  let totalAvailableWeight = config.totalAvailableWeightCalc;
-
-  //console.log(totalAvailableWeight);
-
   let results: ArmorCombo[] = [];
 
   for (let i = 0; i < data.head.length; i++) {
     if (i > 0) postMessage(new OptimizerWorkerRS({ type: OptimizerWorkerRSEnum.Progress, progress: 100 * i / data.head.length, workerIndex: e.data.workerIndex }));
 
+    let totalAvailableWeight = config.totalAvailableWeightCalc;
+    //console.log(totalAvailableWeight);
+
     let head: IArmorPieceDto = data.head[i];
+
+    if (head.enduranceBonus != null)
+      totalAvailableWeight = config.totalAvailableWeightCalcArmorBonusHack;
 
     let weight = head.weight;
     if (weight > totalAvailableWeight) continue;

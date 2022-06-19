@@ -1,22 +1,25 @@
 
-@media screen and (min-width: 1200px) and (max-width: 1299px) {
-  table .optimization-criteria-table {
+@media screen and (min-width: 1400px) and (max-width: 1500px) {
+  table.table-collapse {
     font-size: 14px;
   }
 }
 
-@media screen and (max-width: 1199px) {
+@media screen and (max-width: 1399px) {
 
-  table.optimization-criteria-table,
-  .optimization-criteria-table thead,
-  .optimization-criteria-table tbody,
-  .optimization-criteria-table th,
-  .optimization-criteria-table td,
-  .optimization-criteria-table tr {
+  table.table-collapse,
+  .table-collapse > thead,
+  .table-collapse > tbody,
+  .table-collapse > thead > tr
+  .table-collapse > thead > tr > th,
+  .table-collapse > tbody > tr,
+  .table-collapse > tbody > tr > td,
+  .table-collapse > tbody > tr > th {
     display: block;
   }
 
-    table.optimization-criteria-table thead th {
+    table.table-collapse thead th {
+      top: 0;
       clip: rect(1px, 1px, 1px, 1px);
       clip-path: inset(50%);
       height: 1px;
@@ -27,12 +30,12 @@
       position: absolute;
     }
 
-  .optimization-criteria-table td {
+  .table-collapse td {
     position: relative;
     padding-left: calc(50% + 0.5rem);
   }
 
-    .optimization-criteria-table td:before {
+    .table-collapse td:before {
       position: absolute;
       top: 50%;
       left: 0.5rem;
@@ -40,59 +43,125 @@
       width: calc(50% - 0.5rem);
     }
 
-  table.optimization-criteria-table td:nth-of-type(1):not(:empty):before {
+  .table-collapse > tbody > tr {
+    border-top: 2px solid currentColor;
+  }
+
+  .table > :not(:first-child) {
+    border-top: none;
+  }
+
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(1):not(:empty):before {
     content: "Avg Physical";
   }
 
-  table.optimization-criteria-table td:nth-of-type(2):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(2):before {
     content: "Physical";
   }
 
-  table.optimization-criteria-table td:nth-of-type(3):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(3):before {
     content: "Strike";
   }
 
-  table.optimization-criteria-table td:nth-of-type(4):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(4):before {
     content: "Slash";
   }
 
-  table.optimization-criteria-table td:nth-of-type(5):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(5):before {
     content: "Pierce";
   }
 
-  table.optimization-criteria-table td:nth-of-type(6):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(6):before {
     content: "Magic";
   }
 
-  table.optimization-criteria-table td:nth-of-type(7):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(7):before {
     content: "Fire";
   }
 
-  table.optimization-criteria-table td:nth-of-type(8):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(8):before {
     content: "Lightning";
   }
 
-  table.optimization-criteria-table td:nth-of-type(9):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(9):before {
     content: "Holy";
   }
 
-  table.optimization-criteria-table td:nth-of-type(10):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(10):before {
     content: "Immunity";
   }
 
-  table.optimization-criteria-table td:nth-of-type(11):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(11):before {
     content: "Robustness";
   }
 
-  table.optimization-criteria-table td:nth-of-type(12):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(12):before {
     content: "Focus";
   }
 
-  table.optimization-criteria-table td:nth-of-type(13):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(13):before {
     content: "Vitality";
   }
 
-  table.optimization-criteria-table td:nth-of-type(14):before {
+  table.optimization-criteria-table > tbody > tr > td:nth-of-type(14):before {
+    content: "Poise";
+  }
+
+  table.optimizer-results-table td:nth-of-type(1):before {
+    content: "Head";
+  }
+  table.optimizer-results-table td:nth-of-type(2):before {
+    content: "Chest";
+  }
+  table.optimizer-results-table td:nth-of-type(3):before {
+    content: "Gauntlets";
+  }
+  table.optimizer-results-table td:nth-of-type(4):before {
+    content: "Legs";
+  }
+  table.optimizer-results-table td:nth-of-type(5):before {
+    content: "Weight";
+  }
+  table.optimizer-results-table td:nth-of-type(6):before {
+    content: "Avg Physical";
+  }
+  table.optimizer-results-table td:nth-of-type(7):before {
+    content: "Physical";
+  }
+  table.optimizer-results-table td:nth-of-type(8):before {
+    content: "Strike";
+  }
+  table.optimizer-results-table td:nth-of-type(9):before {
+    content: "Slash";
+  }
+  table.optimizer-results-table td:nth-of-type(10):before {
+    content: "Pierce";
+  }
+  table.optimizer-results-table td:nth-of-type(11):before {
+    content: "Magic";
+  }
+  table.optimizer-results-table td:nth-of-type(12):before {
+    content: "Fire";
+  }
+  table.optimizer-results-table td:nth-of-type(13):before {
+    content: "Lightning";
+  }
+  table.optimizer-results-table td:nth-of-type(14):before {
+    content: "Holy";
+  }
+  table.optimizer-results-table td:nth-of-type(15):before {
+    content: "Immunity";
+  }
+  table.optimizer-results-table td:nth-of-type(16):before {
+    content: "Robustness";
+  }
+  table.optimizer-results-table td:nth-of-type(17):before {
+    content: "Focus";
+  }
+  table.optimizer-results-table td:nth-of-type(18):before {
+    content: "Vitality";
+  }
+  table.optimizer-results-table td:nth-of-type(19):before {
     content: "Poise";
   }
 }
@@ -113,12 +182,46 @@ svg.help-tooltip-svg {
   left: 1.75em;
   background: white;
   z-index: 1;
-  padding: 10px;
+  padding: 1em;
   border-radius: 10px;
   border: 1px solid var(--blue-input);
 }
 
 .help-tooltip-container {
-  display: inline-block;
+  display: inline-flex;
   position: relative;
+  padding-bottom: 0.2em;
+}
+
+/*@media screen and (min-width: 1400px) and (max-width: 1700px) {
+  .help-tooltip-div {
+      left: -8em;
+      bottom: 2em;
+  }
+}
+
+@media screen and (min-width: 100px) and (max-width: 1399px) {
+  .help-tooltip-div {
+    left: -50vh;
+    bottom: 2em;
+  }
+}*/
+
+#prioritization-tooltip {
+    width: 1500px;
+}
+
+/*@media screen and (min-width: 100px) and (max-width: 1539px) {
+  table .table-prioritization-tooltip {
+    font-size: 14px;
+  }
+
+  #prioritization-tooltip {
+    width: 1250px;
+  }
+}*/
+
+.talisman-row > .col {
+  flex-basis: 18.75em;
+  width: 18.75em;
 }

@@ -34,4 +34,6 @@ export interface IArmorPieceDto {
   weight: number;
 
   resourceName: string;
+
+  enduranceBonus: number | null;
 }

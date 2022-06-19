@@ -41,5 +41,7 @@ namespace ScrapeWiki.Model
         public double Poise { get; set; }
 
         public double Weight { get; set; }
+
+        public double? EnduranceBonus { get; set; }
     }
 }

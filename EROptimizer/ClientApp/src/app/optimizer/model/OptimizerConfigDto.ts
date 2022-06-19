@@ -64,6 +64,7 @@ export class OptimizerConfigDto {
   endurance: number = 8;
 
   totalAvailableWeightCalc: number = 0;
+  totalAvailableWeightCalcArmorBonusHack: number = 0;
 
   talisman1Id: number | null = null;
   talisman2Id: number | null = null;
@@ -107,7 +108,7 @@ export class OptimizerConfigDto {
       (1 + (talisman4?.weightBonus ?? 0) / 100);
   }
 
-  public totalAvailableWeightStats(armorData: IArmorDataDto): number {
+  public totalAvailableWeightStats(armorData: IArmorDataDto, baseEndurance: number): number {
    
     //copy of equipLoad()
 
@@ -123,7 +124,7 @@ export class OptimizerConfigDto {
     let talisman4: ITalismanDto | null | undefined = null;
     if (this.talisman4Id) talisman4 = armorData.talismans.find(x => x.talismanId == this.talisman4Id);
 
-    let endurance = this.endurance +
+    let endurance = baseEndurance +
       (talisman1?.enduranceBonus ?? 0) + (talisman2?.enduranceBonus ?? 0) + (talisman3?.enduranceBonus ?? 0) + (talisman4?.enduranceBonus ?? 0);
 
     let equipLoad = armorData.equipLoadArray[endurance - 8] *
@@ -172,7 +173,13 @@ export class OptimizerConfigDto {
   public calcTotal(armorData: IArmorDataDto) {
     this.totalAvailableWeightCalc = this.configType == ConfigTypeEnum.Weights ?
       this.totalAvailableWeight :
-      this.totalAvailableWeightStats(armorData);
+      this.totalAvailableWeightStats(armorData, this.endurance);
+
+    //Armor Endurance bonus value is alwayes 2 currently. If that changes, this won't work.
+    //Basically, I don't want to pass the entire equipLoadArray into each thread worker currently.
+    this.totalAvailableWeightCalcArmorBonusHack = this.configType == ConfigTypeEnum.Weights ?
+      this.totalAvailableWeight :
+      this.totalAvailableWeightStats(armorData, this.endurance + 2);
   }
 }
 

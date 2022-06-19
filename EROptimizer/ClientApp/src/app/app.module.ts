@@ -21,7 +21,6 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
 import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
 import { BestClassComponent } from './best-class/best-class.component';
-import { TestLayoutDialogComponent } from './test-layout-dialog/test-layout-dialog.component';
 
 @NgModule({
   declarations: [
@@ -33,8 +32,7 @@ import { TestLayoutDialogComponent } from './test-layout-dialog/test-layout-dial
     ErrorDialogComponent,
     ArmorSelectionsComponent,
     ArmorPiecesComponent,
-    BestClassComponent,
-    TestLayoutDialogComponent
+    BestClassComponent
   ],
   imports: [
     BrowserModule,

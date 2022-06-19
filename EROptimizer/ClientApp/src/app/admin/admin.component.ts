@@ -2,7 +2,6 @@ import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/cor
 import { MatDialog } from '@angular/material/dialog';
 import * as signalR from "@microsoft/signalr";
 import { HubConnectionState } from '@microsoft/signalr';
-import { TestLayoutDialogComponent } from '../test-layout-dialog/test-layout-dialog.component';
 import { IArmorDataChangesDto } from './dto/IArmorDataChangesDto';
 
 @Component({
@@ -103,12 +102,4 @@ export class AdminComponent implements AfterViewChecked {
     this.onScrapeEnd();
   }
 
-  testDialog() {
-    this.dialog.open(TestLayoutDialogComponent, {
-      data: {
-        errorText: "test",
-      },
-      /*width: "100%"*/
-    });
-  }
 }

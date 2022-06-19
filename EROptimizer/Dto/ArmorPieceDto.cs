@@ -34,6 +34,8 @@ namespace EROptimizer.Dto
 
         public string ResourceName { get; set; }
 
+        public double? EnduranceBonus { get; set; }
+
         public ArmorPieceDto() { }
 
         public ArmorPieceDto(ArmorPiece p, int index)
@@ -64,6 +66,8 @@ namespace EROptimizer.Dto
             Weight = p.Weight;
 
             ResourceName = p.ResourceName;
+
+            EnduranceBonus = p.EnduranceBonus;
         }
     }
 }

@@ -120,3 +120,7 @@ a.autocomplete-icon > svg {
 mat-form-field.autocomplete-field .mat-form-field-infix {
     padding-right: 1.5em;
 }
+
+.margin-bottom-gutter {
+  margin-bottom: calc(var(--bs-gutter-x) * 0.5);
+}

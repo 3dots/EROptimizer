@@ -129,8 +129,10 @@ namespace ScrapeWiki
             await GetEquipLoadArray();
             await ScrapeTalismans();
 
+            PopulateArmorEnduranceBonus();
+
             await _console.WriteLine("Successfully scraped data.");
-        }
+        }        
 
         #endregion
 
@@ -712,6 +714,15 @@ namespace ScrapeWiki
             }
 
             Talismans = Talisman.Generate(Talismans);
+        }
+
+        private void PopulateArmorEnduranceBonus()
+        {
+            ArmorPiece headWithBonus = ArmorPieces.First(x => x.Name == "Imp Head (Wolf)");
+            headWithBonus.EnduranceBonus = 2;
+
+            headWithBonus = ArmorPieces.First(x => x.Name == "Hierodas Glintstone Crown");
+            headWithBonus.EnduranceBonus = 2;
         }
 
         #endregion
