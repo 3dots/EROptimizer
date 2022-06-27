@@ -1,3 +1,13 @@
+.toggles {
+  text-align: right;
+}
+
+
+.button-span {
+  float: right;
+  margin-left: auto;
+}
+
 .button-span,
 .toggles {
   margin-left: auto;
@@ -75,10 +85,10 @@
           width: calc(50% - 0.5rem);
           font-weight: bold;
         }
-}
 
-table.armor-selections-table > thead > tr > th.cell-with-buttons-flex,
-table.armor-selections-table > tbody > tr > td.cell-with-buttons-flex {
-  display: flex;
-  flex-wrap: wrap;
+        table.armor-selections-table > thead > tr > th.cell-with-buttons-flex,
+        table.armor-selections-table > tbody > tr > td.cell-with-buttons-flex {
+          display: flex;
+          flex-wrap: wrap;
+        }
 }
