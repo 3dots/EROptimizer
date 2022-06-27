@@ -31,32 +31,32 @@
       </h2>
     </li>
   </ul>
-  <div *ngIf="armorData" style="flex-grow: 1; overflow: auto; margin-right: auto;">
-    <table class="table fixed-thead armor-pieces-table" style="width: auto;">
+  <div *ngIf="armorData" class="armor-pieces-table-container">
+    <table class="table fixed-thead armor-pieces-table">
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Weight</th>
-          <th scope="col">Physical</th>
-          <th scope="col">Strike</th>
-          <th scope="col">Slash</th>
-          <th scope="col">Pierce</th>
-          <th scope="col" class="magic">Magic</th>
-          <th scope="col" class="fire">Fire</th>
-          <th scope="col" class="lightning">Lightning</th>
-          <th scope="col" class="holy">Holy</th>
-          <th scope="col">Immunity</th>
-          <th scope="col">Robustness</th>
-          <th scope="col">Focus</th>
-          <th scope="col">Vitality</th>
-          <th scope="col">Poise</th>
+          <th scope="col"><span>Name</span></th>
+          <th scope="col"><span>Weight</span></th>
+          <th scope="col"><span>Physical</span></th>
+          <th scope="col"><span>Strike</span></th>
+          <th scope="col"><span>Slash</span></th>
+          <th scope="col"><span>Pierce</span></th>
+          <th scope="col" class="magic"><span>Magic</span></th>
+          <th scope="col" class="fire"><span>Fire</span></th>
+          <th scope="col" class="lightning"><span>Lightning</span></th>
+          <th scope="col" class="holy"><span>Holy</span></th>
+          <th scope="col"><span>Immunity</span></th>
+          <th scope="col"><span>Robustness</span></th>
+          <th scope="col"><span>Focus</span></th>
+          <th scope="col"><span>Vitality</span></th>
+          <th scope="col"><span>Poise</span></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let p of armorPieces">
-          <td>
+          <td data-label="Name" style="display: flex; flex-wrap: wrap;">
             <a [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'" [attr.href]="getURL(p)" target="_blank">{{ p.name }}</a>
-            <div class="toggles" style="float: right;">
+            <div class="toggles" style="margin-left: auto;">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ p.name }}"
                       title="Enable armor piece"
@@ -75,20 +75,20 @@
               </button>
             </div>
           </td>
-          <td>{{p.weight}}</td>
-          <td>{{p.physical}}</td>
-          <td>{{p.physicalStrike}}</td>
-          <td>{{p.physicalSlash}}</td>
-          <td>{{p.physicalPierce}}</td>
-          <td class="magic">{{p.magic}}</td>
-          <td class="fire">{{p.fire}}</td>
-          <td class="lightning">{{p.lightning}}</td>
-          <td class="holy">{{p.holy}}</td>
-          <td>{{p.immunity}}</td>
-          <td>{{p.robustness}}</td>
-          <td>{{p.focus}}</td>
-          <td>{{p.vitality}}</td>
-          <td>{{p.poise}}</td>
+          <td data-label="Weight">{{p.weight}}</td>
+          <td data-label="Physical">{{p.physical}}</td>
+          <td data-label="Strike">{{p.physicalStrike}}</td>
+          <td data-label="Slash">{{p.physicalSlash}}</td>
+          <td data-label="Pierce">{{p.physicalPierce}}</td>
+          <td data-label="Magic" class="magic">{{p.magic}}</td>
+          <td data-label="Fire" class="fire">{{p.fire}}</td>
+          <td data-label="Lightning" class="lightning">{{p.lightning}}</td>
+          <td data-label="Holy" class="holy">{{p.holy}}</td>
+          <td data-label="Immunity">{{p.immunity}}</td>
+          <td data-label="Robustness">{{p.robustness}}</td>
+          <td data-label="Focus">{{p.focus}}</td>
+          <td data-label="Vitality">{{p.vitality}}</td>
+          <td data-label="Poise">{{p.poise}}</td>
         </tr>
       </tbody>
     </table>

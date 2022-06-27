@@ -1,11 +1,11 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <div style="display: flex; flex-direction: column; height: 100%;">
   <h1>Armor Sets</h1>
-  <div *ngIf="armorData" style="flex-grow: 1; overflow: auto;">
+  <div *ngIf="armorData" class="armor-selections-table-container">
     <table class="table fixed-thead armor-selections-table">
       <thead>
         <tr>
-          <th style="width: 63px;">
+          <th class="ignore-hide cell-with-buttons-flex" style="min-width: 63px;">
             <button mat-icon-button class="toggle-icon" attr.aria-label="Enable all pieces" title="Enable all pieces"
                     (click)="enableAll(true)">
               <svg class="bi enable" fill="currentColor">
@@ -19,9 +19,9 @@
               </svg>
             </button>
           </th>
-          <th scope="col">
+          <th class="ignore-hide cell-with-buttons-flex" scope="col">
             <span>Head</span>
-            <span style="float: right;">
+            <span class="button-span">
               <button mat-icon-button class="toggle-icon" aria-label="Enable all Head" title="Enable all Head"
                       (click)="enableAllHead(true)">
                 <svg class="bi enable" fill="currentColor">
@@ -36,9 +36,9 @@
               </button>
             </span>
           </th>
-          <th scope="col">
+          <th class="ignore-hide cell-with-buttons-flex" scope="col">
             <span>Chest</span>
-            <span style="float: right;">
+            <span class="button-span">
               <button mat-icon-button class="toggle-icon" aria-label="Enable all Chest" title="Enable all Chest"
                       (click)="enableAllChest(true)">
                 <svg class="bi enable" fill="currentColor">
@@ -53,9 +53,9 @@
               </button>
             </span>
           </th>
-          <th scope="col">
+          <th class="ignore-hide cell-with-buttons-flex" scope="col">
             <span>Gauntlets</span>
-            <span style="float: right;">
+            <span class="button-span">
               <button mat-icon-button class="toggle-icon" aria-label="Enable all Gauntlets" title="Enable all Gauntlets"
                       (click)="enableAllGauntlets(true)">
                 <svg class="bi enable" fill="currentColor">
@@ -70,9 +70,9 @@
               </button>
             </span>
           </th>
-          <th scope="col">
+          <th class="ignore-hide cell-with-buttons-flex" scope="col">
             <span>Legs</span>
-            <span style="float: right;">
+            <span class="button-span">
               <button mat-icon-button class="toggle-icon" aria-label="Enable all Legs" title="Enable all Legs"
                       (click)="enableAllLegs(true)">
                 <svg class="bi enable" fill="currentColor">
@@ -87,26 +87,26 @@
               </button>
             </span>
           </th>
-          <th scope="col">Weight</th>
-          <th scope="col">Avg <br /> Physical</th>
-          <th scope="col">Physical</th>
-          <th scope="col">Strike</th>
-          <th scope="col">Slash</th>
-          <th scope="col">Pierce</th>
-          <th scope="col" class="magic">Magic</th>
-          <th scope="col" class="fire">Fire</th>
-          <th scope="col" class="lightning">Lightning</th>
-          <th scope="col" class="holy">Holy</th>
-          <th scope="col">Immunity</th>
-          <th scope="col">Robustness</th>
-          <th scope="col">Focus</th>
-          <th scope="col">Vitality</th>
-          <th scope="col">Poise</th>
+          <th scope="col"><span>Weight</span></th>
+          <th scope="col"><span>Avg <br /> Physical</span></th>
+          <th scope="col"><span>Physical</span></th>
+          <th scope="col"><span>Strike</span></th>
+          <th scope="col"><span>Slash</span></th>
+          <th scope="col"><span>Pierce</span></th>
+          <th scope="col" class="magic"><span>Magic</span></th>
+          <th scope="col" class="fire"><span>Fire</span></th>
+          <th scope="col" class="lightning"><span>Lightning</span></th>
+          <th scope="col" class="holy"><span>Holy</span></th>
+          <th scope="col"><span>Immunity</span></th>
+          <th scope="col"><span>Robustness</span></th>
+          <th scope="col"><span>Focus</span></th>
+          <th scope="col"><span>Vitality</span></th>
+          <th scope="col"><span>Poise</span></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let set of armorData.armorSets">
-          <td>
+          <td class="cell-with-buttons-flex">
             <button mat-icon-button class="toggle-icon" attr.aria-label="Enable armor set: {{ set.name }}" title="Enable armor set"
                     (click)="enableArmorSet(set, true)">
               <svg class="bi enable" fill="currentColor">
@@ -120,7 +120,7 @@
               </svg>
             </button>
           </td>
-          <td>
+          <td data-label="Head" class="cell-with-buttons-flex">
             <a [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'"
                [attr.href]="getURL(set.combo.head)" target="_blank">{{ set.combo.head.name }}</a>
             <div class="toggles">
@@ -142,7 +142,7 @@
               </button>
             </div>
           </td>
-          <td>
+          <td data-label="Chest" class="cell-with-buttons-flex">
             <a [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'"
                [attr.href]="getURL(set.combo.chest)" target="_blank">{{ set.combo.chest.name }}</a>
             <div class="toggles">
@@ -164,7 +164,7 @@
               </button>
             </div>
           </td>
-          <td>
+          <td data-label="Gauntlets" class="cell-with-buttons-flex">
             <a [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'"
                [attr.href]="getURL(set.combo.gauntlets)" target="_blank">{{ set.combo.gauntlets.name }}</a>
             <div class="toggles">
@@ -186,7 +186,7 @@
               </button>
             </div>
           </td>
-          <td>
+          <td data-label="Legs" class="cell-with-buttons-flex">
             <a [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'"
                [attr.href]="getURL(set.combo.legs)" target="_blank">{{ set.combo.legs.name }}</a>
             <div class="toggles">
@@ -208,21 +208,21 @@
               </button>
             </div>
           </td>
-          <td>{{ set.combo.weight | number:'1.0-2' }}</td>
-          <td>{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
-          <td>{{ set.combo.physical | number:'1.0-2' }}</td>
-          <td>{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
-          <td>{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
-          <td>{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
-          <td class="magic">{{ set.combo.magic | number:'1.0-2' }}</td>
-          <td class="fire">{{ set.combo.fire | number:'1.0-2' }}</td>
-          <td class="lightning">{{ set.combo.lightning | number:'1.0-2' }}</td>
-          <td class="holy">{{ set.combo.holy | number:'1.0-2' }}</td>
-          <td>{{ set.combo.immunity | number:'1.0-2' }}</td>
-          <td>{{ set.combo.robustness | number:'1.0-2' }}</td>
-          <td>{{ set.combo.focus | number:'1.0-2' }}</td>
-          <td>{{ set.combo.vitality | number:'1.0-2' }}</td>
-          <td>{{ set.combo.poise | number:'1.0-2' }}</td>
+          <td data-label="Weight">{{ set.combo.weight | number:'1.0-2' }}</td>
+          <td data-label="Avg Physical">{{ set.combo.avgPhysical | number:'1.0-2' }}</td>
+          <td data-label="Physical">{{ set.combo.physical | number:'1.0-2' }}</td>
+          <td data-label="Strike">{{ set.combo.physicalStrike | number:'1.0-2' }}</td>
+          <td data-label="Slash">{{ set.combo.physicalSlash | number:'1.0-2' }}</td>
+          <td data-label="Pierce">{{ set.combo.physicalPierce | number:'1.0-2' }}</td>
+          <td data-label="Magic" class="magic">{{ set.combo.magic | number:'1.0-2' }}</td>
+          <td data-label="Fire" class="fire">{{ set.combo.fire | number:'1.0-2' }}</td>
+          <td data-label="Lightning" class="lightning">{{ set.combo.lightning | number:'1.0-2' }}</td>
+          <td data-label="Holy" class="holy">{{ set.combo.holy | number:'1.0-2' }}</td>
+          <td data-label="Immunity">{{ set.combo.immunity | number:'1.0-2' }}</td>
+          <td data-label="Robustness">{{ set.combo.robustness | number:'1.0-2' }}</td>
+          <td data-label="Focus">{{ set.combo.focus | number:'1.0-2' }}</td>
+          <td data-label="Vitality">{{ set.combo.vitality | number:'1.0-2' }}</td>
+          <td data-label="Poise">{{ set.combo.poise | number:'1.0-2' }}</td>
         </tr>
       </tbody>
     </table>

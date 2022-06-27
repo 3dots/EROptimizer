@@ -7,6 +7,14 @@
 
 @media screen and (max-width: 1399px) {
 
+  table.optimization-criteria-table {
+    width: 600px;
+  }
+
+  table.optimizer-results-table {
+    width: 600px;
+  }
+
   table.table-collapse,
   .table-collapse > thead,
   .table-collapse > tbody,
@@ -18,7 +26,12 @@
     display: block;
   }
 
-    table.table-collapse thead th {
+    .table-collapse > thead > tr > th {
+        padding: 0;
+        border: 0;
+    }
+
+    table.table-collapse > thead > tr > th > span {
       top: 0;
       clip: rect(1px, 1px, 1px, 1px);
       clip-path: inset(50%);
@@ -36,6 +49,7 @@
   }
 
     .table-collapse td:before {
+      content: attr(data-label);
       position: absolute;
       top: 50%;
       left: 0.5rem;
@@ -47,122 +61,16 @@
     border-top: 2px solid currentColor;
   }
 
+  .table-collapse > tbody > tr > td:last-child {
+    border-bottom: 0;
+  }
+
+  .table-collapse > tbody > tr:last-child > td:last-child {
+    border-bottom: 2px solid currentColor;
+  }
+
   .table > :not(:first-child) {
     border-top: none;
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(1):not(:empty):before {
-    content: "Avg Physical";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(2):before {
-    content: "Physical";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(3):before {
-    content: "Strike";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(4):before {
-    content: "Slash";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(5):before {
-    content: "Pierce";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(6):before {
-    content: "Magic";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(7):before {
-    content: "Fire";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(8):before {
-    content: "Lightning";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(9):before {
-    content: "Holy";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(10):before {
-    content: "Immunity";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(11):before {
-    content: "Robustness";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(12):before {
-    content: "Focus";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(13):before {
-    content: "Vitality";
-  }
-
-  table.optimization-criteria-table > tbody > tr > td:nth-of-type(14):before {
-    content: "Poise";
-  }
-
-  table.optimizer-results-table td:nth-of-type(1):before {
-    content: "Head";
-  }
-  table.optimizer-results-table td:nth-of-type(2):before {
-    content: "Chest";
-  }
-  table.optimizer-results-table td:nth-of-type(3):before {
-    content: "Gauntlets";
-  }
-  table.optimizer-results-table td:nth-of-type(4):before {
-    content: "Legs";
-  }
-  table.optimizer-results-table td:nth-of-type(5):before {
-    content: "Weight";
-  }
-  table.optimizer-results-table td:nth-of-type(6):before {
-    content: "Avg Physical";
-  }
-  table.optimizer-results-table td:nth-of-type(7):before {
-    content: "Physical";
-  }
-  table.optimizer-results-table td:nth-of-type(8):before {
-    content: "Strike";
-  }
-  table.optimizer-results-table td:nth-of-type(9):before {
-    content: "Slash";
-  }
-  table.optimizer-results-table td:nth-of-type(10):before {
-    content: "Pierce";
-  }
-  table.optimizer-results-table td:nth-of-type(11):before {
-    content: "Magic";
-  }
-  table.optimizer-results-table td:nth-of-type(12):before {
-    content: "Fire";
-  }
-  table.optimizer-results-table td:nth-of-type(13):before {
-    content: "Lightning";
-  }
-  table.optimizer-results-table td:nth-of-type(14):before {
-    content: "Holy";
-  }
-  table.optimizer-results-table td:nth-of-type(15):before {
-    content: "Immunity";
-  }
-  table.optimizer-results-table td:nth-of-type(16):before {
-    content: "Robustness";
-  }
-  table.optimizer-results-table td:nth-of-type(17):before {
-    content: "Focus";
-  }
-  table.optimizer-results-table td:nth-of-type(18):before {
-    content: "Vitality";
-  }
-  table.optimizer-results-table td:nth-of-type(19):before {
-    content: "Poise";
   }
 }
 
@@ -208,7 +116,7 @@ svg.help-tooltip-svg {
 }*/
 
 #prioritization-tooltip {
-    width: 1500px;
+  width: 1500px;
 }
 
 /*@media screen and (min-width: 100px) and (max-width: 1539px) {

@@ -220,95 +220,95 @@
   </div>
 </div>
 <h2 class="h3">Optimization criteria:</h2>
-<div class="container-fluid container-mat-form-field-no-bottom-space">
+<div class="container-fluid container-mat-form-field-no-bottom-space" style="display: flex;">
   <table class="table optimization-criteria-table table-collapse" style="margin-bottom: 10px; table-layout: fixed;">
     <thead>
       <tr>
         <th></th>
-        <th scope="col">Avg Physical</th>
-        <th scope="col">Physical</th>
-        <th scope="col">Strike</th>
-        <th scope="col">Slash</th>
-        <th scope="col">Pierce</th>
-        <th scope="col" class="magic">Magic</th>
-        <th scope="col" class="fire">Fire</th>
-        <th scope="col" class="lightning">Lightning</th>
-        <th scope="col" class="holy">Holy</th>
-        <th scope="col">Immunity</th>
-        <th scope="col">Robustness</th>
-        <th scope="col">Focus</th>
-        <th scope="col">Vitality</th>
-        <th scope="col">Poise</th>
+        <th scope="col"><span>Avg Physical</span></th>
+        <th scope="col"><span>Physical</span></th>
+        <th scope="col"><span>Strike</span></th>
+        <th scope="col"><span>Slash</span></th>
+        <th scope="col"><span>Pierce</span></th>
+        <th scope="col" class="magic"><span>Magic</span></th>
+        <th scope="col" class="fire"><span>Fire</span></th>
+        <th scope="col" class="lightning"><span>Lightning</span></th>
+        <th scope="col" class="holy"><span>Holy</span></th>
+        <th scope="col"><span>Immunity</span></th>
+        <th scope="col"><span>Robustness</span></th>
+        <th scope="col"><span>Focus</span></th>
+        <th scope="col"><span>Vitality</span></th>
+        <th scope="col"><span>Poise</span></th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row" style="vertical-align: middle;">Minimums</th>
-        <td>
+        <td data-label="Avg Physical">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minAvgPhysical" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Physical">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minPhysical" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Strike">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minPhysicalStrike" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Slash">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minPhysicalSlash" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Pierce">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minPhysicalPierce" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="magic">
+        <td data-label="Magic" class="magic">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minMagic" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="fire">
+        <td data-label="Fire" class="fire">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minFire" type="number" min="0" />
           </mat-form-field>
-        <td class="lightning">
+        <td data-label="Lightning" class="lightning">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minLightning" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="holy">
+        <td data-label="Holy" class="holy">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minHoly" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Immunity">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minImmunity" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Robustness">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minRobustness" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Focus">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minFocus" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Vitality">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minVitality" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Poise">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.minPoise" type="number" min="0" />
           </mat-form-field>
@@ -318,7 +318,7 @@
         <th scope="row" style="vertical-align: middle;">
           Prioritization
         </th>
-        <td style="vertical-align: middle;">
+        <td data-label="Avg Physical" style="vertical-align: middle;">
           <div class="help-tooltip-container">
             <button mat-icon-button class="toggle-icon" aria-label="Prioritization Tooltip" aria-describedby="prioritization-tooltip"
                     (focus)="showPriTooltip(true, true)" (focusout)="showPriTooltip(false, false)"
@@ -450,66 +450,66 @@
             </div>
           </div>
         </td>
-        <td>
+        <td data-label="Physical">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priPhysical" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Strike">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priPhysicalStrike" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Slash">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priPhysicalSlash" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Pierce">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priPhysicalPierce" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="magic">
+        <td data-label="Magic" class="magic">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priMagic" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="fire">
+        <td data-label="Fire" class="fire">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priFire" type="number" min="0" />
           </mat-form-field>
-        <td class="lightning">
+        <td data-label="Lightning" class="lightning">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priLightning" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td class="holy">
+        <td data-label="Holy" class="holy">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priHoly" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Immunity">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priImmunity" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Robustness">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priRobustness" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Focus">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priFocus" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Vitality">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priVitality" type="number" min="0" />
           </mat-form-field>
         </td>
-        <td>
+        <td data-label="Poise">
           <mat-form-field appearance="fill">
             <input matInput [(ngModel)]="viewModel.priPoise" type="number" min="0" />
           </mat-form-field>
@@ -581,34 +581,34 @@
   </div>
 </div>
 <h2>Results</h2>
-<div class="container-fluid">
+<div class="container-fluid" style="display: flex;">
   <table class="table optimizer-results-table table-collapse">
     <thead>
       <tr>
-        <th scope="col">Head</th>
-        <th scope="col">Chest</th>
-        <th scope="col">Gauntlets</th>
-        <th scope="col">Legs</th>
-        <th scope="col">Weight</th>
-        <th scope="col">Avg <br /> Physical</th>
-        <th scope="col">Physical</th>
-        <th scope="col">Strike</th>
-        <th scope="col">Slash</th>
-        <th scope="col">Pierce</th>
-        <th scope="col" class="magic">Magic</th>
-        <th scope="col" class="fire">Fire</th>
-        <th scope="col" class="lightning">Lightning</th>
-        <th scope="col" class="holy">Holy</th>
-        <th scope="col">Immunity</th>
-        <th scope="col">Robustness</th>
-        <th scope="col">Focus</th>
-        <th scope="col">Vitality</th>
-        <th scope="col">Poise</th>
+        <th scope="col"><span>Head</span></th>
+        <th scope="col"><span>Chest</span></th>
+        <th scope="col"><span>Gauntlets</span></th>
+        <th scope="col"><span>Legs</span></th>
+        <th scope="col"><span>Weight</span></th>
+        <th scope="col"><span>Avg <br /> Physical</span></th>
+        <th scope="col"><span>Physical</span></th>
+        <th scope="col"><span>Strike</span></th>
+        <th scope="col"><span>Slash</span></th>
+        <th scope="col"><span>Pierce</span></th>
+        <th scope="col" class="magic"><span>Magic</span></th>
+        <th scope="col" class="fire"><span>Fire</span></th>
+        <th scope="col" class="lightning"><span>Lightning</span></th>
+        <th scope="col" class="holy"><span>Holy</span></th>
+        <th scope="col"><span>Immunity</span></th>
+        <th scope="col"><span>Robustness</span></th>
+        <th scope="col"><span>Focus</span></th>
+        <th scope="col"><span>Vitality</span></th>
+        <th scope="col"><span>Poise</span></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let combo of results">
-        <td>
+        <td data-label="Head">
           <a [attr.href]="getURL(combo.head)" target="_blank">{{ combo.head.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.head.name }} and recalculate" title="Disable armor piece and recalculate"
@@ -618,7 +618,7 @@
             </svg>
           </button>
         </td>
-        <td>
+        <td data-label="Chest">
           <a [attr.href]="getURL(combo.chest)" target="_blank">{{ combo.chest.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.chest.name }} and recalculate" title="Disable armor piece and recalculate"
@@ -628,7 +628,7 @@
             </svg>
           </button>
         </td>
-        <td>
+        <td data-label="Gauntlets">
           <a [attr.href]="getURL(combo.gauntlets)" target="_blank">{{ combo.gauntlets.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.gauntlets.name }} and recalculate" title="Disable armor piece and recalculate"
@@ -638,7 +638,7 @@
             </svg>
           </button>
         </td>
-        <td>
+        <td data-label="Legs">
           <a [attr.href]="getURL(combo.legs)" target="_blank">{{ combo.legs.name }}</a>
           <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
                   attr.aria-label="Disable {{ combo.legs.name }} and recalculate" title="Disable armor piece and recalculate"
@@ -648,21 +648,21 @@
             </svg>
           </button>
         </td>
-        <td>{{ combo.weight | number:'1.0-2' }}</td>
-        <td>{{ combo.avgPhysical | number:'1.0-2' }}</td>
-        <td>{{ combo.physical | number:'1.0-2' }}</td>
-        <td>{{ combo.physicalStrike | number:'1.0-2' }}</td>
-        <td>{{ combo.physicalSlash | number:'1.0-2' }}</td>
-        <td>{{ combo.physicalPierce | number:'1.0-2' }}</td>
-        <td class="magic">{{ combo.magic | number:'1.0-2' }}</td>
-        <td class="fire">{{ combo.fire | number:'1.0-2' }}</td>
-        <td class="lightning">{{ combo.lightning | number:'1.0-2' }}</td>
-        <td class="holy">{{ combo.holy | number:'1.0-2' }}</td>
-        <td>{{ combo.immunity | number:'1.0-2' }}</td>
-        <td>{{ combo.robustness | number:'1.0-2' }}</td>
-        <td>{{ combo.focus | number:'1.0-2' }}</td>
-        <td>{{ combo.vitality | number:'1.0-2' }}</td>
-        <td>{{ combo.poise | number:'1.0-2' }}</td>
+        <td data-label="Weight">{{ combo.weight | number:'1.0-2' }}</td>
+        <td data-label="Avg Physical">{{ combo.avgPhysical | number:'1.0-2' }}</td>
+        <td data-label="Physical">{{ combo.physical | number:'1.0-2' }}</td>
+        <td data-label="Strike">{{ combo.physicalStrike | number:'1.0-2' }}</td>
+        <td data-label="Slash">{{ combo.physicalSlash | number:'1.0-2' }}</td>
+        <td data-label="Pierce">{{ combo.physicalPierce | number:'1.0-2' }}</td>
+        <td data-label="Magic" class="magic">{{ combo.magic | number:'1.0-2' }}</td>
+        <td data-label="Fire" class="fire">{{ combo.fire | number:'1.0-2' }}</td>
+        <td data-label="Lightning" class="lightning">{{ combo.lightning | number:'1.0-2' }}</td>
+        <td data-label="Holy" class="holy">{{ combo.holy | number:'1.0-2' }}</td>
+        <td data-label="Immunity">{{ combo.immunity | number:'1.0-2' }}</td>
+        <td data-label="Robustness">{{ combo.robustness | number:'1.0-2' }}</td>
+        <td data-label="Focus">{{ combo.focus | number:'1.0-2' }}</td>
+        <td data-label="Vitality">{{ combo.vitality | number:'1.0-2' }}</td>
+        <td data-label="Poise">{{ combo.poise | number:'1.0-2' }}</td>
       </tr>
     </tbody>
   </table>
