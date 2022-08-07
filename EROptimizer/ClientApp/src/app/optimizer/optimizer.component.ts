@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable, tap, startWith, map } from 'rxjs';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Observable, startWith, map } from 'rxjs';
 
 import { DataService } from '../../service/data.service'
 import { ArmorDataDto, IArmorDataDto } from '../../service/dto/IArmorDataDto';
@@ -16,6 +15,7 @@ import { ITalismanDto } from '../../service/dto/ITalismanDto';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { PrioritizationHelpComponent, PrioritizationHelpData } from '../prioritization-help/prioritization-help.component';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
+import { DialogHelper } from '../utility/dialog.helper';
 
 @Component({
   selector: 'app-optimizer',
@@ -53,7 +53,9 @@ export class OptimizerComponent implements OnInit {
   txtTalisman4: FormControl = new FormControl();
   filteredTalismans4!: Observable<ITalismanDto[]>;
 
-  constructor(private dataService: DataService, private dialog: MatDialog) {
+  @ViewChild('optimizeForHelpDialogTemplate') optimizeForHelpDialogTemplate!: TemplateRef<any>;
+
+  constructor(private dataService: DataService, private dialog: DialogHelper) {
     this.viewModel = dataService.model.config;
   }
 
@@ -201,19 +203,9 @@ export class OptimizerComponent implements OnInit {
     this.setTalismanIds();
   }
 
-  isShowForTooltip: boolean = false;
-  isForTooltipFocused: boolean = false;
-  showForTooltip(show: boolean, focused: boolean | null) {
-
-    if (focused != null) {
-      this.isForTooltipFocused = focused;
-    }
-
-    if (show) {
-      this.isShowForTooltip = true;
-    } else if (!this.isForTooltipFocused) {
-      this.isShowForTooltip = false;
-    }
+  openOptimizeForHelpDialog() {
+    this.dialog.open(this.optimizeForHelpDialogTemplate, {
+    });
   }
 
   openPrioritizationHelpDialog() {
@@ -237,8 +229,7 @@ export class OptimizerComponent implements OnInit {
     };
 
     this.dialog.open(PrioritizationHelpComponent, {
-      data: new PrioritizationHelpData(this.viewModel, setA, setB),
-      maxWidth: "95vw"
+      data: new PrioritizationHelpData(this.viewModel, setA, setB)
     });
   }
 

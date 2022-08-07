@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
+import { DialogHelper } from '../utility/dialog.helper';
 
 @Component({
   selector: 'app-armor-pieces',
@@ -20,7 +20,7 @@ export class ArmorPiecesComponent implements OnInit {
   armorType: ArmorPieceTypeEnum = ArmorPieceTypeEnum.Head;
   armorPieces: IArmorPieceDto[] = [];
 
-  constructor(private dataService: DataService, private dialog: MatDialog) {    
+  constructor(private dataService: DataService, private dialog: DialogHelper) {
   }
 
   ngOnInit(): void {

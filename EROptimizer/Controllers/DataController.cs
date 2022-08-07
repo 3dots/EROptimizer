@@ -29,6 +29,8 @@ namespace EROptimizer.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
+            //return NotFound(); //testing error dialogs
+
             string path = _configuration["StaticDataPath"];
             string fileName = "ArmorData.json";
 

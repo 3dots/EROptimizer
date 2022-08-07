@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
+import { DialogHelper } from '../utility/dialog.helper';
 
 @Component({
   selector: 'app-armor-selections',
@@ -17,7 +17,7 @@ export class ArmorSelectionsComponent implements OnInit {
 
   armorData!: IArmorDataDto;
 
-  constructor(private dataService: DataService, private dialog: MatDialog) {
+  constructor(private dataService: DataService, private dialog: DialogHelper) {
 
   }
 

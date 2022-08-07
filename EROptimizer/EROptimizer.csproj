@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <None Remove="ClientApp\src\app\best-class\model\ERBuild.ts" />
+    <None Remove="ClientApp\src\app\utility\dialog.helper.ts" />
     <None Remove="ClientApp\src\service\dto\ITalismanDto.ts" />
     <None Remove="ClientApp\src\service\model\LocalStorageModel.ts" />
   </ItemGroup>
@@ -24,6 +25,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\best-class\model\ERBuild.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\utility\dialog.helper.ts" />
     <TypeScriptCompile Include="ClientApp\src\service\dto\ITalismanDto.ts" />
     <TypeScriptCompile Include="ClientApp\src\service\model\LocalStorageModel.ts" />
   </ItemGroup>

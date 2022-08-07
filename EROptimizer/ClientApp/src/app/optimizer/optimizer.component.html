@@ -405,20 +405,22 @@
     <div class="h3 fw-bold" style="display: inline-flex; align-items: center; padding-right: 8px; gap: 5px;">
       <div>Optimize for:</div>
       <div class="help-tooltip-container">
-        <button mat-icon-button class="toggle-icon" aria-label="Optimizer for Tooltip" aria-describedby="optimize-for-tooltip"
-                (focus)="showForTooltip(true, true)" (focusout)="showForTooltip(false, false)"
-                (mouseover)="showForTooltip(true, null)" (mouseout)="showForTooltip(false, null)">
+        <button mat-icon-button class="toggle-icon" aria-label="Optimize for explanation" (click)="openOptimizeForHelpDialog()">
           <svg class="bi help-tooltip-svg" fill="currentColor">
             <use href="bootstrap-icons.svg#question-circle" />
           </svg>
         </button>
-        <div id="optimize-for-tooltip" *ngIf="isShowForTooltip" class="help-tooltip-div" style="width: 700px; font-weight: normal;">
-          <div>
+        <ng-template #optimizeForHelpDialogTemplate>
+          <h2 mat-dialog-title>Talismans in PVP vs PVE</h2>
+          <mat-dialog-content class="mat-typography">
             Talismans in PVP actually have different defense bonuses. <br />
             For example, Dragoncrest Greatshield Talisman boosts physical defense by 20% for PVE, but only by 5% for PVP. <br />
             The game defense values are lying to you.
-          </div>
-        </div>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+          </mat-dialog-actions>
+        </ng-template>
       </div>
     </div>
     <ul class="selection-list" style="margin-bottom: 0; display: inline-flex; padding-left: 0;">
