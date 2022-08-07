@@ -1,0 +1,66 @@
+
+@media screen and (max-width: 1399px) {
+
+  table.table-prioritization-tooltip {
+    width: 400px;
+  }
+
+  table.table-prioritization-tooltip,
+  .table-prioritization-tooltip > thead,
+  .table-prioritization-tooltip > tbody,
+  .table-prioritization-tooltip > thead > tr
+  .table-prioritization-tooltip > thead > tr > th,
+  .table-prioritization-tooltip > tbody > tr,
+  .table-prioritization-tooltip > tbody > tr > td,
+  .table-prioritization-tooltip > tbody > tr > th {
+    display: block;
+  }
+
+    .table-prioritization-tooltip > thead > tr > th,
+    .table-prioritization-tooltip > tbody > tr > th:empty {
+      padding: 0;
+      border: 0;
+    }
+
+    table.table-prioritization-tooltip > thead > tr > th > span {
+      top: 0;
+      clip: rect(1px, 1px, 1px, 1px);
+      clip-path: inset(50%);
+      height: 1px;
+      width: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+    }
+
+  .table-prioritization-tooltip td {
+    position: relative;
+    padding-left: calc(50% + 0.5rem);
+  }
+
+    .table-prioritization-tooltip td:before {
+      content: attr(data-label);
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      transform: translate(0, -50%);
+      width: calc(50% - 0.5rem);
+    }
+
+  .table-prioritization-tooltip > tbody > tr {
+    border-top: 2px solid currentColor;
+  }
+
+    .table-prioritization-tooltip > tbody > tr > td:last-child {
+      border-bottom: 0;
+    }
+
+    .table-prioritization-tooltip > tbody > tr:last-child > td:last-child {
+      border-bottom: 2px solid currentColor;
+    }
+
+  .table-prioritization-tooltip > :not(:first-child) {
+    border-top: none;
+  }
+}
