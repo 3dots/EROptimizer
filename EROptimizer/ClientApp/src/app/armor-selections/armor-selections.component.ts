@@ -4,7 +4,7 @@ import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-armor-selections',
@@ -28,10 +28,10 @@ export class ArmorSelectionsComponent implements OnInit {
     }, (error: any) => {
       this.isLoading = false;
       this.dialog.open(ErrorDialogComponent, {
-        data: {
+        data: new ErrorDialogData({
           errorText: "Armor data retrieval failed.",
           errorException: error,
-        }
+        })
       });
     });
   }

@@ -320,134 +320,11 @@
         </th>
         <td data-label="Avg Physical" style="vertical-align: middle;">
           <div class="help-tooltip-container">
-            <button mat-icon-button class="toggle-icon" aria-label="Prioritization Tooltip" aria-describedby="prioritization-tooltip"
-                    (focus)="showPriTooltip(true, true)" (focusout)="showPriTooltip(false, false)"
-                    (mouseover)="showPriTooltip(true, null)" (mouseout)="showPriTooltip(false, null)">
+            <button mat-icon-button class="toggle-icon" aria-label="Prioritization Explanation" (click)="openPrioritizationHelpDialog()">
               <svg class="bi help-tooltip-svg" fill="currentColor">
                 <use href="bootstrap-icons.svg#question-circle" />
               </svg>
-            </button>
-            <div id="prioritization-tooltip" *ngIf="isShowPriTooltip && setA && setB" class="help-tooltip-div">
-              <div>Prioritization is what the optimizer uses to assign scores to armor combinations.</div>
-              <table class="table table-prioritization-tooltip">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th scope="col">Physical</th>
-                    <th scope="col">Strike</th>
-                    <th scope="col">Slash</th>
-                    <th scope="col">Pierce</th>
-                    <th scope="col" class="magic">Magic</th>
-                    <th scope="col" class="fire">Fire</th>
-                    <th scope="col" class="lightning">Lightning</th>
-                    <th scope="col" class="holy">Holy</th>
-                    <th scope="col">Immunity</th>
-                    <th scope="col">Robustness</th>
-                    <th scope="col">Focus</th>
-                    <th scope="col">Vitality</th>
-                    <th scope="col">Poise</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">Prioritization</th>
-                    <td>{{ viewModel.priPhysical }}</td>
-                    <td>{{ viewModel.priPhysicalStrike }}</td>
-                    <td>{{ viewModel.priPhysicalSlash }}</td>
-                    <td>{{ viewModel.priPhysicalPierce }}</td>
-                    <td class="magic">{{ viewModel.priMagic }}</td>
-                    <td class="fire">{{ viewModel.priFire }}</td>
-                    <td class="lightning">{{ viewModel.priLightning }}</td>
-                    <td class="holy">{{ viewModel.priHoly }}</td>
-                    <td>{{ viewModel.priImmunity }}</td>
-                    <td>{{ viewModel.priRobustness }}</td>
-                    <td>{{ viewModel.priFocus }}</td>
-                    <td>{{ viewModel.priVitality }}</td>
-                    <td>{{ viewModel.priPoise }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ setA.name }}</th>
-                    <td>{{ setA.combo.physical | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.physicalStrike | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.physicalSlash | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.physicalPierce | number:'1.0-2' }}</td>
-                    <td class="magic">{{ setA.combo.magic | number:'1.0-2' }}</td>
-                    <td class="fire">{{ setA.combo.fire | number:'1.0-2' }}</td>
-                    <td class="lightning">{{ setA.combo.lightning | number:'1.0-2' }}</td>
-                    <td class="holy">{{ setA.combo.holy | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.immunity | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.robustness | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.focus | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.vitality | number:'1.0-2' }}</td>
-                    <td>{{ setA.combo.poise | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ setA.name }} Score =</th>
-                    <td>{{ viewModel.priPhysical }} * {{ setA.combo.physical | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalStrike }} * {{ setA.combo.physicalStrike | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalSlash }} * {{ setA.combo.physicalSlash | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalPierce }} * {{ setA.combo.physicalPierce | number:'1.0-2' }} +</td>
-                    <td class="magic">{{ viewModel.priMagic }} * {{ setA.combo.magic | number:'1.0-2' }} +</td>
-                    <td class="fire">{{ viewModel.priFire }} * {{ setA.combo.fire | number:'1.0-2' }} +</td>
-                    <td class="lightning">{{ viewModel.priLightning }} * {{ setA.combo.lightning | number:'1.0-2' }} +</td>
-                    <td class="holy">{{ viewModel.priHoly }} * {{ setA.combo.holy | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priImmunity }} * {{ setA.combo.immunity | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priRobustness }} * {{ setA.combo.robustness | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priFocus }} * {{ setA.combo.focus | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priVitality }} * {{ setA.combo.vitality | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPoise }} * {{ setA.combo.poise | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td colspan="13">= {{ setA.combo.score | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ setB.name }}</th>
-                    <td>{{ setB.combo.physical | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.physicalStrike | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.physicalSlash | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.physicalPierce | number:'1.0-2' }}</td>
-                    <td class="magic">{{ setB.combo.magic | number:'1.0-2' }}</td>
-                    <td class="fire">{{ setB.combo.fire | number:'1.0-2' }}</td>
-                    <td class="lightning">{{ setB.combo.lightning | number:'1.0-2' }}</td>
-                    <td class="holy">{{ setB.combo.holy | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.immunity | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.robustness | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.focus | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.vitality | number:'1.0-2' }}</td>
-                    <td>{{ setB.combo.poise | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">{{ setB.name }} Score =</th>
-                    <td>{{ viewModel.priPhysical }} * {{ setB.combo.physical | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalStrike }} * {{ setB.combo.physicalStrike | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalSlash }} * {{ setB.combo.physicalSlash | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPhysicalPierce }} * {{ setB.combo.physicalPierce | number:'1.0-2' }} +</td>
-                    <td class="magic">{{ viewModel.priMagic }} * {{ setB.combo.magic | number:'1.0-2' }} +</td>
-                    <td class="fire">{{ viewModel.priFire }} * {{ setB.combo.fire | number:'1.0-2' }} +</td>
-                    <td class="lightning">{{ viewModel.priLightning }} * {{ setB.combo.lightning | number:'1.0-2' }} +</td>
-                    <td class="holy">{{ viewModel.priHoly }} * {{ setB.combo.holy | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priImmunity }} * {{ setB.combo.immunity | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priRobustness }} * {{ setB.combo.robustness | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priFocus }} * {{ setB.combo.focus | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priVitality }} * {{ setB.combo.vitality | number:'1.0-2' }} +</td>
-                    <td>{{ viewModel.priPoise }} * {{ setB.combo.poise | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td colspan="13">= {{ setB.combo.score | number:'1.0-2' }}</td>
-                  </tr>
-                  <tr>
-                    <th></th>
-                    <td colspan="13" class="bold">
-                      {{ setA.name }}
-                      {{ comparisonCharacter(setA.combo.score, setB.combo.score) }}
-                      {{ setB.name }}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            </button>            
           </div>
         </td>
         <td data-label="Physical">
@@ -608,9 +485,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let combo of results">
-        <td data-label="Head">
+        <td data-label="Head" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.head)" target="_blank">{{ combo.head.name }}</a>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+          <button mat-icon-button class="toggle-icon" style="float: right;"
                   attr.aria-label="Disable {{ combo.head.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.head)">
             <svg class="bi disable" fill="currentColor">
@@ -618,9 +495,9 @@
             </svg>
           </button>
         </td>
-        <td data-label="Chest">
+        <td data-label="Chest" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.chest)" target="_blank">{{ combo.chest.name }}</a>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+          <button mat-icon-button class="toggle-icon" style="float: right;"
                   attr.aria-label="Disable {{ combo.chest.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.chest)">
             <svg class="bi disable" fill="currentColor">
@@ -628,9 +505,9 @@
             </svg>
           </button>
         </td>
-        <td data-label="Gauntlets">
+        <td data-label="Gauntlets" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.gauntlets)" target="_blank">{{ combo.gauntlets.name }}</a>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+          <button mat-icon-button class="toggle-icon" style="float: right;"
                   attr.aria-label="Disable {{ combo.gauntlets.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.gauntlets)">
             <svg class="bi disable" fill="currentColor">
@@ -638,9 +515,9 @@
             </svg>
           </button>
         </td>
-        <td data-label="Legs">
+        <td data-label="Legs" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.legs)" target="_blank">{{ combo.legs.name }}</a>
-          <button mat-icon-button class="toggle-icon" style="margin-left: 5px; float: right;"
+          <button mat-icon-button class="toggle-icon" style="float: right;"
                   attr.aria-label="Disable {{ combo.legs.name }} and recalculate" title="Disable armor piece and recalculate"
                   (click)="disableArmorPiece(combo.legs)">
             <svg class="bi disable" fill="currentColor">

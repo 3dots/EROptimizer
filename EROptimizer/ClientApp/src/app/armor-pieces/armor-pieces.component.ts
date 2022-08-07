@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-armor-pieces',
@@ -31,10 +31,10 @@ export class ArmorPiecesComponent implements OnInit {
     }, (error: any) => {
       this.isLoading = false;
       this.dialog.open(ErrorDialogComponent, {
-        data: {
+        data: new ErrorDialogData({
           errorText: "Armor data retrieval failed.",
           errorException: error,
-        }
+        })
       });
     });
   }

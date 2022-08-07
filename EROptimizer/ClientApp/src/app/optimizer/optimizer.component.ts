@@ -4,7 +4,7 @@ import { Observable, tap, startWith, map } from 'rxjs';
 
 import { DataService } from '../../service/data.service'
 import { ArmorDataDto, IArmorDataDto } from '../../service/dto/IArmorDataDto';
-import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
+import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
 import { IOptimizerWorkerRS, OptimizerWorkerRSEnum } from './model/OptimizerWorkerRS';
 
 import { ConfigTypeEnum, OptimizeForEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
@@ -14,6 +14,7 @@ import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { FormControl } from '@angular/forms';
 import { ITalismanDto } from '../../service/dto/ITalismanDto';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { PrioritizationHelpComponent, PrioritizationHelpData } from '../prioritization-help/prioritization-help.component';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 
 @Component({
@@ -52,9 +53,6 @@ export class OptimizerComponent implements OnInit {
   txtTalisman4: FormControl = new FormControl();
   filteredTalismans4!: Observable<ITalismanDto[]>;
 
-  setA!: IArmorSetDto;
-  setB!: IArmorSetDto;
-
   constructor(private dataService: DataService, private dialog: MatDialog) {
     this.viewModel = dataService.model.config;
   }
@@ -68,12 +66,12 @@ export class OptimizerComponent implements OnInit {
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
       this.setNumberOfDisabledPieces();
-      
+
       if (typeof Worker === 'undefined') {
         this.dialog.open(ErrorDialogComponent, {
-          data: {
+          data: new ErrorDialogData({
             errorText: "Web Worker API is not supported on this browser. Please use a more modern browser",
-          }
+          })
         });
       } else {
         this.createWorkers();
@@ -103,17 +101,15 @@ export class OptimizerComponent implements OnInit {
 
       this.bindTalismanAutocompletes();
 
-      this.setPrioritizationTooltipExample();
-
       this.isLoading = false;
 
     }, (error: any) => {
       this.isLoading = false;
       this.dialog.open(ErrorDialogComponent, {
-        data: {
+        data: new ErrorDialogData({
           errorText: "Armor data retrieval failed.",
           errorException: error,
-        }
+        })
       });
     });
 
@@ -205,22 +201,6 @@ export class OptimizerComponent implements OnInit {
     this.setTalismanIds();
   }
 
-  isShowPriTooltip: boolean = false;
-  isPriTooltipFocused: boolean = false;
-  showPriTooltip(show: boolean, focused: boolean | null) {
-
-    if (focused != null) {
-      this.isPriTooltipFocused = focused;
-    }
-
-    if (show) {
-      this.setPrioritizationTooltipExample();
-      this.isShowPriTooltip = true;
-    } else if (!this.isPriTooltipFocused) {
-      this.isShowPriTooltip = false;
-    }    
-  }
-
   isShowForTooltip: boolean = false;
   isForTooltipFocused: boolean = false;
   showForTooltip(show: boolean, focused: boolean | null) {
@@ -234,6 +214,32 @@ export class OptimizerComponent implements OnInit {
     } else if (!this.isForTooltipFocused) {
       this.isShowForTooltip = false;
     }
+  }
+
+  openPrioritizationHelpDialog() {
+
+    let set = this.armorData.armorSets.find(x => x.name == "Astrologer Set");
+    if (!set) return;
+
+    let setA: IArmorSetDto = {
+      armorSetId: set.armorSetId,
+      name: set.name,
+      combo: new ArmorCombo(set.combo.head, set.combo.chest, set.combo.gauntlets, set.combo.legs, this.viewModel, null),
+    };
+
+    set = this.armorData.armorSets.find(x => x.name == "Bandit Set");
+    if (!set) return;
+
+    let setB: IArmorSetDto = {
+      armorSetId: set.armorSetId,
+      name: set.name,
+      combo: new ArmorCombo(set.combo.head, set.combo.chest, set.combo.gauntlets, set.combo.legs, this.viewModel, null),
+    };
+
+    this.dialog.open(PrioritizationHelpComponent, {
+      data: new PrioritizationHelpData(this.viewModel, setA, setB),
+      maxWidth: "95vw"
+    });
   }
 
   //#endregion
@@ -298,19 +304,19 @@ export class OptimizerComponent implements OnInit {
     });
 
     if (data.head.length == 0) {
-      this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Head pieces are disabled. Please enable at least one Head piece." } });
+      this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "All Head pieces are disabled. Please enable at least one Head piece." }) });
       this.isLoading = false;
       return;
     } else if (data.chest.length == 0) {
-      this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Chest pieces are disabled. Please enable at least one Chest piece." } });
+      this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "All Chest pieces are disabled. Please enable at least one Chest piece." }) });
       this.isLoading = false;
       return;
     } else if (data.gauntlets.length == 0) {
-      this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Gauntlets pieces are disabled. Please enable at least one Gauntlets piece." } });
+      this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "All Gauntlets pieces are disabled. Please enable at least one Gauntlets piece." }) });
       this.isLoading = false;
       return;
     } else if (data.legs.length == 0) {
-      this.dialog.open(ErrorDialogComponent, { data: { errorText: "All Legs pieces are disabled. Please enable at least one Legs piece." } });
+      this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "All Legs pieces are disabled. Please enable at least one Legs piece." }) });
       this.isLoading = false;
       return;
     }
@@ -393,7 +399,7 @@ export class OptimizerComponent implements OnInit {
     }
 
     if (chunks.length != this.viewModel.numberOfThreads || this.workers.length != this.viewModel.numberOfThreads) {
-      this.dialog.open(ErrorDialogComponent, { data: { errorText: "My math messed up." } });
+      this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "My math messed up." }) });
       return;
     }
 
@@ -557,39 +563,7 @@ export class OptimizerComponent implements OnInit {
 
     if (this.viewModel.talisman4Id) this.txtTalisman4.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman4Id));
     else this.txtTalisman4.setValue("");
-  }
-
-  setPrioritizationTooltipExample() {
-
-    let set = this.armorData.armorSets.find(x => x.name == "Astrologer Set");
-
-    if (set) {
-      this.setA = {
-        armorSetId: set.armorSetId,
-        name: set.name,
-        combo: new ArmorCombo(set.combo.head, set.combo.chest, set.combo.gauntlets, set.combo.legs, this.viewModel, null),
-      };
-    }
-
-    set = this.armorData.armorSets.find(x => x.name == "Bandit Set");
-
-    if (set) {
-      this.setB = {
-        armorSetId: set.armorSetId,
-        name: set.name,
-        combo: new ArmorCombo(set.combo.head, set.combo.chest, set.combo.gauntlets, set.combo.legs, this.viewModel, null),
-      };
-    }
-  }
-
-  comparisonCharacter(a: number, b: number): string {
-    if (a > b)
-      return ">";
-    else if (a == b)
-      return "=";
-    else
-      return "<";
-  }
+  }  
 
   //#endregion
 }

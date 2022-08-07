@@ -2,10 +2,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-interface ErrorDialogData {
-  errorTitle: string;
-  errorText: string;
+export class ErrorDialogData {
+  errorTitle: string | null = null;
+  errorText: string | null = null;
   errorException: any;
+
+  public constructor(init?: Partial<ErrorDialogData>) {
+    Object.assign(this, init);
+  }
 }
 
 @Component({

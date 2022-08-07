@@ -56,7 +56,7 @@
         <tr *ngFor="let p of armorPieces">
           <td data-label="Name" style="display: flex; flex-wrap: wrap;">
             <a [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'" [attr.href]="getURL(p)" target="_blank">{{ p.name }}</a>
-            <div class="toggles" style="margin-left: auto;">
+            <div class="toggles" style="margin-left: auto; padding-left: 5px;">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ p.name }}"
                       title="Enable armor piece"

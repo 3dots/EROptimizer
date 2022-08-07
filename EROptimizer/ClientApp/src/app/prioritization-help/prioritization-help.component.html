@@ -1,0 +1,129 @@
+
+
+<h2 mat-dialog-title>
+  Prioritization Explanation
+</h2>
+<mat-dialog-content class="mat-typography">
+  <div>Prioritization is what the optimizer uses to assign scores to armor combinations.</div>
+  <table class="table table-prioritization-tooltip">
+    <thead>
+      <tr>
+        <th></th>
+        <th scope="col">Physical</th>
+        <th scope="col">Strike</th>
+        <th scope="col">Slash</th>
+        <th scope="col">Pierce</th>
+        <th scope="col" class="magic">Magic</th>
+        <th scope="col" class="fire">Fire</th>
+        <th scope="col" class="lightning">Lightning</th>
+        <th scope="col" class="holy">Holy</th>
+        <th scope="col">Immunity</th>
+        <th scope="col">Robustness</th>
+        <th scope="col">Focus</th>
+        <th scope="col">Vitality</th>
+        <th scope="col">Poise</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Prioritization</th>
+        <td>{{ data.viewModel.priPhysical }}</td>
+        <td>{{ data.viewModel.priPhysicalStrike }}</td>
+        <td>{{ data.viewModel.priPhysicalSlash }}</td>
+        <td>{{ data.viewModel.priPhysicalPierce }}</td>
+        <td class="magic">{{ data.viewModel.priMagic }}</td>
+        <td class="fire">{{ data.viewModel.priFire }}</td>
+        <td class="lightning">{{ data.viewModel.priLightning }}</td>
+        <td class="holy">{{ data.viewModel.priHoly }}</td>
+        <td>{{ data.viewModel.priImmunity }}</td>
+        <td>{{ data.viewModel.priRobustness }}</td>
+        <td>{{ data.viewModel.priFocus }}</td>
+        <td>{{ data.viewModel.priVitality }}</td>
+        <td>{{ data.viewModel.priPoise }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ data.setA.name }}</th>
+        <td>{{ data.setA.combo.physical | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.physicalStrike | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.physicalSlash | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.physicalPierce | number:'1.0-2' }}</td>
+        <td class="magic">{{ data.setA.combo.magic | number:'1.0-2' }}</td>
+        <td class="fire">{{ data.setA.combo.fire | number:'1.0-2' }}</td>
+        <td class="lightning">{{ data.setA.combo.lightning | number:'1.0-2' }}</td>
+        <td class="holy">{{ data.setA.combo.holy | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.immunity | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.robustness | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.focus | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.vitality | number:'1.0-2' }}</td>
+        <td>{{ data.setA.combo.poise | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ data.setA.name }} Score =</th>
+        <td>{{ data.viewModel.priPhysical }} * {{ data.setA.combo.physical | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalStrike }} * {{ data.setA.combo.physicalStrike | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalSlash }} * {{ data.setA.combo.physicalSlash | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalPierce }} * {{ data.setA.combo.physicalPierce | number:'1.0-2' }} +</td>
+        <td class="magic">{{ data.viewModel.priMagic }} * {{ data.setA.combo.magic | number:'1.0-2' }} +</td>
+        <td class="fire">{{ data.viewModel.priFire }} * {{ data.setA.combo.fire | number:'1.0-2' }} +</td>
+        <td class="lightning">{{ data.viewModel.priLightning }} * {{ data.setA.combo.lightning | number:'1.0-2' }} +</td>
+        <td class="holy">{{ data.viewModel.priHoly }} * {{ data.setA.combo.holy | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priImmunity }} * {{ data.setA.combo.immunity | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priRobustness }} * {{ data.setA.combo.robustness | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priFocus }} * {{ data.setA.combo.focus | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priVitality }} * {{ data.setA.combo.vitality | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPoise }} * {{ data.setA.combo.poise | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="13">= {{ data.setA.combo.score | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ data.setB.name }}</th>
+        <td>{{ data.setB.combo.physical | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.physicalStrike | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.physicalSlash | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.physicalPierce | number:'1.0-2' }}</td>
+        <td class="magic">{{ data.setB.combo.magic | number:'1.0-2' }}</td>
+        <td class="fire">{{ data.setB.combo.fire | number:'1.0-2' }}</td>
+        <td class="lightning">{{ data.setB.combo.lightning | number:'1.0-2' }}</td>
+        <td class="holy">{{ data.setB.combo.holy | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.immunity | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.robustness | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.focus | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.vitality | number:'1.0-2' }}</td>
+        <td>{{ data.setB.combo.poise | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ data.setB.name }} Score =</th>
+        <td>{{ data.viewModel.priPhysical }} * {{ data.setB.combo.physical | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalStrike }} * {{ data.setB.combo.physicalStrike | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalSlash }} * {{ data.setB.combo.physicalSlash | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPhysicalPierce }} * {{ data.setB.combo.physicalPierce | number:'1.0-2' }} +</td>
+        <td class="magic">{{ data.viewModel.priMagic }} * {{ data.setB.combo.magic | number:'1.0-2' }} +</td>
+        <td class="fire">{{ data.viewModel.priFire }} * {{ data.setB.combo.fire | number:'1.0-2' }} +</td>
+        <td class="lightning">{{ data.viewModel.priLightning }} * {{ data.setB.combo.lightning | number:'1.0-2' }} +</td>
+        <td class="holy">{{ data.viewModel.priHoly }} * {{ data.setB.combo.holy | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priImmunity }} * {{ data.setB.combo.immunity | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priRobustness }} * {{ data.setB.combo.robustness | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priFocus }} * {{ data.setB.combo.focus | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priVitality }} * {{ data.setB.combo.vitality | number:'1.0-2' }} +</td>
+        <td>{{ data.viewModel.priPoise }} * {{ data.setB.combo.poise | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="13">= {{ data.setB.combo.score | number:'1.0-2' }}</td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="13" class="bold">
+          {{ data.setA.name }}
+          {{ comparisonCharacter(data.setA.combo.score, data.setB.combo.score) }}
+          {{ data.setB.name }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+</mat-dialog-actions>

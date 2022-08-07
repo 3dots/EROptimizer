@@ -21,6 +21,7 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
 import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
 import { BestClassComponent } from './best-class/best-class.component';
+import { PrioritizationHelpComponent } from './prioritization-help/prioritization-help.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { BestClassComponent } from './best-class/best-class.component';
     ErrorDialogComponent,
     ArmorSelectionsComponent,
     ArmorPiecesComponent,
-    BestClassComponent
+    BestClassComponent,
+    PrioritizationHelpComponent
   ],
   imports: [
     BrowserModule,

@@ -31,9 +31,13 @@
     width: 600px;
   }
 
-    table.armor-selections-table > thead {
-      position: relative;
-    }
+  .toggles {
+      padding-left: 5px;
+  }
+
+  table.armor-selections-table > thead {
+    position: relative;
+  }
 
       table.armor-selections-table > thead > tr,
       table.armor-selections-table > thead > tr > th,
