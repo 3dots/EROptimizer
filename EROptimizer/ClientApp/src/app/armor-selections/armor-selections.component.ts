@@ -4,7 +4,7 @@ import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
-import { DialogHelper } from '../utility/dialog.helper';
+import { DialogHelper } from '../utility/dialog-helper';
 
 @Component({
   selector: 'app-armor-selections',

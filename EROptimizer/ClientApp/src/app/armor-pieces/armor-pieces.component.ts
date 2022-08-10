@@ -3,7 +3,6 @@ import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
-import { DialogHelper } from '../utility/dialog.helper';
 
 @Component({
   selector: 'app-armor-pieces',

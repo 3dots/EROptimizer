@@ -15,7 +15,7 @@ import { ITalismanDto } from '../../service/dto/ITalismanDto';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { PrioritizationHelpComponent, PrioritizationHelpData } from '../prioritization-help/prioritization-help.component';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
-import { DialogHelper } from '../utility/dialog.helper';
+import { DialogHelper } from '../utility/dialog-helper';
 
 @Component({
   selector: 'app-optimizer',
