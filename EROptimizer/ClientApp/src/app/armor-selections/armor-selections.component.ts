@@ -9,7 +9,7 @@ import { DialogHelper } from '../utility/dialog-helper';
 @Component({
   selector: 'app-armor-selections',
   templateUrl: './armor-selections.component.html',
-  styleUrls: ['./armor-selections.component.css']
+  styleUrls: ['./armor-selections.component.scss']
 })
 export class ArmorSelectionsComponent implements OnInit {
 

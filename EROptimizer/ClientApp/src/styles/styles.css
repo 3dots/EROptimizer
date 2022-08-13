@@ -48,6 +48,10 @@ mat-form-field {
     color: var(--bs-red);
   }
 
+.table > :not(:first-child) {
+  border-top: none;
+}
+
 table.fixed-thead {
   border-collapse: separate;
   border-spacing: 0;
@@ -60,13 +64,9 @@ table.fixed-thead {
     z-index: 100;
   }
 
-  table.fixed-thead > :not(:first-child) {
-    border-top: none;
-  }
-
-  table.fixed-thead > thead > tr > th {
-    border-bottom: 2px solid currentColor;
-  }
+    table.fixed-thead > thead > tr > th {
+      border-bottom: 2px solid currentColor;
+    }
 
 .magic {
   color: var(--blue-input);
@@ -118,7 +118,7 @@ a.autocomplete-icon > svg {
 }
 
 mat-form-field.autocomplete-field .mat-form-field-infix {
-    padding-right: 1.5em;
+  padding-right: 1.5em;
 }
 
 .margin-bottom-gutter {

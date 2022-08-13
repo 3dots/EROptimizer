@@ -1,0 +1,18 @@
+@import "../../styles/mixins.scss";
+
+h2 {
+  margin-bottom: 0;
+}
+
+.armor-pieces-table-container {
+  @include responsive-table-container();
+}
+
+
+table.armor-pieces-table {
+  width: auto;
+}
+
+.armor-pieces-table {
+  @include responsive-table(1150px);
+}

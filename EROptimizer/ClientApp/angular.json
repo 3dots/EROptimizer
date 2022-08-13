@@ -6,6 +6,9 @@
     "my-app": {
       "projectType": "application",
       "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
         "@schematics/angular:application": {
           "strict": true
         }
@@ -32,8 +35,8 @@
               }
             ],
             "styles": [
-              "src/sass.scss",
-              "src/styles.css"
+              "src/styles/sass.scss",
+              "src/styles/styles.css"
             ],
             "scripts": [],
             "webWorkerTsConfig": "tsconfig.worker.json"

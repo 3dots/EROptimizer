@@ -1,0 +1,40 @@
+@import "../../styles/mixins.scss";
+
+.toggles {
+  text-align: right;
+}
+
+.button-span {
+  float: right;
+  margin-left: auto;
+}
+
+.button-span,
+.toggles {
+  margin-left: auto;
+}
+
+.armor-selections-table-container {
+  @include responsive-table-container();
+}
+
+.armor-selections-table {
+  @include responsive-table(1550px);
+}
+
+@media screen and (max-width: 1550px) {
+
+  .toggles {
+    padding-left: 5px;
+  }
+
+  table.armor-selections-table > thead {
+    position: relative;
+  }
+
+  table.armor-selections-table > thead > tr > th.cell-with-buttons-flex,
+  table.armor-selections-table > tbody > tr > td.cell-with-buttons-flex {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

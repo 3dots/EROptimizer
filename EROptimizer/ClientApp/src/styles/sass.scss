@@ -1,7 +1,7 @@
 @use '@angular/material' as mat;
 
 $grid-gutter-width: 1rem;
-@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../../node_modules/bootstrap/scss/bootstrap";
 
 @include mat.core();
 
@@ -56,4 +56,3 @@ $my-theme: mat.define-light-theme((
     margin-bottom: 8px;
   }
 }
-

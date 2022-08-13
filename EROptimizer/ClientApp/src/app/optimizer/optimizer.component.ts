@@ -20,7 +20,7 @@ import { DialogHelper } from '../utility/dialog-helper';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html',
-  styleUrls: ['./optimizer.component.css'],
+  styleUrls: ['./optimizer.component.scss'],
 })
 export class OptimizerComponent implements OnInit {
 

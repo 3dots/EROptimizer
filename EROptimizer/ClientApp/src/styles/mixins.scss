@@ -1,0 +1,84 @@
+
+
+@mixin responsive-table($breakpoint, $mobileWidth: 600px) {
+  @media screen and (max-width: $breakpoint) {
+
+    @at-root {
+      table#{&} {
+        width: $mobileWidth;
+      }
+
+      table#{&},
+      table#{&} > thead,
+      table#{&} > thead > tr,
+      table#{&} > thead > tr > th,
+      table#{&} > tbody,
+      table#{&} > tbody > tr,
+      table#{&} > tbody > tr > td,
+      table#{&} > tbody > tr > th {
+        display: block;
+      }
+
+      table#{&} > thead > tr > th:not(.ignore-hide) {
+        padding: 0;
+      }
+
+      table#{&} > thead > tr > th:not(.ignore-hide),
+      table#{&} > thead > tr > th.ignore-hide.last {
+        border: 0;
+      }
+
+      table#{&} > thead > tr > th.ignore-hide:first-child,
+      table#{&} > tbody > tr > td:first-child,
+      table#{&} > tbody > tr > th:first-child {
+        border-top: 2px solid currentColor;
+      }
+
+      table#{&} > tbody > tr > td:last-child {
+        border-bottom: none;
+      }
+
+      table#{&} > tbody > tr:last-child > td:last-child {
+        border-bottom: 2px solid currentColor;
+      }
+
+      table#{&} > thead > tr > th:not(.ignore-hide) > span {
+        top: 0;
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+      }
+
+      table#{&} > tbody > tr > td {
+        position: relative;
+        padding-left: calc(50% + 0.5rem);
+      }
+
+      table#{&} > tbody > tr > td:before {
+        content: attr(data-label);
+        position: absolute;
+        top: 50%;
+        left: 0.5rem;
+        transform: translate(0, -50%);
+        width: calc(50% - 0.5rem);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+@mixin responsive-table-container($breakpoint: 650px) {
+  flex-grow: 1;
+  overflow: auto;
+  margin-right: auto;
+  display: flex;
+
+  @media screen and (max-width: $breakpoint) {
+    margin-right: 0;
+  }
+}
