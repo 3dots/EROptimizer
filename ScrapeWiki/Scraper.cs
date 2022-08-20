@@ -28,8 +28,10 @@ namespace ScrapeWiki
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
-        private readonly ChromeDriver _chromeDriver;
+        
         private readonly bool _dontDownload;
+
+        private ChromeDriver _chromeDriver;
 
         #endregion
 
@@ -50,11 +52,7 @@ namespace ScrapeWiki
         {
             _console = pc;
             _filesPath = filesPath;
-            _dontDownload = dontDownload;
-
-            var options = new ChromeOptions();
-            options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
-            _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);
+            _dontDownload = dontDownload;            
         }
 
         #endregion
@@ -67,6 +65,10 @@ namespace ScrapeWiki
 
             try
             {
+                var options = new ChromeOptions();
+                options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
+                _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);                
+
                 await BeginScrape();
                 success = true;
             }
@@ -78,7 +80,7 @@ namespace ScrapeWiki
 
             try
             {
-                _chromeDriver.Close();
+                _chromeDriver?.Close();
             }
             catch
             {

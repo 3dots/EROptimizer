@@ -13,8 +13,6 @@ namespace ScrapeWiki
 
     class ProgressConsole : IProgressConsole
     {
-        private readonly int DASH_COUNT = 10;
-
         Task IProgressConsole.WriteLine(string s)
         {
             return Task.Run(() => { Console.WriteLine(s); });

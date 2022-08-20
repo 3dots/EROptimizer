@@ -109,7 +109,7 @@ export class OptimizerConfigDto {
   }
 
   public totalAvailableWeightStats(armorData: IArmorDataDto, baseEndurance: number): number {
-   
+    //console.log("totalAvailableWeightStats()");
     //copy of equipLoad()
 
     let talisman1: ITalismanDto | null | undefined = null;
@@ -124,23 +124,33 @@ export class OptimizerConfigDto {
     let talisman4: ITalismanDto | null | undefined = null;
     if (this.talisman4Id) talisman4 = armorData.talismans.find(x => x.talismanId == this.talisman4Id);
 
+    
     let endurance = baseEndurance +
       (talisman1?.enduranceBonus ?? 0) + (talisman2?.enduranceBonus ?? 0) + (talisman3?.enduranceBonus ?? 0) + (talisman4?.enduranceBonus ?? 0);
+    //console.log(endurance);
 
-    let equipLoad = armorData.equipLoadArray[endurance - 8] *
+    let equipLoadFromStats = armorData.equipLoadArray[endurance - 8]
+    //console.log(equipLoadFromStats);
+
+    let equipLoad = equipLoadFromStats *
       (1 + (talisman1?.weightBonus ?? 0) / 100) *
       (1 + (talisman2?.weightBonus ?? 0) / 100) *
       (1 + (talisman3?.weightBonus ?? 0) / 100) *
       (1 + (talisman4?.weightBonus ?? 0) / 100);
+    //console.log(equipLoad);
 
     let weightLeft = equipLoad * this.weightFractionGoal
       - this.rightHand1 - this.rightHand2 - this.rightHand3
       - this.leftHand1 - this.leftHand2 - this.leftHand3;
 
+    //console.log(weightLeft);
+
     if (talisman1) weightLeft -= talisman1.weight;
     if (talisman2) weightLeft -= talisman2.weight;
     if (talisman3) weightLeft -= talisman3.weight;
     if (talisman4) weightLeft -= talisman4.weight;
+
+    //console.log(weightLeft);
 
     return weightLeft;
   }
