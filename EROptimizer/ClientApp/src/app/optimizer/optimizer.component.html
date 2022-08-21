@@ -19,8 +19,8 @@
   </ul>
 </div>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
-  <div class="row" style="align-items: center;">
-    <div class="col-xxl-6 col-xl-7 col-lg-9">
+  <div class="row">
+    <div class="col-xxl-6 col-xl-7">
       <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
@@ -41,7 +41,7 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row" *ngIf="armorData && viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+      <div class="row stats-row" *ngIf="armorData && viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
         <div class="col">
           <mat-form-field appearance="fill">
             <mat-label>Endurance (no talismans):</mat-label>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xxl-6 col-xl-5 col-lg-3 margin-bottom-gutter">
+    <div class="col-xxl-6 col-xl-5 margin-bottom-gutter" style="align-self: center;">
       <button class="btn btn-secondary" (click)="reset()">Reset Everything</button>
     </div>
   </div>

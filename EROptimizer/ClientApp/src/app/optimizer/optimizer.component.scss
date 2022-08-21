@@ -17,6 +17,11 @@ svg.help-tooltip-svg {
   width: 18.75em;
 }
 
+.stats-row > .col {
+  flex-basis: 11.25em;
+  width: 11.25em;
+}
+
 .optimization-criteria-table {
   @include responsive-table(1399px);
 }
