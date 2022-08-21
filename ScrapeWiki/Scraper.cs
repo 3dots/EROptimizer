@@ -82,9 +82,10 @@ namespace ScrapeWiki
             {
                 _chromeDriver?.Close();
             }
-            catch
+            catch (Exception e)
             {
-
+                await _console.WriteLine("Closing chrome driver exception:");
+                await _console.WriteLine(e.ToString());
             }
 
             return success;
@@ -149,6 +150,7 @@ namespace ScrapeWiki
             if (_dontDownload || File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
             {
                 htmlString = await File.ReadAllTextAsync(filePath);
+                await _console.WriteLine($"Using local copy of {resourceName}");
             }
 
             if (htmlString == "") throw new HttpRequestException("Empty file", null, HttpStatusCode.NotFound);

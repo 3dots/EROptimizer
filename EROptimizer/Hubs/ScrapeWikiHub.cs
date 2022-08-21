@@ -38,6 +38,7 @@ namespace EROptimizer.Hubs
 
             bool success = await scraper.Scrape();
             if (success) await Evaluate(scraper);
+            else await ScrapeEnd();
         }
 
         public async Task WriteLine(string s)
@@ -151,6 +152,7 @@ namespace EROptimizer.Hubs
         {
             await WriteLine($"Fail. Exception:");
             await WriteLine(e.ToString());
+            await ScrapeEnd();
         }
 
         async Task WriteStaticDataFile(ArmorDataDto data, string fileName)

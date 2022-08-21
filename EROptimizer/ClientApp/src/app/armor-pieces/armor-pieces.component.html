@@ -1,6 +1,6 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <div style="display: flex; flex-direction: column; height: 100%;">
-  <h1>Armor Pieces</h1>
+  <h1>Armor Data</h1>
   <ul class="selection-list" style="margin-bottom: 0;">
     <li>
       <h2>
@@ -55,8 +55,8 @@
       <tbody>
         <tr *ngFor="let p of armorPieces">
           <td data-label="Name" style="display: flex; flex-wrap: wrap;">
-            <a [style.text-decoration]="p.isEnabled ? 'none' : 'line-through'" [attr.href]="getURL(p)" target="_blank">{{ p.name }}</a>
-            <div class="toggles" style="margin-left: auto; padding-left: 5px;">
+            <a [attr.href]="getURL(p)" target="_blank">{{ p.name }}</a> <!--[style.text-decoration]="p.isEnabled ? 'underline' : 'line-through'"-->
+            <!--<div class="toggles" style="margin-left: auto; padding-left: 5px;">
               <button mat-icon-button class="toggle-icon"
                       attr.aria-label="Enable armor piece: {{ p.name }}"
                       title="Enable armor piece"
@@ -73,7 +73,7 @@
                   <use href="bootstrap-icons.svg#x-circle-fill" />
                 </svg>
               </button>
-            </div>
+            </div>-->
           </td>
           <td data-label="Weight">{{p.weight}}</td>
           <td data-label="Physical">{{p.physical}}</td>

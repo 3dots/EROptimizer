@@ -1,6 +1,6 @@
 <app-loading *ngIf="isLoading"></app-loading>
 <div style="display: flex; flex-direction: column; height: 100%;">
-  <h1>Armor Sets</h1>
+  <h1>Armor Filters</h1>
   <div *ngIf="armorData" class="armor-selections-table-container">
     <table class="table fixed-thead armor-selections-table">
       <thead>
@@ -121,7 +121,7 @@
             </button>
           </td>
           <td data-label="Head" class="cell-with-buttons-flex">
-            <a [style.text-decoration]="set.combo.head.isEnabled ? 'none' : 'line-through'"
+            <a [style.text-decoration]="linkDecorationStyle(set.combo.head)"
                [attr.href]="getURL(set.combo.head)" target="_blank">{{ set.combo.head.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
@@ -143,7 +143,7 @@
             </div>
           </td>
           <td data-label="Chest" class="cell-with-buttons-flex">
-            <a [style.text-decoration]="set.combo.chest.isEnabled ? 'none' : 'line-through'"
+            <a [style.text-decoration]="linkDecorationStyle(set.combo.chest)"
                [attr.href]="getURL(set.combo.chest)" target="_blank">{{ set.combo.chest.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
@@ -165,7 +165,7 @@
             </div>
           </td>
           <td data-label="Gauntlets" class="cell-with-buttons-flex">
-            <a [style.text-decoration]="set.combo.gauntlets.isEnabled ? 'none' : 'line-through'"
+            <a [style.text-decoration]="linkDecorationStyle(set.combo.gauntlets)"
                [attr.href]="getURL(set.combo.gauntlets)" target="_blank">{{ set.combo.gauntlets.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"
@@ -187,7 +187,7 @@
             </div>
           </td>
           <td data-label="Legs" class="cell-with-buttons-flex">
-            <a [style.text-decoration]="set.combo.legs.isEnabled ? 'none' : 'line-through'"
+            <a [style.text-decoration]="linkDecorationStyle(set.combo.legs)"
                [attr.href]="getURL(set.combo.legs)" target="_blank">{{ set.combo.legs.name }}</a>
             <div class="toggles">
               <button mat-icon-button class="toggle-icon"

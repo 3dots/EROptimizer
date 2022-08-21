@@ -101,4 +101,10 @@ export class ArmorSelectionsComponent implements OnInit {
     if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
     else return null;
   }
+
+  linkDecorationStyle(piece: IArmorPieceDto): string {
+    if (piece.name == "None") return 'none';
+    else if (piece.isEnabled) return 'underline';
+    else return 'line-through';
+  }
 }

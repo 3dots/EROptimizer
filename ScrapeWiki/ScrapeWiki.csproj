@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="equip.load.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
