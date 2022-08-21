@@ -21,7 +21,7 @@ namespace ScrapeWiki
             await scraper.Scrape();
             stopwatch.Stop();
 
-            Console.WriteLine($"Success, press any key to exit. {stopwatch.Elapsed.TotalSeconds:n2}s");
+            Console.WriteLine($"Success, press any key to exit. {stopwatch.Elapsed.TotalMinutes:n2} minutes");
             Console.ReadKey();
         }
     }

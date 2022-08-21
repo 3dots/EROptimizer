@@ -28,7 +28,7 @@ namespace ScrapeWiki
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
-        
+
         private readonly bool _dontDownload;
 
         private ChromeDriver _chromeDriver;
@@ -52,7 +52,7 @@ namespace ScrapeWiki
         {
             _console = pc;
             _filesPath = filesPath;
-            _dontDownload = dontDownload;            
+            _dontDownload = dontDownload;
         }
 
         #endregion
@@ -67,7 +67,7 @@ namespace ScrapeWiki
             {
                 var options = new ChromeOptions();
                 options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
-                _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);                
+                _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);
 
                 await BeginScrape();
                 success = true;
@@ -98,7 +98,7 @@ namespace ScrapeWiki
             //Getting armor set names
             await GetSets();
 
-            List<ArmorSet> setsCopy = ArmorSets.ToList();
+            List<ArmorSet> setsCopy = ArmorSets.ToList(); //copy because ProcessSet() removes 404s
             foreach (ArmorSet s in setsCopy)
             {
                 await ProcessSet(s);
@@ -135,7 +135,7 @@ namespace ScrapeWiki
             PopulateArmorEnduranceBonus();
 
             await _console.WriteLine("Successfully scraped data.");
-        }        
+        }
 
         #endregion
 
@@ -222,17 +222,8 @@ namespace ScrapeWiki
                 }
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
-                if (new string[] { "Blackflame Set" }.Contains(setName))
-                {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(resourceName, $"Ignoring {setName}"));
-                    continue;
-                }
+                //await _console.WriteLine($"{setResourceName} {setName}");
 
-                if (setName == "Goldrick Soldier Set") setName = "Godrick Soldier Set";
-
-                await _console.WriteLine($"{setResourceName} {setName}");
-
-                //Dont need to lock here, since single thread
                 ArmorSets.Add(new ArmorSet() { ArmorSetId = ArmorSetIdCounter++, Name = setName, ResourceName = setResourceName });
             }
         }
@@ -262,14 +253,15 @@ namespace ScrapeWiki
                 $"{set.Name} Armor Pieces in Elden Ring",
                 $"{set.Name}Armor Pieces in Elden Ring",
                 $"{set.Name} Pieces in Elden Ring",
-                $"{set.Name} Armor Pieces"};
+                $"{set.Name} Armor Pieces"
+            };
 
             if (set.Name == "Haligtree Soldier Set") headingStrings.Add("Haligtree Set Armor Pieces in Elden Ring");
-            else if (set.Name == "Melina's Set") headingStrings.Add("Traveler's Set Armor Pieces in Elden Ring");
 
             string headerText = $"{set.Name} Armor Pieces in Elden Ring";
             IList<HtmlNode> h3s = htmlDoc.QuerySelectorAll("#wiki-content-block > h3");
-            HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => headingStrings.Contains(x.InnerText.Replace("&nbsp;", " ")?.Trim(), StringComparer.InvariantCultureIgnoreCase));
+            HtmlNode h3ArmorPieces = h3s.FirstOrDefault(x => headingStrings.Contains(x.InnerText.Replace("&nbsp;", " ")?.Trim(),
+                StringComparer.InvariantCultureIgnoreCase));
             if (h3ArmorPieces == null)
             {
                 throw new ScrapeParsingException(set.ResourceName, $"h3 with \"{headerText}\" not found.");
@@ -641,7 +633,7 @@ namespace ScrapeWiki
                 }
                 else
                 {
-                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse {dataTypeText} {text}"));
+                    await ScrapeExceptionContinue(new ScrapeParsingException(piece.ResourceName, $"Failed to parse {dataTypeText}, text: {text}"));
                     return false;
                 }
             }
@@ -657,7 +649,7 @@ namespace ScrapeWiki
             var path = Path.Combine(AppContext.BaseDirectory, "equip.load.csv");
             string[] lines = await File.ReadAllLinesAsync(path);
 
-            for(int i = 1; i < lines.Length; i++)
+            for (int i = 1; i < lines.Length; i++)
             {
                 string hexFloat = lines[i].Split(',')[1];
                 uint num = uint.Parse(hexFloat, System.Globalization.NumberStyles.AllowHexSpecifier);
@@ -666,7 +658,7 @@ namespace ScrapeWiki
 
                 double value = (double)f;
                 EquipLoadArray.Add(value);
-            }            
+            }
         }
 
         private async Task ScrapeEquipLoadArray()
