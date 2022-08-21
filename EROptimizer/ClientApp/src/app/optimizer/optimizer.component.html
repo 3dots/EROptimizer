@@ -19,58 +19,64 @@
   </ul>
 </div>
 <div class="container-fluid container-mat-form-field-less-bottom-space">
-  <div class="row">
-    <div class="col-xxl-6 col-xl-7">
-      <div class="row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
-        <div class="col col-lg-2">
-          <mat-form-field appearance="fill">
-            <mat-label>Equip Load:</mat-label>
-            <input matInput [(ngModel)]="viewModel.maxWeight" type="number" />
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Weight Fraction Goal</mat-label>
-            <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Available weight for armor:</mat-label>
-            <input matInput [value]="viewModel.totalAvailableWeight | number:'1.0-2'" disabled type="number" />
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row stats-row" *ngIf="armorData && viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Endurance (no talismans):</mat-label>
-            <input matInput [(ngModel)]="viewModel.endurance" type="number" min="8" />
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Equip Load:</mat-label>
-            <input matInput [value]="viewModel.equipLoad(armorData) | number:'1.0-1'" disabled type="number" />
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Weight Fraction Goal</mat-label>
-            <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Available weight for armor:</mat-label>
-            <input matInput [value]="viewModel.totalAvailableWeightStats(armorData, viewModel.endurance) | number:'1.0-2'" disabled type="number" />
-          </mat-form-field>
-        </div>
-      </div>
+  <div class="row stats-row" *ngIf="viewModel.configType == ConfigTypeEnum.Weights">
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Equip Load:</mat-label>
+        <input matInput [(ngModel)]="viewModel.maxWeight" type="number" />
+      </mat-form-field>
     </div>
-    <div class="col-xxl-6 col-xl-5 margin-bottom-gutter" style="align-self: center;">
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Weight Fraction Goal</mat-label>
+        <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Available weight for armor:</mat-label>
+        <input matInput [value]="viewModel.totalAvailableWeight | number:'1.0-2'" disabled type="number" />
+      </mat-form-field>
+    </div>
+    <div class="col margin-bottom-gutter" style="align-self: center;">
       <button class="btn btn-secondary" (click)="reset()">Reset Everything</button>
     </div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"></div>
+  </div>
+  <div class="row stats-row" *ngIf="armorData && viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Endurance (no talismans):</mat-label>
+        <input matInput [(ngModel)]="viewModel.endurance" type="number" min="8" />
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Equip Load:</mat-label>
+        <input matInput [value]="viewModel.equipLoad(armorData) | number:'1.0-1'" disabled type="number" />
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Weight Fraction Goal</mat-label>
+        <input matInput [(ngModel)]="viewModel.weightFractionGoal" type="number" min="0">
+      </mat-form-field>
+    </div>
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Available weight for armor:</mat-label>
+        <input matInput [value]="viewModel.totalAvailableWeightStats(armorData, viewModel.endurance) | number:'1.0-2'" disabled type="number" />
+      </mat-form-field>
+    </div>
+    <div class="col margin-bottom-gutter" style="align-self: center;">
+      <button class="btn btn-secondary" (click)="reset()">Reset Everything</button>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"></div>
   </div>
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
