@@ -1,3 +1,12 @@
+:root {
+  --blue-input: #1e5aea;
+  --red-input: #D52536;
+  --yellow-input: #707000;
+  --holy-input: #804000;
+
+  --margin-bottom-standard: 8px;
+}
+
 .table-border {
   border: 1px solid #cccccc;
 }
@@ -26,18 +35,22 @@ mat-form-field {
     padding-top: 0;
   }
 
-:root {
-  --blue-input: #1e5aea;
-  --red-input: #D52536;
-  --yellow-input: #707000;
-  --holy-input: #804000;
+.mat-icon-button.toggle-icon {
+  height: auto;
+  width: auto;
+  line-height: inherit;
 }
 
-.mat-icon-button.toggle-icon,
 .mat-icon-button.toggle-icon svg {
   height: 1.5em;
   width: 1.5em;
   line-height: 1.5em;
+}
+
+.mat-icon-button.toggle-icon svg.help-tooltip-svg {
+  height: 1.29em;
+  width: 1.29em;
+  line-height: 1.29em;
 }
 
   .mat-icon-button.toggle-icon svg.enable {
@@ -123,4 +136,13 @@ mat-form-field.autocomplete-field .mat-form-field-infix {
 
 .margin-bottom-gutter {
   margin-bottom: calc(var(--bs-gutter-x) * 0.5);
+}
+
+.standard-gap {
+  align-items: center;
+  gap: 5px;
+}
+
+.mb-standard {
+  margin-bottom: var(--margin-bottom-standard);
 }

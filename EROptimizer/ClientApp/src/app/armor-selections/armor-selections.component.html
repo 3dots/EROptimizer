@@ -1,6 +1,95 @@
 <app-loading *ngIf="isLoading"></app-loading>
+
 <div style="display: flex; flex-direction: column; height: 100%;">
   <h1>Armor Filters</h1>
+  <div class="container-fluid container-mat-form-field-less-bottom-space">
+    <div class="row overrides-row" style="align-items: center;">
+      <div class="col-12 col-xxl-auto standard-gap" style="display: flex; padding-bottom: 0.5em;">
+        <label>Overrides:</label>
+        <button mat-icon-button class="toggle-icon" aria-label="Armor filter overrides explanation" (click)="filterOverridesHelpDialog()">
+          <svg class="bi help-tooltip-svg" fill="currentColor">
+            <use href="bootstrap-icons.svg#question-circle" />
+          </svg>
+        </button>
+        <ng-template #filterOverridesHelpDialogTemplate>
+          <h2 mat-dialog-title>Armor Filter Overrides</h2>
+          <mat-dialog-content class="mat-typography">
+            If armor filter overrides are set, they ignore the disabled/enabled filters in the rest of the page. <br />
+            This lets you force a particular piece (head/chest/gauntlets/legs) without having to reset all your filters.
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+          </mat-dialog-actions>
+        </ng-template>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="fill" class="autocomplete-field">
+          <mat-label>Head:</mat-label>
+          <input type="text" matInput [formControl]="txtOverrideHead" [matAutocomplete]="cmbOverrideHead">
+          <mat-autocomplete #cmbOverrideHead="matAutocomplete" [displayWith]="displayArmorPiece" (optionSelected)="onOverrideFilterChanged($event)">
+            <mat-option *ngFor="let option of filteredHead | async" [value]="option">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideHead)">
+            <svg class="bi" fill="currentColor">
+              <use href="bootstrap-icons.svg#x" />
+            </svg>
+          </a>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="fill" class="autocomplete-field">
+          <mat-label>Chest:</mat-label>
+          <input type="text" matInput [formControl]="txtOverrideChest" [matAutocomplete]="cmbOverrideChest">
+          <mat-autocomplete #cmbOverrideChest="matAutocomplete" [displayWith]="displayArmorPiece" (optionSelected)="onOverrideFilterChanged($event)">
+            <mat-option *ngFor="let option of filteredChest | async" [value]="option">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideChest)">
+            <svg class="bi" fill="currentColor">
+              <use href="bootstrap-icons.svg#x" />
+            </svg>
+          </a>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="fill" class="autocomplete-field">
+          <mat-label>Gauntlets:</mat-label>
+          <input type="text" matInput [formControl]="txtOverrideGauntlets" [matAutocomplete]="cmbOverrideGauntlets">
+          <mat-autocomplete #cmbOverrideGauntlets="matAutocomplete" [displayWith]="displayArmorPiece" (optionSelected)="onOverrideFilterChanged($event)">
+            <mat-option *ngFor="let option of filteredGauntlets | async" [value]="option">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideGauntlets)">
+            <svg class="bi" fill="currentColor">
+              <use href="bootstrap-icons.svg#x" />
+            </svg>
+          </a>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field appearance="fill" class="autocomplete-field">
+          <mat-label>Legs:</mat-label>
+          <input type="text" matInput [formControl]="txtOverrideLegs" [matAutocomplete]="cmbOverrideLegs">
+          <mat-autocomplete #cmbOverrideLegs="matAutocomplete" [displayWith]="displayArmorPiece" (optionSelected)="onOverrideFilterChanged($event)">
+            <mat-option *ngFor="let option of filteredLegs | async" [value]="option">
+              {{option.name}}
+            </mat-option>
+          </mat-autocomplete>
+          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideLegs)">
+            <svg class="bi" fill="currentColor">
+              <use href="bootstrap-icons.svg#x" />
+            </svg>
+          </a>
+        </mat-form-field>
+      </div>
+      <div class="col"></div>
+      <div class="col"></div>
+    </div>
+  </div>
   <div *ngIf="armorData" class="armor-selections-table-container">
     <table class="table fixed-thead armor-selections-table">
       <thead>

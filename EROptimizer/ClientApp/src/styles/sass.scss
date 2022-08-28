@@ -53,6 +53,6 @@ $my-theme: mat.define-light-theme((
 // Styles
 .mat-typography {
   h1, h2, h3, .h3 {
-    margin-bottom: 8px;
+    margin-bottom: var(--margin-bottom-standard);
   }
 }

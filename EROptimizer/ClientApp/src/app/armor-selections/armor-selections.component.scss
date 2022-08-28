@@ -14,6 +14,11 @@
   margin-left: auto;
 }
 
+.overrides-row > .col {
+  flex-basis: 18.7em;
+  width: 18.7em;
+}
+
 .armor-selections-table-container {
   @include responsive-table-container();
 }

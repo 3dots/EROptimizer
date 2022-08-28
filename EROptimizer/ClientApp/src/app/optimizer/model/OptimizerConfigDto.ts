@@ -72,6 +72,11 @@ export class OptimizerConfigDto {
   talisman4Id: number | null = null;
 
   optimizeForType: OptimizeForEnum = OptimizeForEnum.PVP;
+
+  filterOverrideHeadName: string | null = null;
+  filterOverrideChestName: string | null = null;
+  filterOverrideGauntletsName: string | null = null;
+  filterOverrideLegsName: string | null = null;
   
   public constructor(init?: Partial<OptimizerConfigDto>) {
     Object.assign(this, init);

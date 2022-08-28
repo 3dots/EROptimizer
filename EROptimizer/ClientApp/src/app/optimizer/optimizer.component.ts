@@ -16,6 +16,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { PrioritizationHelpComponent, PrioritizationHelpData } from '../prioritization-help/prioritization-help.component';
 import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { DialogHelper } from '../utility/dialog-helper';
+import { UtilityHelper } from '../utility/utility-helper';
 
 @Component({
   selector: 'app-optimizer',
@@ -195,12 +196,12 @@ export class OptimizerComponent implements OnInit {
   }
 
   onTalismanChanged(ev: MatAutocompleteSelectedEvent) {
-    this.setTalismanIds();
+    this.saveTalismanIds();
   }
 
   clearAutocomplete(txtAutocomplete: FormControl) {
     txtAutocomplete.setValue("");
-    this.setTalismanIds();
+    this.saveTalismanIds();
   }
 
   openOptimizeForHelpDialog() {
@@ -499,8 +500,7 @@ export class OptimizerComponent implements OnInit {
   //#region Helpers
 
   getURL(piece: IArmorPieceDto): string | null {
-    if (piece.resourceName) return "https://eldenring.wiki.fextralife.com" + piece.resourceName;
-    else return null;
+    return UtilityHelper.getURL(piece);
   }
 
   setNumberOfDisabledPieces() {
@@ -526,7 +526,7 @@ export class OptimizerComponent implements OnInit {
     return t && t.name ? t.name : "";
   }
 
-  setTalismanIds() {
+  saveTalismanIds() {
 
     if (typeof this.txtTalisman1.value == "string") this.viewModel.talisman1Id = null;
     else this.viewModel.talisman1Id = (this.txtTalisman1.value as ITalismanDto).talismanId;

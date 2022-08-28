@@ -227,7 +227,7 @@
 </div>
 <h2 class="h3">Optimization criteria:</h2>
 <div class="container-fluid container-mat-form-field-no-bottom-space" style="display: flex;">
-  <table class="table optimization-criteria-table table-collapse" style="margin-bottom: 10px; table-layout: fixed;">
+  <table class="table optimization-criteria-table table-collapse mb-standard" style="table-layout: fixed;">
     <thead>
       <tr>
         <th></th>
@@ -325,13 +325,11 @@
           Prioritization
         </th>
         <td data-label="Avg Physical" style="vertical-align: middle;">
-          <div class="help-tooltip-container">
-            <button mat-icon-button class="toggle-icon" aria-label="Prioritization Explanation" (click)="openPrioritizationHelpDialog()">
-              <svg class="bi help-tooltip-svg" fill="currentColor">
-                <use href="bootstrap-icons.svg#question-circle" />
-              </svg>
-            </button>            
-          </div>
+          <button mat-icon-button class="toggle-icon" aria-label="Prioritization Explanation" (click)="openPrioritizationHelpDialog()">
+            <svg class="bi help-tooltip-svg" fill="currentColor">
+              <use href="bootstrap-icons.svg#question-circle" />
+            </svg>
+          </button>
         </td>
         <td data-label="Physical">
           <mat-form-field appearance="fill">
@@ -401,16 +399,18 @@
     </tbody>
   </table>
 </div>
-<div class="container-fluid container-mat-form-field-less-bottom-space">
-  <div class="button-div" style="margin-bottom: 10px;">
+<div class="container-fluid">
+  <div class="button-div">
     <button class="btn btn-secondary" (click)="prioritizePhysicals()">Prioritize Just Physicals</button>
     <button class="btn btn-secondary" (click)="prioritizeElementals()">Just Elementals</button>
     <button class="btn btn-secondary" (click)="prioritizeBoth()">Both</button>
   </div>
+</div>
+<div class="container-fluid container-mat-form-field-less-bottom-space">
   <div *ngIf="viewModel.configType == ConfigTypeEnum.StatsAndDropdowns">
-    <div class="h3 fw-bold" style="display: inline-flex; align-items: center; padding-right: 8px; gap: 5px;">
+    <div class="h3 fw-bold standard-gap" style="display: inline-flex; padding-right: 8px;">
       <div>Optimize for:</div>
-      <div class="help-tooltip-container">
+      <div>
         <button mat-icon-button class="toggle-icon" aria-label="Optimize for explanation" (click)="openOptimizeForHelpDialog()">
           <svg class="bi help-tooltip-svg" fill="currentColor">
             <use href="bootstrap-icons.svg#question-circle" />
@@ -459,7 +459,6 @@
         </div>
         <div class="col-lg-8 col-sm-12 col-xs-12 margin-bottom-gutter" style="align-self: center;">
           <button class="btn btn-primary" (click)="runOptimization()">Run Optimization</button>
-          <span style="margin-left: 10px;"># of Disabled Pieces: {{numberOfDisabledPieces}}</span>
         </div>
       </div>
     </div>
