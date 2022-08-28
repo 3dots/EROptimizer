@@ -286,14 +286,9 @@ export class OptimizerComponent implements OnInit {
       }
 
       this.workers = newWorkerArray;
-    }
+    }    
 
-    let data = new ArmorDataDto({
-      head: this.armorData.head.filter(x => x.isEnabled),
-      chest: this.armorData.chest.filter(x => x.isEnabled),
-      gauntlets: this.armorData.gauntlets.filter(x => x.isEnabled),
-      legs: this.armorData.legs.filter(x => x.isEnabled)
-    });
+    let data: ArmorDataDto = this.filterArmorData();
 
     if (data.head.length == 0) {
       this.dialog.open(ErrorDialogComponent, { data: new ErrorDialogData({ errorText: "All Head pieces are disabled. Please enable at least one Head piece." }) });
@@ -498,6 +493,40 @@ export class OptimizerComponent implements OnInit {
   //#endregion
 
   //#region Helpers
+
+  filterArmorData(): ArmorDataDto {
+
+    let headFilterOverride: IArmorPieceDto | null | undefined = null;
+    if (this.viewModel.filterOverrideHeadName) {
+      headFilterOverride = this.armorData.head.find(x => x.name == this.viewModel.filterOverrideHeadName);
+      if (headFilterOverride == null) this.viewModel.filterOverrideHeadName = null; //garbage
+    }
+
+    let chestFilterOverride: IArmorPieceDto | null | undefined = null;
+    if (this.viewModel.filterOverrideChestName) {
+      chestFilterOverride = this.armorData.chest.find(x => x.name == this.viewModel.filterOverrideChestName);
+      if (chestFilterOverride == null) this.viewModel.filterOverrideChestName = null; //garbage
+    }
+
+    let gauntletsFilterOverride: IArmorPieceDto | null | undefined = null;
+    if (this.viewModel.filterOverrideGauntletsName) {
+      gauntletsFilterOverride = this.armorData.gauntlets.find(x => x.name == this.viewModel.filterOverrideGauntletsName);
+      if (gauntletsFilterOverride == null) this.viewModel.filterOverrideGauntletsName = null; //garbage
+    }
+
+    let legsFilterOverride: IArmorPieceDto | null | undefined = null;
+    if (this.viewModel.filterOverrideLegsName) {
+      legsFilterOverride = this.armorData.legs.find(x => x.name == this.viewModel.filterOverrideLegsName);
+      if (legsFilterOverride == null) this.viewModel.filterOverrideLegsName = null; //garbage
+    }
+
+    return new ArmorDataDto({
+      head: headFilterOverride != null ? [headFilterOverride] : this.armorData.head.filter(x => x.isEnabled),
+      chest: chestFilterOverride != null ? [chestFilterOverride] : this.armorData.chest.filter(x => x.isEnabled),
+      gauntlets: gauntletsFilterOverride != null ? [gauntletsFilterOverride] : this.armorData.gauntlets.filter(x => x.isEnabled),
+      legs: legsFilterOverride != null ? [legsFilterOverride] : this.armorData.legs.filter(x => x.isEnabled)
+    });
+  }
 
   getURL(piece: IArmorPieceDto): string | null {
     return UtilityHelper.getURL(piece);
