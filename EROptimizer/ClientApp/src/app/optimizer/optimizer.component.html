@@ -461,10 +461,10 @@
           <button class="btn btn-primary" (click)="runOptimization()">Run Optimization</button>
         </div>
         <div class="col-sm-auto margin-bottom-gutter">
-          # of Disabled Pieces: <a routerLink="/">{{numberOfDisabledPieces}}</a>
+          # of Disabled Pieces: <a routerLink="/filters">{{numberOfDisabledPieces}}</a>
         </div>
         <div class="col-sm-auto margin-bottom-gutter">
-          Overrides: {{isArmorOverrides()}}
+          Overrides: <a routerLink="/filters">{{isArmorOverrides()}}</a>
         </div>
       </div>
     </div>

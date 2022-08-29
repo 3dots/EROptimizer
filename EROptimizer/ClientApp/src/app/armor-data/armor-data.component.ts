@@ -6,11 +6,11 @@ import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dia
 import { DialogHelper } from '../utility/dialog-helper';
 
 @Component({
-  selector: 'app-armor-pieces',
-  templateUrl: './armor-pieces.component.html',
-  styleUrls: ['./armor-pieces.component.scss']
+  selector: 'app-armor-data',
+  templateUrl: './armor-data.component.html',
+  styleUrls: ['./armor-data.component.scss']
 })
-export class ArmorPiecesComponent implements OnInit {
+export class ArmorDataComponent implements OnInit {
 
   isLoading: boolean = true;
 

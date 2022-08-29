@@ -12,11 +12,11 @@ import { DialogHelper } from '../utility/dialog-helper';
 import { UtilityHelper } from '../utility/utility-helper';
 
 @Component({
-  selector: 'app-armor-selections',
-  templateUrl: './armor-selections.component.html',
-  styleUrls: ['./armor-selections.component.scss']
+  selector: 'app-armor-filters',
+  templateUrl: './armor-filters.component.html',
+  styleUrls: ['./armor-filters.component.scss']
 })
-export class ArmorSelectionsComponent implements OnInit {
+export class ArmorFiltersComponent implements OnInit {
 
   //#region Fields and Properties
 

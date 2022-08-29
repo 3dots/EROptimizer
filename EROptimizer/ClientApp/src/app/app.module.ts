@@ -18,8 +18,8 @@ import { LoadingComponent } from './loading/loading.component';
 import { OptimizerComponent } from './optimizer/optimizer.component';
 import { AdminComponent } from './admin/admin.component';
 import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
-import { ArmorSelectionsComponent } from './armor-selections/armor-selections.component';
-import { ArmorPiecesComponent } from './armor-pieces/armor-pieces.component';
+import { ArmorFiltersComponent } from './armor-filters/armor-filters.component';
+import { ArmorDataComponent } from './armor-data/armor-data.component';
 import { BestClassComponent } from './best-class/best-class.component';
 import { PrioritizationHelpComponent } from './prioritization-help/prioritization-help.component';
 
@@ -31,8 +31,8 @@ import { PrioritizationHelpComponent } from './prioritization-help/prioritizatio
     AdminComponent,
     LoadingComponent,
     ErrorDialogComponent,
-    ArmorSelectionsComponent,
-    ArmorPiecesComponent,
+    ArmorFiltersComponent,
+    ArmorDataComponent,
     BestClassComponent,
     PrioritizationHelpComponent
   ],
