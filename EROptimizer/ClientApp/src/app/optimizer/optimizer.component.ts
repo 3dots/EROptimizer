@@ -9,7 +9,7 @@ import { IOptimizerWorkerRS, OptimizerWorkerRSEnum } from './model/OptimizerWork
 import { ConfigTypeEnum, OptimizeForEnum, OptimizerConfigDto } from './model/OptimizerConfigDto';
 import { OptimizerWorkerRQ } from './model/OptimizerWorkerRQ';
 import { ArmorCombo } from './model/ArmorCombo';
-import { IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
+import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { FormControl } from '@angular/forms';
 import { ITalismanDto } from '../../service/dto/ITalismanDto';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -182,8 +182,36 @@ export class OptimizerComponent implements OnInit {
   }
 
   disableArmorPiece(piece: IArmorPieceDto) {
-    piece.isEnabled = false;
-    this.numberOfDisabledPieces++;
+
+    let isArmorFilterOverride: boolean = false;
+    switch (piece.type) {
+      case ArmorPieceTypeEnum.Head: {
+        isArmorFilterOverride = this.viewModel.filterOverrideHeadName == piece.name;
+        if (isArmorFilterOverride) this.viewModel.filterOverrideHeadName = null;
+        break;
+      }
+      case ArmorPieceTypeEnum.Chest: {
+        isArmorFilterOverride = this.viewModel.filterOverrideChestName == piece.name;
+        if (isArmorFilterOverride) this.viewModel.filterOverrideChestName = null;
+        break;
+      }
+      case ArmorPieceTypeEnum.Gauntlets: {
+        isArmorFilterOverride = this.viewModel.filterOverrideGauntletsName == piece.name;
+        if (isArmorFilterOverride) this.viewModel.filterOverrideGauntletsName = null;
+        break;
+      }
+      case ArmorPieceTypeEnum.Legs: {
+        isArmorFilterOverride = this.viewModel.filterOverrideLegsName == piece.name;
+        if (isArmorFilterOverride) this.viewModel.filterOverrideLegsName = null;
+        break;
+      }
+    }
+
+    if (!isArmorFilterOverride) {
+      piece.isEnabled = false;
+      this.numberOfDisabledPieces++;
+    }
+    
     this.runOptimization();
   }
 
@@ -532,6 +560,35 @@ export class OptimizerComponent implements OnInit {
     return UtilityHelper.getURL(piece);
   }
 
+  getResultsCancelButtonAria(piece: IArmorPieceDto): string {
+    let isArmorFilterOverride: boolean = false;
+
+    switch (piece.type) {
+      case ArmorPieceTypeEnum.Head: {
+        isArmorFilterOverride = this.viewModel.filterOverrideHeadName == piece.name;
+        break;
+      }
+      case ArmorPieceTypeEnum.Chest: {
+        isArmorFilterOverride = this.viewModel.filterOverrideChestName == piece.name;
+        break;
+      }
+      case ArmorPieceTypeEnum.Gauntlets: {
+        isArmorFilterOverride = this.viewModel.filterOverrideGauntletsName == piece.name;
+        break;
+      }
+      case ArmorPieceTypeEnum.Legs: {
+        isArmorFilterOverride = this.viewModel.filterOverrideLegsName == piece.name;
+        break;
+      }
+    }
+
+    if (isArmorFilterOverride) {
+      return `Remove ${ArmorPieceTypeEnum[piece.type]} armor filter override and recalculate`;
+    } else {
+      return `Disable ${piece.name} and recalculate`;
+    }
+  }
+
   setNumberOfDisabledPieces() {
     let count = 0;
     this.armorData.head.forEach(x => { if (!x.isEnabled) count++; });
@@ -584,6 +641,10 @@ export class OptimizerComponent implements OnInit {
     if (this.viewModel.talisman4Id) this.txtTalisman4.setValue(this.armorData.talismans.find(x => x.talismanId == this.viewModel.talisman4Id));
     else this.txtTalisman4.setValue("");
   }  
+
+  isArmorOverrides(): string {
+    return this.viewModel.isArmorOverrides() ? "Yes" : "No";
+  }
 
   //#endregion
 }

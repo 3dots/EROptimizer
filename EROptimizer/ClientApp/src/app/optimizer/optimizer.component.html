@@ -444,7 +444,7 @@
   </div>
   <div class="row">
     <div class="col-xxl-6 col-xl-7 col-lg-9">
-      <div class="row">
+      <div class="row" style="align-items: center;">
         <div class="col col-lg-2">
           <mat-form-field appearance="fill">
             <mat-label># of threads:</mat-label>
@@ -457,9 +457,14 @@
             <input matInput [(ngModel)]="viewModel.numberOfResults" type="number" min="0" />
           </mat-form-field>
         </div>
-        <div class="col-lg-8 col-sm-12 col-xs-12 margin-bottom-gutter" style="align-self: center;">
+        <div class="col-sm-auto col-xs-12 margin-bottom-gutter">
           <button class="btn btn-primary" (click)="runOptimization()">Run Optimization</button>
-          <span style="margin-left: 10px;"># of Disabled Pieces: {{numberOfDisabledPieces}}</span>
+        </div>
+        <div class="col-sm-auto margin-bottom-gutter">
+          # of Disabled Pieces: <a routerLink="/">{{numberOfDisabledPieces}}</a>
+        </div>
+        <div class="col-sm-auto margin-bottom-gutter">
+          Overrides: {{isArmorOverrides()}}
         </div>
       </div>
     </div>
@@ -496,7 +501,8 @@
         <td data-label="Head" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.head)" target="_blank">{{ combo.head.name }}</a>
           <button mat-icon-button class="toggle-icon" style="float: right;"
-                  attr.aria-label="Disable {{ combo.head.name }} and recalculate" title="Disable armor piece and recalculate"
+                  [attr.aria-label]="getResultsCancelButtonAria(combo.head)"
+                  [title]="getResultsCancelButtonAria(combo.head)"
                   (click)="disableArmorPiece(combo.head)">
             <svg class="bi disable" fill="currentColor">
               <use href="bootstrap-icons.svg#x-circle-fill" />
@@ -506,7 +512,8 @@
         <td data-label="Chest" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.chest)" target="_blank">{{ combo.chest.name }}</a>
           <button mat-icon-button class="toggle-icon" style="float: right;"
-                  attr.aria-label="Disable {{ combo.chest.name }} and recalculate" title="Disable armor piece and recalculate"
+                  [attr.aria-label]="getResultsCancelButtonAria(combo.chest)"
+                  [title]="getResultsCancelButtonAria(combo.chest)"
                   (click)="disableArmorPiece(combo.chest)">
             <svg class="bi disable" fill="currentColor">
               <use href="bootstrap-icons.svg#x-circle-fill" />
@@ -516,7 +523,8 @@
         <td data-label="Gauntlets" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.gauntlets)" target="_blank">{{ combo.gauntlets.name }}</a>
           <button mat-icon-button class="toggle-icon" style="float: right;"
-                  attr.aria-label="Disable {{ combo.gauntlets.name }} and recalculate" title="Disable armor piece and recalculate"
+                  [attr.aria-label]="getResultsCancelButtonAria(combo.gauntlets)"
+                  [title]="getResultsCancelButtonAria(combo.gauntlets)"
                   (click)="disableArmorPiece(combo.gauntlets)">
             <svg class="bi disable" fill="currentColor">
               <use href="bootstrap-icons.svg#x-circle-fill" />
@@ -526,7 +534,8 @@
         <td data-label="Legs" class="cell-with-buttons-flex">
           <a [attr.href]="getURL(combo.legs)" target="_blank">{{ combo.legs.name }}</a>
           <button mat-icon-button class="toggle-icon" style="float: right;"
-                  attr.aria-label="Disable {{ combo.legs.name }} and recalculate" title="Disable armor piece and recalculate"
+                  [attr.aria-label]="getResultsCancelButtonAria(combo.legs)"
+                  [title]="getResultsCancelButtonAria(combo.legs)"
                   (click)="disableArmorPiece(combo.legs)">
             <svg class="bi disable" fill="currentColor">
               <use href="bootstrap-icons.svg#x-circle-fill" />

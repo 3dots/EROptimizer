@@ -1,4 +1,5 @@
 import { IArmorDataDto } from "../../../service/dto/IArmorDataDto";
+import { ArmorPieceTypeEnum } from "../../../service/dto/IArmorPieceDto";
 import { ITalismanDto } from "../../../service/dto/ITalismanDto";
 
 export class OptimizerConfigDto {
@@ -77,6 +78,37 @@ export class OptimizerConfigDto {
   filterOverrideChestName: string | null = null;
   filterOverrideGauntletsName: string | null = null;
   filterOverrideLegsName: string | null = null;
+
+  //todo: refactor as base classes?
+  //getFilterOverrideName(type: ArmorPieceTypeEnum) : string | null {
+  //  switch (type) {
+  //    case ArmorPieceTypeEnum.Head: return this.filterOverrideHeadName;
+  //    case ArmorPieceTypeEnum.Chest: return this.filterOverrideChestName;
+  //    case ArmorPieceTypeEnum.Gauntlets: return this.filterOverrideGauntletsName;
+  //    case ArmorPieceTypeEnum.Legs: return this.filterOverrideLegsName;
+  //  }
+  //}
+
+  //setFilterOverrideName(type: ArmorPieceTypeEnum, name: string | null) {
+  //  switch (type) {
+  //    case ArmorPieceTypeEnum.Head: {
+  //      this.filterOverrideHeadName = name;
+  //      break;
+  //    }
+  //    case ArmorPieceTypeEnum.Chest: {
+  //      this.filterOverrideChestName = name;
+  //      break;
+  //    }
+  //    case ArmorPieceTypeEnum.Gauntlets: {
+  //      this.filterOverrideGauntletsName = name;
+  //      break;
+  //    }
+  //    case ArmorPieceTypeEnum.Legs: {
+  //      this.filterOverrideLegsName = name;
+  //      break;
+  //    }
+  //  }
+  //}
   
   public constructor(init?: Partial<OptimizerConfigDto>) {
     Object.assign(this, init);
@@ -195,6 +227,17 @@ export class OptimizerConfigDto {
     this.totalAvailableWeightCalcArmorBonusHack = this.configType == ConfigTypeEnum.Weights ?
       this.totalAvailableWeight :
       this.totalAvailableWeightStats(armorData, this.endurance + 2);
+  }
+
+  isArmorOverrides(): boolean {
+    if (
+      this.filterOverrideHeadName ||
+      this.filterOverrideChestName ||
+      this.filterOverrideGauntletsName ||
+      this.filterOverrideLegsName)
+      return true;
+    else
+      return false;
   }
 }
 
