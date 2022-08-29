@@ -228,17 +228,6 @@ export class OptimizerConfigDto {
       this.totalAvailableWeight :
       this.totalAvailableWeightStats(armorData, this.endurance + 2);
   }
-
-  isArmorOverrides(): boolean {
-    if (
-      this.filterOverrideHeadName ||
-      this.filterOverrideChestName ||
-      this.filterOverrideGauntletsName ||
-      this.filterOverrideLegsName)
-      return true;
-    else
-      return false;
-  }
 }
 
 export enum ConfigTypeEnum {

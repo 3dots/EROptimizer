@@ -642,8 +642,18 @@ export class OptimizerComponent implements OnInit {
     else this.txtTalisman4.setValue("");
   }  
 
-  isArmorOverrides(): string {
-    return this.viewModel.isArmorOverrides() ? "Yes" : "No";
+  armorOverridesList(): string {
+    let strings = [];
+    if (this.viewModel.filterOverrideHeadName) strings.push("Head");
+    if (this.viewModel.filterOverrideChestName) strings.push("Chest");
+    if (this.viewModel.filterOverrideGauntletsName) strings.push("Gauntlets");
+    if (this.viewModel.filterOverrideLegsName) strings.push("Legs");
+
+    if (strings.length == 0) {
+      return "No";
+    } else {
+      return strings.join(", ");
+    }
   }
 
   //#endregion
