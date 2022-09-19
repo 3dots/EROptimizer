@@ -18,4 +18,12 @@ namespace ScrapeWiki
             return Task.Run(() => { Console.WriteLine(s); });
         }
     }
+
+    class DummyProgressConsole : IProgressConsole
+    {
+        Task IProgressConsole.WriteLine(string s)
+        {
+            return Task.CompletedTask;
+        }
+    }
 }

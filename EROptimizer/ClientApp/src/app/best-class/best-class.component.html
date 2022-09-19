@@ -1,5 +1,5 @@
 <h1>Best Starting Class</h1>
-<span>Best class is: {{ bestClass.name }}</span>
+<span>{{ bestClassesStatement() }} {{ bestClasses }}</span>
 <button style="margin-left: 10px;" class="btn btn-primary" (click)="store()">Store to cookie</button>
 <button style="margin-left: 10px;" class="btn btn-secondary" (click)="reset()">Reset</button>
 <table class="table container-mat-form-field-no-bottom-space">
@@ -23,48 +23,48 @@
       <th scope="row" style="vertical-align: middle;">Your build:</th>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.vigor" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.vigor" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.mind" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.mind" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.endurance" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.endurance" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.strength" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.strength" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.dexterity" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.dexterity" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.intelligence" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.intelligence" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.faith" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.faith" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td>
         <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.arcane" type="number" min="0" />
+          <input matInput [(ngModel)]="yourBuild.arcane" (ngModelChange)="statsChanged($event)" type="number" min="0" />
         </mat-form-field>
       </td>
       <td></td>
       <td></td>
     </tr>
-    <tr *ngFor="let class of startingClasses" [class.best-class]="bestClass.name == class.name">
+    <tr *ngFor="let class of startingClasses" [class.best-class]="class.isBestClass">
       <th scope="row">{{class.name}}</th>
       <td>{{class.vigor}}</td>
       <td>{{class.mind}}</td>
@@ -75,7 +75,7 @@
       <td>{{class.faith}}</td>
       <td>{{class.arcane}}</td>
       <td>{{class.startingLevel}}</td>
-      <td>{{soulLevelNeeded(class)}}</td>
+      <td>{{class.soulLevelNeeded}}</td>
     </tr>
   </tbody>
 </table>

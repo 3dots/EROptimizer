@@ -19,7 +19,7 @@ namespace ScrapeWiki
     {
         #region Fields
 
-        private const string BaseUrl = "https://eldenring.wiki.fextralife.com";
+        private const string BASE_URL = "https://eldenring.wiki.fextralife.com";
 
         private const int SCRAPING_PAUSE_AVG_MS = 15000;
         private const int SCRAPING_PAUSE_STD_DEV_MS = 5000;
@@ -28,10 +28,9 @@ namespace ScrapeWiki
 
         private readonly IProgressConsole _console;
         private readonly string _filesPath;
+        private readonly string _chromeDriverPath;
 
         private readonly bool _dontDownload;
-
-        private ChromeDriver _chromeDriver;
 
         #endregion
 
@@ -50,8 +49,9 @@ namespace ScrapeWiki
 
         public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath, bool dontDownload)
         {
-            _console = pc;
+            _console = pc ?? new DummyProgressConsole();
             _filesPath = filesPath;
+            _chromeDriverPath = chromeDriverPath;
             _dontDownload = dontDownload;
         }
 
@@ -65,10 +65,6 @@ namespace ScrapeWiki
 
             try
             {
-                var options = new ChromeOptions();
-                options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
-                _chromeDriver = new ChromeDriver(@"C:\bin\chromedriver_win32\", options);
-
                 await BeginScrape();
                 success = true;
             }
@@ -78,15 +74,7 @@ namespace ScrapeWiki
                 await _console.WriteLine(e.ToString());
             }
 
-            try
-            {
-                _chromeDriver?.Close();
-            }
-            catch (Exception e)
-            {
-                await _console.WriteLine("Closing chrome driver exception:");
-                await _console.WriteLine(e.ToString());
-            }
+            await CloseChromeDriver();
 
             return success;
         }
@@ -141,6 +129,35 @@ namespace ScrapeWiki
 
         #region Selenium
 
+        private ChromeDriver _chromeDriver;
+        private ChromeDriver ChromeDriver
+        {
+            get
+            {
+                if (_chromeDriver == null)
+                {
+                    var options = new ChromeOptions();
+                    options.PageLoadStrategy = OpenQA.Selenium.PageLoadStrategy.Eager;
+                    _chromeDriver = new ChromeDriver(_chromeDriverPath, options);
+                }
+                return _chromeDriver;
+            }
+        }
+
+        private async Task CloseChromeDriver()
+        {
+            if (_chromeDriver == null) return;
+            try
+            {
+                _chromeDriver.Close();
+            }
+            catch (Exception e)
+            {
+                await _console.WriteLine("Closing chrome driver exception:");
+                await _console.WriteLine(e.ToString());
+            }
+        }
+
         private async Task<string> GetHtml(string resourceName) //Expects slash "/Armor"
         {
             string resourceFile = $"{resourceName.Replace("/", "")}.html";
@@ -157,13 +174,13 @@ namespace ScrapeWiki
 
             if (htmlString == null)
             {
-                string url = $"{BaseUrl}{resourceName}";
+                string url = $"{BASE_URL}{resourceName}";
                 await _console.WriteLine($"Scraping {url}");
                 Stopwatch stopwatchOverall = Stopwatch.StartNew();
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
-                _chromeDriver.Navigate().GoToUrl(url);
+                ChromeDriver.Navigate().GoToUrl(url);
                 htmlString = _chromeDriver.PageSource;
 
                 //todo: detect 404
@@ -190,7 +207,6 @@ namespace ScrapeWiki
 
             return htmlString;
         }
-
 
         #endregion
 

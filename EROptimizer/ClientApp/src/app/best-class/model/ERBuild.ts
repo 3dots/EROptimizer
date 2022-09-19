@@ -14,7 +14,8 @@ export class ERBuild {
 
   startingLevel: number = 0;
 
-  isBest: boolean = false;
+  soulLevelNeeded: number = 0;
+  isBestClass: boolean = false;
 
   public constructor(init?: Partial<ERBuild>) {
     Object.assign(this, init);

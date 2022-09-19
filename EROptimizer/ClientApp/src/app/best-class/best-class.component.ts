@@ -7,10 +7,13 @@ import { ERBuild } from './model/ERBuild';
   templateUrl: './best-class.component.html',
   styleUrls: ['./best-class.component.css']
 })
-export class BestClassComponent implements OnInit {
+export class BestClassComponent {
 
   yourBuild: ERBuild;
   startingClasses: ERBuild[];
+
+  bestClasses: string = "";
+  isMultipleBestClasses: boolean = false;
 
   constructor(private dataService: DataService) {
     this.startingClasses = [];
@@ -30,7 +33,8 @@ export class BestClassComponent implements OnInit {
       dataService.model.build = this.yourBuild = new ERBuild();
       this.setMinStats();
     }
-    
+
+    this.calcBestClasses();
   }
 
   setMinStats() {
@@ -42,9 +46,6 @@ export class BestClassComponent implements OnInit {
     this.yourBuild.intelligence = Math.min(...this.startingClasses.map(x => x.intelligence));
     this.yourBuild.faith = Math.min(...this.startingClasses.map(x => x.faith));
     this.yourBuild.arcane = Math.min(...this.startingClasses.map(x => x.arcane));
-  }
-
-  ngOnInit(): void {
   }
 
   soulLevelNeeded(startingClass: ERBuild): number {
@@ -62,24 +63,67 @@ export class BestClassComponent implements OnInit {
     return startingClass.startingLevel + levelUpsNeeded;
   }
 
-  get bestClass(): ERBuild {
+  calcBestClasses() {
 
-    let bestClass = this.startingClasses[0];
-    let smallestLevel = this.soulLevelNeeded(bestClass);
+    this.bestClasses = "";
+    this.isMultipleBestClasses = false;
 
-    for (let i = 1; i < this.startingClasses.length; i++) {
-      let soulLevelNeeded = this.soulLevelNeeded(this.startingClasses[i]);
-      if (soulLevelNeeded < smallestLevel) {
-        smallestLevel = soulLevelNeeded;
-        bestClass = this.startingClasses[i];
+    let smallestLevel: number | null = null;
+
+    for (let i = 0; i < this.startingClasses.length; i++) {
+      let curClass: ERBuild = this.startingClasses[i];
+      curClass.soulLevelNeeded = this.soulLevelNeeded(curClass);
+      if (smallestLevel == null || curClass.soulLevelNeeded < smallestLevel) {
+        smallestLevel = curClass.soulLevelNeeded;
       }
     }
 
-    return bestClass;
+    let isSingleBestClass = false;
+
+    for (let i = 0; i < this.startingClasses.length; i++) {
+      let curClass: ERBuild = this.startingClasses[i];
+      if (curClass.soulLevelNeeded == smallestLevel) {
+        curClass.isBestClass = true;
+
+        if (isSingleBestClass)
+          this.isMultipleBestClasses = true;
+        else
+          isSingleBestClass = true;
+
+        if (this.bestClasses)
+          this.bestClasses += ", " + curClass.name;
+        else
+          this.bestClasses += curClass.name;
+
+      } else {
+        curClass.isBestClass = false;
+      }
+    }
+  }
+
+  statsChanged(event: Event) {
+    this.calcBestClasses();
+  }
+
+  getBestClasses(): string {
+    let bestClasses = "";
+    for (let i = 0; i < this.startingClasses.length; i++) {
+      let curClass: ERBuild = this.startingClasses[i];
+      if (curClass.isBestClass) {
+        if (bestClasses) bestClasses += ", " + curClass.name;
+        else bestClasses += curClass.name;
+      }
+    }
+    return bestClasses
+  }
+
+  bestClassesStatement(): string {
+    return this.isMultipleBestClasses ? "The best classes are" : "The best class is";
   }
 
   reset() {
     this.setMinStats();
+    this.calcBestClasses();
   }
 
   store() {
