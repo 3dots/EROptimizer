@@ -1,5 +1,5 @@
 
-$iisWebsiteName = "Test"
+$iisWebsiteName = "Prod"
 $iisRoot = "C:\inetpub\wwwroot\"
 $websitePath = $iisRoot + $iisWebsiteName
 
@@ -23,7 +23,7 @@ try
     Invoke-Command -Session $remoteSession {
         Stop-IISSite $using:iisWebsiteName -Confirm: $false
         Stop-WebAppPool $using:iisWebsiteName
-        Start-Sleep -s 2
+        Start-Sleep -s 5
         if (-not ((Get-WebAppPoolState $using:iisWebsiteName).Value -eq "Stopped")) {
             throw ("AppPool " + $iisWebsiteName + " failed to stop.")
         }
