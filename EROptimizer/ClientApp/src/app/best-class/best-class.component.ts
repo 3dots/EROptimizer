@@ -5,7 +5,7 @@ import { ERBuild } from './model/ERBuild';
 @Component({
   selector: 'app-best-class',
   templateUrl: './best-class.component.html',
-  styleUrls: ['./best-class.component.css']
+  styleUrls: ['./best-class.component.scss']
 })
 export class BestClassComponent {
 

@@ -1,0 +1,14 @@
+@import "../../styles/mixins.scss";
+
+.best-class {
+    outline: 1px solid red;
+    outline-offset: -1px;
+}
+
+.best-class-table-container {
+  @include responsive-table-container();
+}
+
+.best-class-table {
+  @include responsive-table(1410px);
+}

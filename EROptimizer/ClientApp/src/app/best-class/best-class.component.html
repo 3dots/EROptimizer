@@ -2,80 +2,82 @@
 <span>{{ bestClassesStatement() }} {{ bestClasses }}</span>
 <button style="margin-left: 10px;" class="btn btn-primary" (click)="store()">Store to cookie</button>
 <button style="margin-left: 10px;" class="btn btn-secondary" (click)="reset()">Reset</button>
-<table class="table container-mat-form-field-no-bottom-space">
-  <thead>
-    <tr>
-      <th scope="col">Starting class</th>
-      <th scope="col">Vigor</th>
-      <th scope="col">Mind</th>
-      <th scope="col">Endurance</th>
-      <th scope="col">Strength</th>
-      <th scope="col">Dexterity</th>
-      <th scope="col">Intelligence</th>
-      <th scope="col">Faith</th>
-      <th scope="col">Arcane</th>
-      <th scope="col">Starting Level</th>
-      <th scope="col">Soul Level Needed</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row" style="vertical-align: middle;">Your build:</th>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.vigor" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.mind" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.endurance" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.strength" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.dexterity" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.intelligence" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.faith" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td>
-        <mat-form-field appearance="fill">
-          <input matInput [(ngModel)]="yourBuild.arcane" (ngModelChange)="statsChanged($event)" type="number" min="0" />
-        </mat-form-field>
-      </td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr *ngFor="let class of startingClasses" [class.best-class]="class.isBestClass">
-      <th scope="row">{{class.name}}</th>
-      <td>{{class.vigor}}</td>
-      <td>{{class.mind}}</td>
-      <td>{{class.endurance}}</td>
-      <td>{{class.strength}}</td>
-      <td>{{class.dexterity}}</td>
-      <td>{{class.intelligence}}</td>
-      <td>{{class.faith}}</td>
-      <td>{{class.arcane}}</td>
-      <td>{{class.startingLevel}}</td>
-      <td>{{class.soulLevelNeeded}}</td>
-    </tr>
-  </tbody>
-</table>
+<div class="best-class-table-container container-mat-form-field-no-bottom-space" style="margin-top: 10px;">
+  <table class="table best-class-table">
+    <thead>
+      <tr>
+        <th scope="col"><span>Starting class</span></th>
+        <th scope="col"><span>Vigor</span></th>
+        <th scope="col"><span>Mind</span></th>
+        <th scope="col"><span>Endurance</span></th>
+        <th scope="col"><span>Strength</span></th>
+        <th scope="col"><span>Dexterity</span></th>
+        <th scope="col"><span>Intelligence</span></th>
+        <th scope="col"><span>Faith</span></th>
+        <th scope="col"><span>Arcane</span></th>
+        <th scope="col"><span>Starting Level</span></th>
+        <th scope="col"><span>Soul Level Needed</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" style="vertical-align: middle;">Your build:</th>
+        <td data-label="Vigor">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.vigor" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Mind">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.mind" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Endurance">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.endurance" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Strength">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.strength" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Dexterity">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.dexterity" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Intelligence">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.intelligence" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Faith">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.faith" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td data-label="Arcane">
+          <mat-form-field appearance="fill">
+            <input matInput [(ngModel)]="yourBuild.arcane" (ngModelChange)="statsChanged($event)" type="number" min="0" />
+          </mat-form-field>
+        </td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let class of startingClasses" [class.best-class]="class.isBestClass">
+        <th scope="row">{{class.name}}</th>
+        <td data-label="Vigor">{{class.vigor}}</td>
+        <td data-label="Mind">{{class.mind}}</td>
+        <td data-label="Endurance">{{class.endurance}}</td>
+        <td data-label="Strength">{{class.strength}}</td>
+        <td data-label="Dexterity">{{class.dexterity}}</td>
+        <td data-label="Intelligence">{{class.intelligence}}</td>
+        <td data-label="Faith">{{class.faith}}</td>
+        <td data-label="Arcane">{{class.arcane}}</td>
+        <td data-label="Starting Level">{{class.startingLevel}}</td>
+        <td data-label="Soul Level Needed">{{class.soulLevelNeeded}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
