@@ -18,7 +18,7 @@
             This lets you force a particular piece (head/chest/gauntlets/legs) without having to reset all your filters.
           </mat-dialog-content>
           <mat-dialog-actions align="end">
-            <button mat-button mat-dialog-close mat-raised-button color="primary">Close</button>
+            <button mat-dialog-close class="btn btn-primary">Close</button>
           </mat-dialog-actions>
         </ng-template>
       </div>
@@ -31,7 +31,7 @@
               {{option.name}}
             </mat-option>
           </mat-autocomplete>
-          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideHead)">
+          <a class="autocomplete-icon" aria-label="Clear autocomplete" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideHead)">
             <svg class="bi" fill="currentColor">
               <use href="bootstrap-icons.svg#x" />
             </svg>
@@ -47,7 +47,7 @@
               {{option.name}}
             </mat-option>
           </mat-autocomplete>
-          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideChest)">
+          <a class="autocomplete-icon" aria-label="Clear autocomplete" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideChest)">
             <svg class="bi" fill="currentColor">
               <use href="bootstrap-icons.svg#x" />
             </svg>
@@ -63,7 +63,7 @@
               {{option.name}}
             </mat-option>
           </mat-autocomplete>
-          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideGauntlets)">
+          <a class="autocomplete-icon" aria-label="Clear autocomplete" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideGauntlets)">
             <svg class="bi" fill="currentColor">
               <use href="bootstrap-icons.svg#x" />
             </svg>
@@ -79,7 +79,7 @@
               {{option.name}}
             </mat-option>
           </mat-autocomplete>
-          <a class="autocomplete-icon" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideLegs)">
+          <a class="autocomplete-icon" aria-label="Clear autocomplete" href="javascript:void(0)" (click)="clearAutocomplete(txtOverrideLegs)">
             <svg class="bi" fill="currentColor">
               <use href="bootstrap-icons.svg#x" />
             </svg>
