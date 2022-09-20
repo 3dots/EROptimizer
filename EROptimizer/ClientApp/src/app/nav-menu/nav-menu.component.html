@@ -13,16 +13,16 @@
          [ngClass]="{ show: isExpanded }">
       <ul class="navbar-nav flex-grow">
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/optimizer']">EROptimizer</a>
+          <a class="nav-link text-dark" [routerLink]="['/optimizer']" (click)="collapse()">EROptimizer</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/filters']">Armor Filters</a>
+          <a class="nav-link text-dark" [routerLink]="['/filters']" (click)="collapse()">Armor Filters</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/data']">Armor Data</a>
+          <a class="nav-link text-dark" [routerLink]="['/data']" (click)="collapse()">Armor Data</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/bestclass']">Starting Class</a>
+          <a class="nav-link text-dark" [routerLink]="['/bestclass']" (click)="collapse()">Starting Class</a>
         </li>
       </ul>
       <ul class="navbar-nav flex-grow">
