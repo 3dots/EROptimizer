@@ -3,15 +3,16 @@
     <button class="navbar-toggler"
             type="button"
             data-toggle="collapse"
-            data-target=".navbar-collapse"
+            data-target=".navbar-collapse"            
+            (click)="toggle()"
             aria-label="Toggle navigation"
             [attr.aria-expanded]="isExpanded"
-            (click)="toggle()">
+            aria-controls="id_menu_container">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse collapse d-md-inline-flex" style="justify-content: space-between;"
+    <div class="navbar-collapse collapse d-md-inline-flex"
          [ngClass]="{ show: isExpanded }">
-      <ul class="navbar-nav flex-grow">
+      <ul class="navbar-nav flex-grow" id="id_menu_container">
         <li class="nav-item" [routerLinkActive]="['link-active']">
           <a class="nav-link text-dark" [routerLink]="['/optimizer']" (click)="collapse()">EROptimizer</a>
         </li>
@@ -24,9 +25,7 @@
         <li class="nav-item" [routerLinkActive]="['link-active']">
           <a class="nav-link text-dark" [routerLink]="['/bestclass']" (click)="collapse()">Starting Class</a>
         </li>
-      </ul>
-      <ul class="navbar-nav flex-grow">
-        <li class="nav-item">
+        <li class="nav-item ms-md-auto">
           <a class="nav-link text-dark" href="https://github.com/3dots/EROptimizer/issues" target="_blank">Report an issue</a>
         </li>
       </ul>

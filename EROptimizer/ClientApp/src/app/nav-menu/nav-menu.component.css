@@ -33,3 +33,7 @@ a:hover {
   background-color: #eeeeee;
   border-radius: 3px;
 }
+
+.navbar-nav {
+    width: 100%;
+}

@@ -15,7 +15,7 @@ import { LocalStorageModel } from './model/LocalStorageModel';
 })
 export class DataService {
 
-  private url: string = "/data/";
+  private url: string = "/api/data/";
   private _armorDataObservable!: Observable<IArmorDataDto>;
   private _armorData!: IArmorDataDto;
 

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace EROptimizer.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/api/[controller]")]
     public class DataController : ControllerBase
     {
         private readonly IConfiguration _configuration;
