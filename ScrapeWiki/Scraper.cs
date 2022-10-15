@@ -236,6 +236,11 @@ namespace ScrapeWiki
                     //ScrapeExceptionContinue(new ScrapeParsingException(resourceName, "Empty Set name."));
                     continue;
                 }
+                else if (setName == "Millicent's Set") //Unobtainable
+                {
+                    continue;
+                }
+
                 if (string.IsNullOrEmpty(setResourceName)) throw new ScrapeParsingException(resourceName, "Empty Set link.");
 
                 //await _console.WriteLine($"{setResourceName} {setName}");
@@ -370,6 +375,10 @@ namespace ScrapeWiki
                         if (string.IsNullOrEmpty(armorPieceName))
                         {
                             throw new ScrapeParsingException(resourceName, "Armor piece name was blank in the table?");
+                        }
+                        else if (IsUnobtainable(armorPieceName))
+                        {
+                            break;
                         }
 
                         bool isStandAlonePiece = false;
@@ -969,6 +978,31 @@ namespace ScrapeWiki
                     await _console.WriteLine($"{set.Name}: {p.Name}");
                 }
             }
+        }
+
+        private bool IsUnobtainable(string armorPieceName)
+        {
+            return new string[]
+            {
+                "Brave's Battlewear",
+                "Brave's Battlewear (Altered)",
+                "Brave's Bracer",
+                "Brave's Leather Helm",
+                "Brave's Legwraps",
+                "Deathbed Smalls",
+                "Grass Hair Ornament",
+                "Golden Prosthetic",
+                "Millicent's Boots",
+                "Millicent's Gloves",
+                "Millicent's Robe",
+                "Millicent's Tunic",
+                "Ragged Armor",
+                "Ragged Armor (Altered)",
+                "Ragged Gloves",
+                "Ragged Hat",
+                "Ragged Hat (Altered)",
+                "Ragged Loincloth",
+            }.Contains(armorPieceName);
         }
 
         #endregion

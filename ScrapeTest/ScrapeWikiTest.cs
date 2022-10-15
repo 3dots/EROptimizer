@@ -32,9 +32,9 @@ namespace ScrapeTest
         [Fact]
         public void Counts()
         {
-            Assert.Equal(578, _scraper.ArmorPieces.Count);
+            Assert.Equal(560, _scraper.ArmorPieces.Count);
 
-            Assert.Equal(254, _scraper.ArmorSets.Count);
+            Assert.Equal(239, _scraper.ArmorSets.Count);
         }
     }
 
