@@ -30,6 +30,7 @@ namespace EROptimizer.Controllers
         public async Task<IActionResult> Get()
         {
             //return NotFound(); //testing error dialogs
+            //Thread.Sleep(3000); //testing slow load
 
             string path = _configuration["StaticDataPath"];
             string fileName = "ArmorData.json";

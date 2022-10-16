@@ -14,16 +14,28 @@
          [ngClass]="{ show: isExpanded }">
       <ul class="navbar-nav flex-grow" id="id_menu_container">
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/optimizer']" (click)="collapse()">EROptimizer</a>
+          <a class="nav-link text-dark"
+             [routerLink]="['/optimizer']"
+             routerLinkActive #optimizer="routerLinkActive" [attr.aria-current]="ariaCurrentAttribute(optimizer)"
+             (click)="collapse()">EROptimizer</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/filters']" (click)="collapse()">Armor Filters</a>
+          <a class="nav-link text-dark"
+             [routerLink]="['/filters']"
+             routerLinkActive #filters="routerLinkActive" [attr.aria-current]="ariaCurrentAttribute(filters)"
+             (click)="collapse()">Armor Filters</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/data']" (click)="collapse()">Armor Data</a>
+          <a class="nav-link text-dark"
+             [routerLink]="['/data']"
+             routerLinkActive #data="routerLinkActive" [attr.aria-current]="ariaCurrentAttribute(data)"
+             (click)="collapse()">Armor Data</a>
         </li>
         <li class="nav-item" [routerLinkActive]="['link-active']">
-          <a class="nav-link text-dark" [routerLink]="['/bestclass']" (click)="collapse()">Starting Class</a>
+          <a class="nav-link text-dark"
+             [routerLink]="['/bestclass']"
+             routerLinkActive #bestclass="routerLinkActive" [attr.aria-current]="ariaCurrentAttribute(bestclass)"
+             (click)="collapse()">Starting Class</a>
         </li>
         <li class="nav-item ms-md-auto">
           <a class="nav-link text-dark" href="https://github.com/3dots/EROptimizer/issues" target="_blank">Report an issue</a>

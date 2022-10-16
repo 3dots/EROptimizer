@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, startWith, map } from 'rxjs';
 
 import { DataService } from '../../service/data.service'
@@ -23,7 +23,7 @@ import { UtilityHelper } from '../utility/utility-helper';
   templateUrl: './optimizer.component.html',
   styleUrls: ['./optimizer.component.scss'],
 })
-export class OptimizerComponent implements OnInit {
+export class OptimizerComponent implements OnInit, AfterViewInit {
 
   //#region Fields and Properties
 
@@ -55,6 +55,8 @@ export class OptimizerComponent implements OnInit {
   filteredTalismans4!: Observable<ITalismanDto[]>;
 
   @ViewChild('optimizeForHelpDialogTemplate') optimizeForHelpDialogTemplate!: TemplateRef<any>;
+
+  @ViewChild('mainHeading') mainHeading!: ElementRef;
 
   constructor(private dataService: DataService, private dialog: DialogHelper) {
     this.viewModel = dataService.model.config;
@@ -104,7 +106,7 @@ export class OptimizerComponent implements OnInit {
 
       this.bindTalismanAutocompletes();
 
-      this.isLoading = false;
+      this.isLoading = false;      
 
     }, (error: any) => {
       this.isLoading = false;
@@ -116,6 +118,11 @@ export class OptimizerComponent implements OnInit {
       });
     });
 
+  }
+
+  ngAfterViewInit() {
+    //todo: trap focus in loading element, while its up.
+    //this.mainHeading.nativeElement.focus();
   }
 
   prioritizePhysicals() {

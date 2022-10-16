@@ -146,3 +146,7 @@ mat-form-field.autocomplete-field .mat-form-field-infix {
 .mb-standard {
   margin-bottom: var(--margin-bottom-standard);
 }
+
+h1:focus {
+    outline: none;
+}

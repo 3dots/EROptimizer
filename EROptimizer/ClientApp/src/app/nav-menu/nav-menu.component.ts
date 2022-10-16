@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-nav-menu',
@@ -14,5 +15,9 @@ export class NavMenuComponent {
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  ariaCurrentAttribute(rla: RouterLinkActive) {
+    return rla.isActive ? "page" : null;
   }
 }
