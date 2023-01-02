@@ -22,7 +22,7 @@ export class OverflowUtil {
   static resizeHandler() {
     //console.log("OverflowUtil.resizeHandler");
     let containers = document.querySelectorAll(`[${this.ATTRIBUTE_NAME}]`);
-    console.log(containers);
+    //console.log(containers);
 
     containers.forEach((c) => {
 
