@@ -31,8 +31,8 @@
       </h2>
     </li>
   </ul>
-  <div *ngIf="armorData" class="armor-pieces-table-container">
-    <table class="table fixed-thead armor-pieces-table">
+  <div class="armor-pieces-table-container" data-overflow-min-height>
+    <table *ngIf="armorData" class="table fixed-thead armor-pieces-table">
       <thead>
         <tr>
           <th scope="col"><span>Name</span></th>

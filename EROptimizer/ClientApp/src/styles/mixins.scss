@@ -74,7 +74,7 @@
 
 @mixin responsive-table-container($breakpoint: 650px) {
   flex-grow: 1;
-  overflow: auto;
+  overflow-y: auto;
   margin-right: auto;
   display: flex;
 

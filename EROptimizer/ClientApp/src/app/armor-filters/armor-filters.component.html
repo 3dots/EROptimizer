@@ -90,8 +90,8 @@
       <div class="col"></div>
     </div>
   </div>
-  <div *ngIf="armorData" class="armor-selections-table-container">
-    <table class="table fixed-thead armor-selections-table">
+  <div class="armor-selections-table-container" data-overflow-min-height>
+    <table *ngIf="armorData" class="table fixed-thead armor-selections-table">
       <thead>
         <tr>
           <th class="ignore-hide cell-with-buttons-flex" style="min-width: 63px;">

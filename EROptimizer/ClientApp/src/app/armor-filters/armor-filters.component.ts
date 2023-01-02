@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { map, Observable, startWith } from 'rxjs';
@@ -9,6 +9,7 @@ import { IArmorSetDto } from '../../service/dto/IArmorSetDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
 import { OptimizerConfigDto } from '../optimizer/model/OptimizerConfigDto';
 import { DialogHelper } from '../utility/dialog-helper';
+import { OverflowUtil } from '../utility/overflow-util';
 import { UtilityHelper } from '../utility/utility-helper';
 
 @Component({
@@ -16,7 +17,7 @@ import { UtilityHelper } from '../utility/utility-helper';
   templateUrl: './armor-filters.component.html',
   styleUrls: ['./armor-filters.component.scss']
 })
-export class ArmorFiltersComponent implements OnInit {
+export class ArmorFiltersComponent implements OnInit, AfterViewInit {
 
   //#region Fields and Properties
 
@@ -44,7 +45,7 @@ export class ArmorFiltersComponent implements OnInit {
 
   //#region Events
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.dataService.armorData.subscribe((data: IArmorDataDto) => {
       this.armorData = data;
 
@@ -83,6 +84,10 @@ export class ArmorFiltersComponent implements OnInit {
         })
       });
     });
+  }
+
+  ngAfterViewInit() {
+    OverflowUtil.setupOverflowMinHeight();
   }
 
   enableArmorSet(set: IArmorSetDto, enable: boolean) {

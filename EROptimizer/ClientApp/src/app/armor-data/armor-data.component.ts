@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { DataService } from '../../service/data.service';
 import { IArmorDataDto } from '../../service/dto/IArmorDataDto';
 import { ArmorPieceTypeEnum, IArmorPieceDto } from '../../service/dto/IArmorPieceDto';
 import { ErrorDialogComponent, ErrorDialogData } from '../error-dialog/error-dialog.component';
 import { DialogHelper } from '../utility/dialog-helper';
+import { OverflowUtil } from '../utility/overflow-util';
 
 @Component({
   selector: 'app-armor-data',
   templateUrl: './armor-data.component.html',
   styleUrls: ['./armor-data.component.scss']
 })
-export class ArmorDataComponent implements OnInit {
+export class ArmorDataComponent implements OnInit, AfterViewInit {
 
   isLoading: boolean = true;
 
@@ -37,6 +38,10 @@ export class ArmorDataComponent implements OnInit {
         })
       });
     });
+  }
+
+  ngAfterViewInit() {
+    OverflowUtil.setupOverflowMinHeight();
   }
 
   switchToType(type: ArmorPieceTypeEnum) {
