@@ -34,7 +34,13 @@ namespace EROptimizer.Hubs
             bool dontDownload = false;
             bool.TryParse(_configuration["ScrapeWiki:DontDownload"], out dontDownload);
 
-            var scraper = new Scraper(this, _configuration["ScrapeWiki:FilesPath"], _configuration["ScrapeWiki:ChromeDriverFolderPath"], dontDownload);
+            bool dontDownloadRelationships = false;
+            bool.TryParse(_configuration["ScrapeWiki:DontDownloadRelationships"], out dontDownloadRelationships);
+
+            var scraper = new Scraper(this, 
+                _configuration["ScrapeWiki:FilesPath"],
+                _configuration["ScrapeWiki:ChromeDriverFolderPath"], 
+                dontDownload, dontDownloadRelationships);
 
             bool success = await scraper.Scrape();
             if (success) await Evaluate(scraper);

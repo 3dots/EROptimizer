@@ -19,18 +19,19 @@ namespace ScrapeWiki
     {
         #region Fields
 
-        private const string BASE_URL = "https://eldenring.wiki.fextralife.com";
+        const string BASE_URL = "https://eldenring.wiki.fextralife.com";
 
-        private const int SCRAPING_PAUSE_AVG_MS = 15000;
-        private const int SCRAPING_PAUSE_STD_DEV_MS = 5000;
+        const int SCRAPING_PAUSE_AVG_MS = 15000;
+        const int SCRAPING_PAUSE_STD_DEV_MS = 5000;
 
-        private readonly Random _random = new Random();
+        readonly Random _random = new Random();
 
-        private readonly IProgressConsole _console;
-        private readonly string _filesPath;
-        private readonly string _chromeDriverPath;
+        readonly IProgressConsole _console;
+        readonly string _filesPath;
+        readonly string _chromeDriverPath;
 
-        private readonly bool _dontDownload;
+        readonly bool _dontDownload;
+        readonly bool _dontDownloadRelationships;
 
         #endregion
 
@@ -43,16 +44,19 @@ namespace ScrapeWiki
         public List<double> EquipLoadArray { get; private set; } = new List<double>();
         public List<Talisman> Talismans { get; private set; } = new List<Talisman>();
 
+        bool DontDownload { get; set; }
+
         #endregion
 
         #region Constructor
 
-        public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath, bool dontDownload)
+        public Scraper(IProgressConsole pc, string filesPath, string chromeDriverPath, bool dontDownload, bool dontDownloadRelationships)
         {
             _console = pc ?? new DummyProgressConsole();
             _filesPath = filesPath;
             _chromeDriverPath = chromeDriverPath;
             _dontDownload = dontDownload;
+            _dontDownloadRelationships = dontDownloadRelationships;
         }
 
         #endregion
@@ -83,6 +87,8 @@ namespace ScrapeWiki
         {
             await _console.WriteLine($"Begin Scrape.");
 
+            DontDownload = _dontDownload || _dontDownloadRelationships;
+
             //Getting armor set names
             await GetSets();
 
@@ -93,6 +99,8 @@ namespace ScrapeWiki
             }
 
             await EnsureUniqueness();
+
+            DontDownload = _dontDownload;
 
             await GetData(ArmorPieceTypeEnum.Head);
             await GetData(ArmorPieceTypeEnum.Chest);
@@ -164,7 +172,7 @@ namespace ScrapeWiki
             string filePath = Path.Combine(_filesPath, resourceFile);
 
             string htmlString = null;
-            if (_dontDownload || File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
+            if (DontDownload || File.Exists(filePath) && File.GetLastWriteTime(filePath).Date == DateTime.Now.Date)
             {
                 htmlString = await File.ReadAllTextAsync(filePath);
                 await _console.WriteLine($"Using local copy of {resourceName}");

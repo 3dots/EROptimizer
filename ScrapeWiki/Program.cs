@@ -12,10 +12,13 @@ namespace ScrapeWiki
             bool dontDownload = false;
             bool.TryParse(ConfigurationManager.AppSettings.Get("DontDownload"), out dontDownload);
 
+            bool dontDownloadRelationships = false;
+            bool.TryParse(ConfigurationManager.AppSettings.Get("DontDownloadRelationships"), out dontDownloadRelationships);
+
             var scraper = new Scraper(new ProgressConsole(),
-                                        ConfigurationManager.AppSettings.Get("FilesPath"),
-                                        ConfigurationManager.AppSettings.Get("ChromeDriverFolderPath"),
-                                        dontDownload);
+                ConfigurationManager.AppSettings.Get("FilesPath"),
+                ConfigurationManager.AppSettings.Get("ChromeDriverFolderPath"),
+                dontDownload, dontDownloadRelationships);
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             await scraper.Scrape();

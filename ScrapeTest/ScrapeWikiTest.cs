@@ -18,7 +18,7 @@ namespace ScrapeTest
             this.output = output;
 
             IConfiguration config = AppSettings.InitConfiguration();
-            _scraper = new Scraper(new TestProgressConsole(this.output), config["FilesPath"], null, true);
+            _scraper = new Scraper(new TestProgressConsole(this.output), config["FilesPath"], null, true, true);
 
             _scraperResult = Task.Run(async () => await _scraper.Scrape()).Result;
         }
