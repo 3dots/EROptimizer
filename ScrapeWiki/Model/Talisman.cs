@@ -137,7 +137,7 @@ namespace ScrapeWiki.Model
                 }
                 else if (t.Name == "Mottled Necklace")
                 {
-                    //Wiki doesn't have numbers
+                    t.ImmunityBonus = t.RobustnessBonus = t.FocusBonus = t.VitalityBonus = 40;
 
                     var tPlus = new Talisman()
                     {
