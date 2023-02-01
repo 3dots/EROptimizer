@@ -209,7 +209,7 @@ export class ArmorFiltersComponent implements OnInit, AfterViewInit {
       const filterValue = name.toLowerCase();
       return pieces.filter(t => t.name.toLowerCase().includes(filterValue));
     } else {
-      return pieces.slice();
+      return pieces;
     }
   }
 
